@@ -14,8 +14,33 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.conf.urls import url
+from django.urls import include
+from transformer.views import SourceObjectViewSet, ConsumerObjectViewSet, TransformViewSet
+from rest_framework import routers
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+router = routers.DefaultRouter()
+router.register(r'transform', TransformViewSet, 'transform')
+router.register(r'source_objects', SourceObjectViewSet, 'sourceobject')
+router.register(r'consumer_objects', ConsumerObjectViewSet, 'consumerobject')
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Gemini API",
+      default_version='v1',
+      description="Test description",
+      contact=openapi.Contact(email="archive@rockarch.org"),
+      license=openapi.License(name="MIT License"),
+   ),
+   validators=['flex', 'ssv'],
+   public=True,
+)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    url(r'^', include(router.urls)),
+    url(r'^status/', include('health_check.api.urls')),
+    url(r'^admin/', admin.site.urls),
+    url(r'^schema(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=None), name='schema-json'),
 ]
