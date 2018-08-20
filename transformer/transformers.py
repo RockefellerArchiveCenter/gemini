@@ -4,17 +4,11 @@ from pycountry import languages as langz
 import time
 
 from gemini import settings
-from transformer.models import ConsumerObject, Identifier
+from transformer.models import AbstractObject
 from clients import ArchivesSpaceClient
 
 
-class AccessionTransformError(Exception): pass
-
-
-class ComponentTransformError(Exception): pass
-
-
-class AgentTransformError(Exception): pass
+class ObjectTransformError(Exception): pass
 
 
 class ArchivesSpaceDataTransformer(object):
@@ -165,7 +159,7 @@ class ArchivesSpaceDataTransformer(object):
                 consumer_data = {**consumer_data, "parent": {"ref": self.parent}}
             return consumer_data
         except Exception as e:
-            raise ComponentTransformError('Error transforming component: {}'.format(e))
+            raise ObjectTransformError('Error transforming component: {}'.format(e))
 
     def transform_grouping_component(self, data):
         defaults = {
@@ -198,44 +192,7 @@ class ArchivesSpaceDataTransformer(object):
                 consumer_data['notes'].append(self.transform_note_multipart(data['appraisal_note'], "appraisal"))
             return consumer_data
         except Exception as e:
-            raise ComponentTransformError('Error transforming grouping component: {}'.format(e))
-
-    def transform_accession(self, data):
-        accession_number = self.transform_accession_number(data['accession_number'])
-        defaults = {
-            "publish": False, "linked_events": [], "jsonmodel_type": "accession",
-            "external_documents": [], "instances": [], "subjects": [],
-            "classifications": [], "related_accessions": [], "deaccessions": [],
-            }
-        try:
-            consumer_data = {
-                **defaults,
-                "title": data['title'],
-                "external_ids": self.transform_external_ids(data['url']),
-                "extents": self.transform_extents(
-                    {"bytes": str(data['extent_size']),
-                     "files": str(data['extent_files'])}),
-                "dates": self.transform_dates(data['start_date'], data['end_date']),
-                "rights_statements": self.transform_rights(data['rights_statements']),
-                "linked_agents": self.transform_linked_agents(
-                    data['creators']+[{"name": data['organization'], "type": "organization"}]),
-                "related_resources": [{'ref': data['resource']}],
-                "repository": {"ref": "/repositories/{}".format(settings.ARCHIVESSPACE['repo_id'])},
-                "accession_date": data['accession_date'],
-                "access_restrictions_note": data['access_restrictions'],
-                "use_restrictions_note": data['use_restrictions'],
-                "acquisition_type": data['acquisition_type'],
-                "content_description": data['description']}
-
-            for n, segment in enumerate(accession_number):
-                consumer_data = {
-                    **consumer_data,
-                    "id_{}".format(n): accession_number[n]}
-            if 'appraisal_note' in data:
-                consumer_data = {**consumer_data, "general_note": data['appraisal_note']}
-            return consumer_data
-        except Exception as e:
-            raise AccessionTransformError('Error transforming accession: {}'.format(e))
+            raise ObjectTransformError('Error transforming grouping component: {}'.format(e))
 
     def transform_agent(self, data):
         try:
@@ -263,4 +220,4 @@ class ArchivesSpaceDataTransformer(object):
                                "source": "local", "rules": "dacs"}]}
             return consumer_data
         except Exception as e:
-            raise AgentTransformError('Error transforming agent: {}'.format(e))
+            raise ObjectTransformError('Error transforming agent: {}'.format(e))

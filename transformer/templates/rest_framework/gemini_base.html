@@ -34,16 +34,7 @@
             <a class="navbar-brand" rel="nofollow" href="/">Gemini</a>
             {% endblock %}
             <ul class="navbar-nav mr-auto">
-              <li class="dropdown nav-item">
-                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">Transform Data
-                  <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="{% url 'transform-list' %}">Transform</a></li>
-                  <li><a class="dropdown-item" href="{% url 'sourceobject-list' %}">Source Objects</a></li>
-                  <li><a class="dropdown-item" href="{% url 'consumerobject-list' %}">Consumer Objects</a></li>
-                </ul>
-              </li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'object-list' %}">Objects</a></li>
             </ul>
           </div>
         </div>

@@ -16,15 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.conf.urls import url
 from django.urls import include
-from transformer.views import SourceObjectViewSet, ConsumerObjectViewSet, TransformViewSet
+from transformer.views import AbstractObjectViewSet
 from rest_framework import routers
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 router = routers.DefaultRouter()
-router.register(r'transform', TransformViewSet, 'transform')
-router.register(r'source_objects', SourceObjectViewSet, 'sourceobject')
-router.register(r'consumer_objects', ConsumerObjectViewSet, 'consumerobject')
+router.register(r'objects', AbstractObjectViewSet, 'object')
 
 schema_view = get_schema_view(
    openapi.Info(
