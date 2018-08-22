@@ -6,7 +6,6 @@ class AbstractObject(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     TYPE_CHOICES = (
-        ('accession', 'Accession'),
         ('agent', 'Agent'),
         ('collection', 'Collection'),
         ('file', 'File'),

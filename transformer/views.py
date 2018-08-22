@@ -9,7 +9,6 @@ from django.views.generic import View
 from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
 
-from clients import ArchivesSpaceClient
 from transformer.models import AbstractObject
 from transformer.serializers import AbstractObjectSerializer, AbstractObjectListSerializer
 
