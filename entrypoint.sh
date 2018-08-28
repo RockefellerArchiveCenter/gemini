@@ -11,7 +11,7 @@ if [ ! -f gemini/config.py ]; then
 fi
 
 echo "Apply database migrations"
-python manage.py migrate
+python manage.py makemigrations && python manage.py migrate
 
 echo "Create users"
 python manage.py shell -c "from django.contrib.auth.models import User; \

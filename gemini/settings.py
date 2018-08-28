@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'health_check',
     'drf_yasg',
-    'transformer',
+    'storer',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +61,7 @@ ROOT_URLCONF = 'gemini.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR, os.path.join(BASE_DIR, 'transformer', 'templates')],
+        'DIRS': [BASE_DIR, os.path.join(BASE_DIR, 'storer', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

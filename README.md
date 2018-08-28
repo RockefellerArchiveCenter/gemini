@@ -1,5 +1,5 @@
 # gemini
-A microservice to move data from ArchivesSpace to Fedora.
+A microservice to store AIPs and DIPs in Fedora.
 
 ## License
 
