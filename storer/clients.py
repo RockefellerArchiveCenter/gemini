@@ -13,10 +13,10 @@ logger.setLevel(logging.DEBUG)
 logger = wrap_logger(logger)
 
 
-class FedoraClientAuthError(Exception): pass
+class FedoraClientError(Exception): pass
 
 
-class FedoraClientDataError(Exception): pass
+class ArchivematicaClientError(Exception): pass
 
 
 class FedoraClient(object):
@@ -42,16 +42,26 @@ class FedoraClient(object):
             self.log.debug("Object retrieved from Fedora")
         return json.loads(object.data)[0]
 
-    def create(self, data):
+    def create_container(self, data):
         self.log = self.log.bind(request_id=str(uuid4()))
         object = fcrepo.BasicContainer(self.client)
-        # component.add_triple(foo.rdf.prefixes.dc.subject, 'minty')
-        # consider specifying URI
+        # object.add_triple(foo.rdf.prefixes.dc.subject, 'minty')
+        # consider specifying URI:
+        #   object = fcrepo.BasicContainer(self.client, 'uri')
+        #   object.create(specify_uri=True)
         if object.create():
             self.log.debug("Object created in Fedora", object=component.uri_as_string())
             return object.uri_as_string()
         self.log.error("Could not create object in Fedora")
         return False
+
+    def create_binary(self, data):
+        # https://github.com/ghukill/pyfc4/blob/master/docs/basic_usage.md#create-nonrdf-binary-resources
+        # baz2 = Binary(repo, 'foo/baz2')
+        # baz2.binary.location = 'http://example.org/image.jpg'
+        # baz2.binary.mimetype = 'image/jpeg'
+        # baz2.create(specify_uri=True)
+        pass
 
     def update(self, data, identifier):
         self.log = self.log.bind(request_id=str(uuid4()), object=identifier)
@@ -63,14 +73,36 @@ class FedoraClient(object):
         self.log.error("Could not update object in Fedora")
         return False
 
-    def delete(self, identifier):
-        self.log = self.log.bind(request_id=str(uuid4()), object=identifier)
-        object = self.client.get_resource(identifier)
-        if object.delete():
-            self.log.debug("Object deleted from Fedora")
-            return True
-        self.log.error("Could not delete object from Fedora")
-        return False
 
-    def get_or_create(self, type, field, value, last_updated, consumer_data):
-        pass
+class ArchivematicaClient(object):
+    def __init__(self):
+        self.log = logger.new(transaction_id=str(uuid4()))
+        self.headers = {"Authorization": "ApiKey {}:{}".format(settings.ARCHIVEMATICA['username'], settings.ARCHIVEMATICA['api_key'])}
+        self.params = {"username": settings.ARCHIVEMATICA['username'], "api_key": settings.ARCHIVEMATICA['api_key']}
+
+    def retrieve(self, uri, *args, **kwargs):
+        response = requests.get(uri, headers=self.headers, **kwargs)
+        if response:
+            return response
+        else:
+            raise FedoraClientError("Could not return a valid response for {}".format(uri))
+
+    def retrieve_paged(self, uri, *args, limit=10, **kwargs):
+        params = {"limit": limit, "offset": 0}
+        if "params" in kwargs:
+            params.update(**kwargs['params'])
+            del kwargs['params']
+
+        current_page = requests.get(url, params=params, headers=self.headers, **kwargs)
+        current_json = current_page.json()
+        if hasattr(current_json, 'keys') and \
+           {'objects', 'next'} <= set(current_json.keys()):
+            while current_json['offset'] <= current_json['total_count']:
+                for obj in current_json['objects']:
+                    yield obj
+                if not current_json['next']: break
+                params['page'] += limit
+                current_page = requests.get(url, params=params, headers=self.headers, **kwargs)
+                current_json = current_page.json()
+        else:
+            raise FedoraClientError("retrieve_paged doesn't know how to handle {}".format(current_json))

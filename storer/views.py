@@ -16,7 +16,7 @@ logger.setLevel(logging.DEBUG)
 logger = wrap_logger(logger)
 
 
-class PackageViewSet(viewsets.ModelViewSet):
+class PackageViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Endpoint for packages.
 
@@ -34,12 +34,3 @@ class PackageViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return PackageListSerializer
         return PackageSerializer
-
-    def create(self, request):
-        type = 'aip'
-        package = Package.objects.create(
-            data=request.data['data'],
-            type=type
-        )
-        serializer = PackageSerializer(package, context={'request': request})
-        return Response(serializer.data)

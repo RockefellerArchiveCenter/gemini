@@ -1,14 +1,13 @@
 # Local config file - rename to config.py
 
-AURORA = {
-  "baseurl": "http://aurora/api/",
-  "username": "admin",
-  "password": "admin",
+ARCHIVEMATICA = {
+  "baseurl": "http://127.0.0.1:62081/api/v2/",
+  "username": "test",
+  "api_key": "test",
 }
 
-ARCHIVESSPACE = {
+FEDORA = {
   "baseurl": "http://localhost:8089/",
   "username": "admin",
   "password": "admin",
-  "repo_id": 2,
 }
