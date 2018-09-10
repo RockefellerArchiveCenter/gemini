@@ -79,30 +79,32 @@ class ArchivematicaClient(object):
         self.log = logger.new(transaction_id=str(uuid4()))
         self.headers = {"Authorization": "ApiKey {}:{}".format(settings.ARCHIVEMATICA['username'], settings.ARCHIVEMATICA['api_key'])}
         self.params = {"username": settings.ARCHIVEMATICA['username'], "api_key": settings.ARCHIVEMATICA['api_key']}
+        self.baseurl = settings.ARCHIVEMATICA['baseurl']
 
     def retrieve(self, uri, *args, **kwargs):
-        response = requests.get(uri, headers=self.headers, **kwargs)
+        full_url = "/".join([self.baseurl.rstrip("/"), uri.lstrip("/")])
+        response = requests.get(full_url, headers=self.headers, **kwargs)
         if response:
             return response
         else:
-            raise FedoraClientError("Could not return a valid response for {}".format(uri))
+            raise FedoraClientError("Could not return a valid response for {}".format(full_url))
 
     def retrieve_paged(self, uri, *args, limit=10, **kwargs):
+        full_url = "/".join([self.baseurl.rstrip("/"), uri.lstrip("/")])
         params = {"limit": limit, "offset": 0}
         if "params" in kwargs:
             params.update(**kwargs['params'])
             del kwargs['params']
 
-        current_page = requests.get(url, params=params, headers=self.headers, **kwargs)
+        current_page = requests.get(full_url, params=params, headers=self.headers, **kwargs)
         current_json = current_page.json()
-        if hasattr(current_json, 'keys') and \
-           {'objects', 'next'} <= set(current_json.keys()):
-            while current_json['offset'] <= current_json['total_count']:
+        if current_json.get('meta'):
+            while current_json['meta']['offset'] <= current_json['meta']['total_count']:
                 for obj in current_json['objects']:
                     yield obj
-                if not current_json['next']: break
-                params['page'] += limit
-                current_page = requests.get(url, params=params, headers=self.headers, **kwargs)
+                if not current_json['meta']['next']: break
+                params['offset'] += limit
+                current_page = requests.get(full_url, params=params, headers=self.headers, **kwargs)
                 current_json = current_page.json()
         else:
-            raise FedoraClientError("retrieve_paged doesn't know how to handle {}".format(current_json))
+            raise FedoraClientError("retrieve_paged doesn't know how to handle {}".format(full_url))

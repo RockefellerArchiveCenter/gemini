@@ -1,7 +1,7 @@
 # Local config file - rename to config.py
 
 ARCHIVEMATICA = {
-  "baseurl": "http://127.0.0.1:62081/api/v2/",
+  "baseurl": "http://archivematica-storage-service:8000/api/v2/",
   "username": "test",
   "api_key": "test",
 }
