@@ -1,6 +1,6 @@
 from django_cron import CronJobBase, Schedule
 
-from storer.routines import AIPStoreRoutine, DIP
+from storer.routines import AIPStoreRoutine, DIPStoreRoutine
 
 
 class StorePackage(CronJobBase):
@@ -9,9 +9,9 @@ class StorePackage(CronJobBase):
 
     def do(self):
         if self.package_type == 'AIP':
-            AIPStoreRoutine.run()
+            AIPStoreRoutine().run()
         elif self.package_type == 'DIP':
-            DIPStoreRoutine.run()
+            DIPStoreRoutine().run()
 
 
 class StoreAIPs(StorePackage):
@@ -19,6 +19,6 @@ class StoreAIPs(StorePackage):
     code = 'storer.store_aips'
 
 
-class StoreAIPs(StorePackage):
+class StoreDIPs(StorePackage):
     package_type = 'DIP'
     code = 'storer.store_dips'

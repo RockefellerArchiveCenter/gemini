@@ -131,6 +131,7 @@ STATIC_URL = '/static/'
 
 ARCHIVEMATICA = CF.ARCHIVEMATICA
 FEDORA = CF.FEDORA
+TMP_DIR = CF.TMP_DIR
 
 structlog.configure(
     processors=[

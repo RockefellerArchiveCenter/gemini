@@ -11,3 +11,5 @@ FEDORA = {
   "username": "admin",
   "password": "admin",
 }
+
+TMP_DIR = 'tmp'

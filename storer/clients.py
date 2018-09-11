@@ -1,6 +1,6 @@
 import json
 import logging
-from os.path import join
+from os.path import basename, join, splitext
 from pyfc4 import models as fcrepo
 import requests
 from structlog import wrap_logger
@@ -42,36 +42,44 @@ class FedoraClient(object):
             self.log.debug("Object retrieved from Fedora")
         return json.loads(object.data)[0]
 
-    def create_container(self, data):
+    def create_container(self, uri=None):
         self.log = self.log.bind(request_id=str(uuid4()))
-        object = fcrepo.BasicContainer(self.client)
-        # object.add_triple(foo.rdf.prefixes.dc.subject, 'minty')
-        # consider specifying URI:
-        #   object = fcrepo.BasicContainer(self.client, 'uri')
-        #   object.create(specify_uri=True)
-        if object.create():
-            self.log.debug("Object created in Fedora", object=component.uri_as_string())
-            return object.uri_as_string()
+        try:
+            if uri:
+                container = fcrepo.BasicContainer(self.client, uri)
+                container.create(specify_uri=True)
+            else:
+                container = fcrepo.BasicContainer(self.client)
+                container.create()
+        except Exception as e:
+            container = self.client.get_resource(uri)
+        if container:
+            self.log.debug("Object created in Fedora", object=container.uri_as_string())
+            return container
         self.log.error("Could not create object in Fedora")
         return False
 
-    def create_binary(self, data):
+    def create_binary(self, filepath, container):
         # https://github.com/ghukill/pyfc4/blob/master/docs/basic_usage.md#create-nonrdf-binary-resources
-        # baz2 = Binary(repo, 'foo/baz2')
-        # baz2.binary.location = 'http://example.org/image.jpg'
-        # baz2.binary.mimetype = 'image/jpeg'
-        # baz2.create(specify_uri=True)
-        pass
-
-    def update(self, data, identifier):
-        self.log = self.log.bind(request_id=str(uuid4()), object=identifier)
-        object = self.client.get_resource(identifier)
-        # component.add_triple(foo.rdf.prefixes.dc.subject, 'minty')
-        if object.update():
-            self.log.debug("Object updated in Fedora")
-            return True
-        self.log.error("Could not update object in Fedora")
-        return False
+        try:
+            new_binary = fcrepo.Binary(self.client, '{}/{}'.format(container.uri_as_string(), basename(filepath)))
+            # need to figure this one out
+            new_binary.binary.data = open(filepath, 'rb')
+            new_binary.binary.mimetype = 'image/jpeg'
+            new_binary.create(specify_uri=True)
+        except Exception as e:
+            new_binary = self.client.get_resource('{}/{}'.format(container.uri_as_string(), basename(filepath)))
+            # need to figure this one out
+            new_binary.binary.data = open(filepath, 'rb')
+            new_binary.binary.mimetype = 'image/jpeg'
+            new_binary.update()
+        if new_binary:
+            self.log.debug("Binary created in Fedora", object=new_binary.uri_as_string())
+            return new_binary
+        else:
+            self.log.error("Could not create binary in Fedora: {}".format(e))
+            print(e)
+            return False
 
 
 class ArchivematicaClient(object):
