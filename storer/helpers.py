@@ -6,6 +6,7 @@ import tarfile
 
 from gemini import settings
 
+
 # from Aurora files_helper.py
 def get_fields_from_file(fpath):
     fields = {}
@@ -30,7 +31,6 @@ def get_fields_from_file(fpath):
                         fields[key] = val
     except Exception as e:
         print(e)
-
     return fields
 
 
@@ -50,21 +50,21 @@ def extract_file(archive, src, dest):
             if name.endswith(src):
                 tf.extract(name, path=dest)
         tf.close()
+    else:
+        print("Unrecognized archive extension")
+        return False
     return dest
 
 
 def extract_all(archive, dest):
     ext = splitext(archive)[1]
-    if ext == '.7z':
-        pass
-    elif ext == '.tar':
+    if ext == '.tar':
         tf = tarfile.open(archive, 'r')
         tf.extractall(settings.TMP_DIR)
         tf.close()
         # Archivematica creates DIPs with filenames that don't match their UUIDs, so we have to rename here
         shutil.move(join(settings.TMP_DIR, tf.members[0].name), dest)
-    elif ext == '.zip':
-        zip = zipfile.ZipFile(archive, 'r')
-        zip.extractall(dest)
-        zip.close()
+    else:
+        print("Unrecognized archive extension")
+        return False
     return dest

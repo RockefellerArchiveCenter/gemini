@@ -1,6 +1,7 @@
 import logging
 from os import listdir, makedirs, remove
 from os.path import basename, isdir, isfile, join, splitext
+import requests
 import shutil
 from structlog import wrap_logger
 from uuid import uuid4
@@ -40,11 +41,10 @@ class StoreRoutine:
                         data=package
                     )
                     response = self.send_callback(container.uri_as_string())
-        if self.clean_up():
-            return True
-        else:
-            raise StoreRoutineError("Error cleaning up")
-            return False
+            if not self.clean_up():
+                raise StoreRoutineError("Error cleaning up")
+                return False
+        return True
 
     def store_package(self, package):
         # https://wiki.archivematica.org/AIP_structure
@@ -55,7 +55,7 @@ class StoreRoutine:
         container = self.store_container(package)
         if container:
             if self.package_type == 'DIP':
-                extracted = self.extract_package(self.download.name)
+                extracted = helpers.extract_all(self.download.name, join(settings.TMP_DIR, self.uuid))
                 reserved_names = ['manifest-', 'bagit.txt', 'tagmanifest-', 'rights.csv', 'bag-info.txt']
                 for f in listdir(join(extracted, 'objects')):
                     if 'bag-info.txt' in f:
@@ -89,21 +89,16 @@ class StoreRoutine:
         binary = self.fedora_client.create_binary(filepath, container)
         return binary
 
-    def extract_package(self, package):
-        extracted = helpers.extract_all(package, join(settings.TMP_DIR, self.uuid))
-        return extracted
-
     def send_callback(self, fedora_uri):
-        if not isfile(self.bag_info_path):
-            self.bag_info_path = helpers.extract_file(self.download.name, self.bag_info_path, join(settings.TMP_DIR, basename(self.bag_info_path)))
-        bag_info = helpers.get_fields_from_file(self.bag_info_path)
-        print(bag_info.get('Internal_Sender_Identifier'))
-        print(fedora_uri)
-        # response = requests.post('{}/process-transfers/', data={'identifier': bag_info['Internal_Sender_Identifier'], 'uri': fedora_uri})
-        # if response:
-        #     return True
-        # else:
-        #     raise StoreRoutineError("Could not create execute callback for {} {}".format(self, package_type, self.uuid))
+        if settings.CALLBACK:
+            if not isfile(self.bag_info_path):
+                self.bag_info_path = helpers.extract_file(self.download.name, self.bag_info_path, join(settings.TMP_DIR, basename(self.bag_info_path)))
+            bag_info = helpers.get_fields_from_file(self.bag_info_path)
+            # response = requests.post(settings.CALLBACK['url'], data={'identifier': bag_info['Internal_Sender_Identifier'], 'uri': fedora_uri})
+            # if response:
+            #     return True
+            # else:
+            #     raise StoreRoutineError("Could not create execute callback for {} {}".format(self, package_type, self.uuid))
 
     def clean_up(self):
         for d in listdir(settings.TMP_DIR):

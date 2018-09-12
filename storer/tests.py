@@ -1,6 +1,7 @@
 import json
 from os.path import join, isdir
 from os import listdir
+import vcr
 
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -11,6 +12,15 @@ from storer.cron import StoreAIPs, StoreDIPs
 from storer.models import Package
 from storer.views import PackageViewSet
 
+storer_vcr = vcr.VCR(
+    serializer='yaml',
+    cassette_library_dir='fixtures/cassettes',
+    record_mode='once',
+    match_on=['path', 'method', 'query'],
+    filter_query_parameters=['username', 'password'],
+    filter_headers=['Authorization'],
+)
+
 
 class ComponentTest(TestCase):
     # def setUp(self):
@@ -18,7 +28,11 @@ class ComponentTest(TestCase):
 
     def process_packages(self):
         print('*** Processing packages ***')
-        StoreAIPs().do()
+        print('*** Storing AIPS ***')
+        with storer_vcr.use_cassette('store_aips.yml'):
+            StoreAIPs().do()
+        print('*** Storing DIPS ***')
+        # with storer_vcr.use_cassette('store_dips.yml'):
         StoreDIPs().do()
 
     def get_packages(self):

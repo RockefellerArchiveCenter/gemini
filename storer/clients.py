@@ -1,5 +1,6 @@
 import json
 import logging
+import magic
 from os.path import basename, join, splitext
 from pyfc4 import models as fcrepo
 import requests
@@ -61,24 +62,23 @@ class FedoraClient(object):
 
     def create_binary(self, filepath, container):
         # https://github.com/ghukill/pyfc4/blob/master/docs/basic_usage.md#create-nonrdf-binary-resources
+        file_data = open(filepath, 'rb')
+        mimetype = magic.from_file(filepath, mime=True)
         try:
             new_binary = fcrepo.Binary(self.client, '{}/{}'.format(container.uri_as_string(), basename(filepath)))
-            # need to figure this one out
-            new_binary.binary.data = open(filepath, 'rb')
-            new_binary.binary.mimetype = 'image/jpeg'
+            new_binary.binary.data = file_data
+            new_binary.binary.mimetype = mimetype
             new_binary.create(specify_uri=True)
         except Exception as e:
             new_binary = self.client.get_resource('{}/{}'.format(container.uri_as_string(), basename(filepath)))
-            # need to figure this one out
-            new_binary.binary.data = open(filepath, 'rb')
-            new_binary.binary.mimetype = 'image/jpeg'
+            new_binary.binary.data = file_data
+            new_binary.binary.mimetype = mimetype
             new_binary.update()
         if new_binary:
             self.log.debug("Binary created in Fedora", object=new_binary.uri_as_string())
             return new_binary
         else:
             self.log.error("Could not create binary in Fedora: {}".format(e))
-            print(e)
             return False
 
 
