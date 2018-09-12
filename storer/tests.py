@@ -1,11 +1,13 @@
 import json
 from os.path import join, isdir
 from os import listdir
+import random
 import vcr
 
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
+from rest_framework.test import APIRequestFactory
 
 from gemini import settings
 from storer.cron import StoreAIPs, StoreDIPs
@@ -23,20 +25,29 @@ storer_vcr = vcr.VCR(
 
 
 class ComponentTest(TestCase):
-    # def setUp(self):
-    #     self.factory = APIRequestFactory()
+    def setUp(self):
+        self.factory = APIRequestFactory()
 
     def process_packages(self):
         print('*** Processing packages ***')
         print('*** Storing AIPS ***')
-        with storer_vcr.use_cassette('store_aips.yml'):
-            StoreAIPs().do()
+        # with storer_vcr.use_cassette('store_aips.yml'):
+        store_aips = StoreAIPs().do(dirs={'tmp': settings.TEST_TMP_DIR})
+        self.assertNotEqual(False, store_aips, "AIPS not stored correctly")
         print('*** Storing DIPS ***')
         # with storer_vcr.use_cassette('store_dips.yml'):
-        StoreDIPs().do()
+        store_dips = StoreDIPs().do(dirs={'tmp': settings.TEST_TMP_DIR})
+        self.assertNotEqual(False, store_dips, "DIPS not stored correctly")
 
     def get_packages(self):
         print('*** Getting all packages ***')
+        request = self.factory.get(reverse('package-list'))
+        response = PackageViewSet.as_view(actions={"get": "list"})(request)
+        self.assertEqual(response.status_code, 200, "Wrong HTTP code")
+        pk = random.randrange(len(response.data))+1
+        request = self.factory.get(reverse('package-detail', args=[pk]), format='json')
+        response = PackageViewSet.as_view(actions={"get": "retrieve"})(request, pk=pk)
+        self.assertEqual(response.status_code, 200, "Wrong HTTP code")
 
     # def tearDown(self):
     #     for d in [settings.TEST_UPLOAD_DIR, settings.TEST_TRANSFER_SOURCE_DIR, settings.TEST_PROCESSING_DIR]:
@@ -45,4 +56,4 @@ class ComponentTest(TestCase):
 
     def test_packages(self):
         self.process_packages()
-        # self.get_packages()
+        self.get_packages()

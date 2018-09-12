@@ -56,14 +56,14 @@ def extract_file(archive, src, dest):
     return dest
 
 
-def extract_all(archive, dest):
+def extract_all(archive, dest, tmp):
     ext = splitext(archive)[1]
     if ext == '.tar':
         tf = tarfile.open(archive, 'r')
-        tf.extractall(settings.TMP_DIR)
+        tf.extractall(tmp)
         tf.close()
         # Archivematica creates DIPs with filenames that don't match their UUIDs, so we have to rename here
-        shutil.move(join(settings.TMP_DIR, tf.members[0].name), dest)
+        shutil.move(join(tmp, tf.members[0].name), dest)
     else:
         print("Unrecognized archive extension")
         return False

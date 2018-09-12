@@ -22,10 +22,14 @@ class StoreRoutineError(Exception): pass
 
 
 class StoreRoutine:
-    def __init__(self):
+    def __init__(self, dirs):
         self.log = logger.bind(transaction_id=str(uuid4()))
         self.am_client = ArchivematicaClient()
         self.fedora_client = FedoraClient()
+        if dirs:
+            self.tmp_dir = dirs['tmp']
+        else:
+            self.tmp_dir = settings.TMP_DIR
 
     def run(self):
         url = 'file/?package_type={}'.format(self.package_type)
@@ -49,19 +53,19 @@ class StoreRoutine:
     def store_package(self, package):
         # https://wiki.archivematica.org/AIP_structure
         # https://wiki.archivematica.org/DIP_structure
-        if not isdir(settings.TMP_DIR):
-            makedirs(settings.TMP_DIR)
+        if not isdir(self.tmp_dir):
+            makedirs(self.tmp_dir)
         self.download = self.download_package(package)
         container = self.store_container(package)
         if container:
             if self.package_type == 'DIP':
-                extracted = helpers.extract_all(self.download.name, join(settings.TMP_DIR, self.uuid))
+                extracted = helpers.extract_all(self.download.name, join(self.tmp_dir, self.uuid), self.tmp_dir)
                 reserved_names = ['manifest-', 'bagit.txt', 'tagmanifest-', 'rights.csv', 'bag-info.txt']
                 for f in listdir(join(extracted, 'objects')):
                     if 'bag-info.txt' in f:
                         self.bag_info_path = join(extracted, 'objects', f)
                     if not any(name in f for name in reserved_names):
-                        self.store_binary(join(settings.TMP_DIR, self.uuid, 'objects', f), container)
+                        self.store_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
             elif self.package_type == 'AIP':
                 self.bag_info_path = join(self.uuid, 'data', 'objects', 'bag-info.txt')
                 self.store_binary(self.download.name, container)
@@ -74,7 +78,7 @@ class StoreRoutine:
         extension = splitext(package_json['current_path'])[1]
         if not extension:
             extension = '.tar'
-        package = open(join(settings.TMP_DIR, '{}{}'.format(self.uuid, extension)), "wb")
+        package = open(join(self.tmp_dir, '{}{}'.format(self.uuid, extension)), "wb")
         package.write(response._content)
         package.close()
         return package
@@ -92,7 +96,7 @@ class StoreRoutine:
     def send_callback(self, fedora_uri):
         if settings.CALLBACK:
             if not isfile(self.bag_info_path):
-                self.bag_info_path = helpers.extract_file(self.download.name, self.bag_info_path, join(settings.TMP_DIR, basename(self.bag_info_path)))
+                self.bag_info_path = helpers.extract_file(self.download.name, self.bag_info_path, join(self.tmp_dir, basename(self.bag_info_path)))
             bag_info = helpers.get_fields_from_file(self.bag_info_path)
             # response = requests.post(settings.CALLBACK['url'], data={'identifier': bag_info['Internal_Sender_Identifier'], 'uri': fedora_uri})
             # if response:
@@ -101,8 +105,8 @@ class StoreRoutine:
             #     raise StoreRoutineError("Could not create execute callback for {} {}".format(self, package_type, self.uuid))
 
     def clean_up(self):
-        for d in listdir(settings.TMP_DIR):
-            filepath = join(settings.TMP_DIR, d)
+        for d in listdir(self.tmp_dir):
+            filepath = join(self.tmp_dir, d)
             if isdir(filepath):
                 shutil.rmtree(filepath)
             elif isfile(filepath):

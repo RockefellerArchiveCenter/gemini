@@ -7,11 +7,11 @@ class StorePackage(CronJobBase):
     RUN_EVERY_MINS = 1
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
 
-    def do(self):
+    def do(self, dirs=None):
         if self.package_type == 'AIP':
-            AIPStoreRoutine().run()
+            AIPStoreRoutine(dirs).run()
         elif self.package_type == 'DIP':
-            DIPStoreRoutine().run()
+            DIPStoreRoutine(dirs).run()
 
 
 class StoreAIPs(StorePackage):
