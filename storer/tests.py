@@ -49,10 +49,9 @@ class ComponentTest(TestCase):
         response = PackageViewSet.as_view(actions={"get": "retrieve"})(request, pk=pk)
         self.assertEqual(response.status_code, 200, "Wrong HTTP code")
 
-    # def tearDown(self):
-    #     for d in [settings.TEST_UPLOAD_DIR, settings.TEST_TRANSFER_SOURCE_DIR, settings.TEST_PROCESSING_DIR]:
-    #         if isdir(d):
-    #             shutil.rmtree(d)
+    def tearDown(self):
+        if isdir(settings.TEST_TMP_DIR):
+            shutil.rmtree(d)
 
     def test_packages(self):
         self.process_packages()
