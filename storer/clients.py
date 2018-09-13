@@ -3,6 +3,7 @@ import logging
 import magic
 from os.path import basename, join, splitext
 from pyfc4 import models as fcrepo
+from pyfc4.plugins.pcdm import models as pcdm
 import requests
 from structlog import wrap_logger
 from uuid import uuid4
@@ -44,13 +45,14 @@ class FedoraClient(object):
         return json.loads(object.data)[0]
 
     def create_container(self, uri=None):
+        # uses PCDM plugin: https://github.com/ghukill/pyfc4/blob/master/pyfc4/plugins/pcdm/models.py#L121
         self.log = self.log.bind(request_id=str(uuid4()))
         try:
             if uri:
-                container = fcrepo.BasicContainer(self.client, uri)
+                container = pcdm.PCDMObject(repo=self.client, uri=uri)
                 container.create(specify_uri=True)
             else:
-                container = fcrepo.BasicContainer(self.client)
+                container = pcdm.PCDMObject(repo=self.client)
                 container.create()
         except Exception as e:
             container = self.client.get_resource(uri)
@@ -61,16 +63,17 @@ class FedoraClient(object):
         return False
 
     def create_binary(self, filepath, container):
-        # https://github.com/ghukill/pyfc4/blob/master/docs/basic_usage.md#create-nonrdf-binary-resources
+        # Uses PCDM plugin: https://github.com/ghukill/pyfc4/blob/master/pyfc4/plugins/pcdm/models.py#L237
         file_data = open(filepath, 'rb')
         mimetype = magic.from_file(filepath, mime=True)
         try:
-            new_binary = fcrepo.Binary(self.client, '{}/{}'.format(container.uri_as_string(), basename(filepath)))
-            new_binary.binary.data = file_data
-            new_binary.binary.mimetype = mimetype
-            new_binary.create(specify_uri=True)
+            new_binary = container.create_file(uri=basename(filepath), specify_uri=True, data=file_data, mimetype=mimetype)
+            # new_binary = fcrepo.Binary(self.client, '{}/{}'.format(container.uri_as_string(), basename(filepath)))
+            # new_binary.binary.data = file_data
+            # new_binary.binary.mimetype = mimetype
+            # new_binary.create(specify_uri=True)
         except Exception as e:
-            new_binary = self.client.get_resource('{}/{}'.format(container.uri_as_string(), basename(filepath)))
+            new_binary = self.client.get_resource('{}/files/{}'.format(container.uri_as_string(), basename(filepath)))
             new_binary.binary.data = file_data
             new_binary.binary.mimetype = mimetype
             new_binary.update()

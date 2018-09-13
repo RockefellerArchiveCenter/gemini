@@ -2,6 +2,7 @@ import json
 from os.path import join, isdir
 from os import listdir
 import random
+from shutil import rmtree
 import vcr
 
 from django.contrib.auth.models import User
@@ -51,7 +52,7 @@ class ComponentTest(TestCase):
 
     def tearDown(self):
         if isdir(settings.TEST_TMP_DIR):
-            shutil.rmtree(d)
+            rmtree(settings.TEST_TMP_DIR)
 
     def test_packages(self):
         self.process_packages()
