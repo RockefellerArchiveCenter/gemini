@@ -29,7 +29,7 @@ openapi-codec==1.3.2
 pluggy==0.7.1
 psycopg2-binary==2.7.4
 py==1.6.0
-git+git://github.com/RockefellerArchiveCenter/pyfc4.git@b9684573143a72edc3d362c010786bcc8a89ffa0#egg=pyfc4
+pyfc4==0.2
 pylzma==0.4.9
 pyparsing==2.2.0
 pytest==3.8.0
