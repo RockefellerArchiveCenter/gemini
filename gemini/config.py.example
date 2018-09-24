@@ -4,6 +4,7 @@ ARCHIVEMATICA = {
   "baseurl": "http://archivematica-storage-service:8000/api/v2/",
   "username": "test",
   "api_key": "test",
+  "pipeline_uuid": "ae8fbca2-575b-4a0e-8d9c-ad0f07ac8c8d"
 }
 
 FEDORA = {

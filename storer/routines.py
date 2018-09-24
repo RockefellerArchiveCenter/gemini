@@ -5,6 +5,7 @@ import requests
 import shutil
 from structlog import wrap_logger
 from uuid import uuid4
+from xml.etree import ElementTree as ET
 import zipfile
 
 from gemini import settings
@@ -35,19 +36,21 @@ class StoreRoutine:
         url = 'file/?package_type={}'.format(self.package_type)
         for package in self.am_client.retrieve_paged(url):
             self.uuid = package['uuid']
-            if not Package.objects.filter(type=self.package_type, data__uuid=self.uuid).exists():
-                container = self.store_package(package)
-                if not container:
-                    raise StoreRoutineError("Could not store {} with UUID {} in Fedora".format(self.package_type, self.uuid))
-                else:
-                    Package.objects.create(
-                        type=self.package_type.lower(),
-                        data=package
-                    )
-                    response = self.send_callback(container.uri_as_string())
-            if not self.clean_up():
-                raise StoreRoutineError("Error cleaning up")
-                return False
+            if package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid']:
+                if not Package.objects.filter(type=self.package_type, data__uuid=self.uuid).exists():
+                    container = self.store_package(package)
+                    if not container:
+                        raise StoreRoutineError("Could not store {} with UUID {} in Fedora".format(self.package_type, self.uuid))
+                    else:
+                        Package.objects.create(
+                            type=self.package_type.lower(),
+                            data=package
+                        )
+                        internal_sender_identifier = self.get_internal_sender_identifier()
+                        response = self.send_callback(container.uri_as_string(), internal_sender_identifier)
+                if not self.clean_up():
+                    raise StoreRoutineError("Error cleaning up")
+                    return False
         return True
 
     def store_package(self, package):
@@ -61,13 +64,14 @@ class StoreRoutine:
             if self.package_type == 'DIP':
                 extracted = helpers.extract_all(self.download.name, join(self.tmp_dir, self.uuid), self.tmp_dir)
                 reserved_names = ['manifest-', 'bagit.txt', 'tagmanifest-', 'rights.csv', 'bag-info.txt']
+                for f in listdir(extracted):
+                    if (basename(f).startswith('METS.') and basename(f).endswith('.xml')):
+                        self.mets_path = f
                 for f in listdir(join(extracted, 'objects')):
-                    if 'bag-info.txt' in f:
-                        self.bag_info_path = join(extracted, 'objects', f)
                     if not any(name in f for name in reserved_names):
                         self.store_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
             elif self.package_type == 'AIP':
-                self.bag_info_path = join(self.uuid, 'data', 'objects', 'bag-info.txt')
+                self.mets_path = "METS.{}.xml".format(self.uuid)
                 self.store_binary(self.download.name, container)
             return container
         else:
@@ -93,12 +97,23 @@ class StoreRoutine:
         binary = self.fedora_client.create_binary(filepath, container)
         return binary
 
-    def send_callback(self, fedora_uri):
+    def get_internal_sender_identifier(self):
+        mets = helpers.extract_file(self.download.name, self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
+        tree = ET.parse(mets)
+        root = tree.getroot()
+        ns = {'mets': 'http://www.loc.gov/METS/'}
+        element = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns)
+        return element.text
+
+    def send_callback(self, fedora_uri, internal_sender_identifier):
         if settings.CALLBACK:
-            if not isfile(self.bag_info_path):
-                self.bag_info_path = helpers.extract_file(self.download.name, self.bag_info_path, join(self.tmp_dir, basename(self.bag_info_path)))
-            bag_info = helpers.get_fields_from_file(self.bag_info_path)
-            # response = requests.post(settings.CALLBACK['url'], data={'identifier': bag_info['Internal_Sender_Identifier'], 'uri': fedora_uri})
+            print(fedora_uri)
+            print(internal_sender_identifier)
+            # if not isdir(self.tmp_dir):
+            #     makedirs(self.tmp_dir)
+            # bag_info_file = helpers.extract_file(self.download.name, join(self.uuid, 'bag-info.txt'), join(self.tmp_dir, 'bag-info.txt'))
+            # bag_info = helpers.get_fields_from_file(bag_info_file)
+            # response = requests.post(settings.CALLBACK['url'], data={'identifier': internal_sender_identifier, 'uri': fedora_uri})
             # if response:
             #     return True
             # else:

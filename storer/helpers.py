@@ -1,4 +1,4 @@
-from os.path import splitext, join, isfile
+from os.path import basename, splitext, join, isfile
 import py7zlib
 import re
 import shutil
@@ -43,12 +43,16 @@ def extract_file(archive, src, dest):
             if name.endswith(src):
                 outfile = open(dest, 'wb')
                 outfile.write(a.getmember(name).read())
-        outfile.close()
+                outfile.close()
+        fp.close()
     elif ext == '.tar':
         tf = tarfile.open(archive, mode="r")
-        for name in tf.getmembers():
-            if name.endswith(src):
-                tf.extract(name, path=dest)
+        for member in tf.getmembers():
+            if member.name.endswith(src):
+                outfile = open(dest, 'wb')
+                extracted = tf.extractfile(member)
+                outfile.write(extracted.read())
+                outfile.close()
         tf.close()
     else:
         print("Unrecognized archive extension")
