@@ -109,11 +109,8 @@ class StoreRoutine:
         if settings.CALLBACK:
             print(fedora_uri)
             print(internal_sender_identifier)
-            # if not isdir(self.tmp_dir):
-            #     makedirs(self.tmp_dir)
-            # bag_info_file = helpers.extract_file(self.download.name, join(self.uuid, 'bag-info.txt'), join(self.tmp_dir, 'bag-info.txt'))
-            # bag_info = helpers.get_fields_from_file(bag_info_file)
-            # response = requests.post(settings.CALLBACK['url'], data={'identifier': internal_sender_identifier, 'uri': fedora_uri})
+            print(self.package_type)
+            # response = requests.post(settings.CALLBACK['url'], data={'identifier': internal_sender_identifier, 'uri': fedora_uri, 'package_type': self.package_type})
             # if response:
             #     return True
             # else:
