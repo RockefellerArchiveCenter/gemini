@@ -68,14 +68,18 @@ class FedoraClient(object):
         mimetype = magic.from_file(filepath, mime=True)
         try:
             new_binary = container.create_file(uri=basename(filepath), specify_uri=True, data=file_data, mimetype=mimetype)
-            # new_binary = fcrepo.Binary(self.client, '{}/{}'.format(container.uri_as_string(), basename(filepath)))
-            # new_binary.binary.data = file_data
-            # new_binary.binary.mimetype = mimetype
-            # new_binary.create(specify_uri=True)
+            new_binary.add_triple(new_binary.rdf.prefixes.rdfs.label, filepath)
+            # this is throwing an error because format is a function name
+            # new_binary.add_triple(new_binary.rdf.prefixes.dc.format, mimetype)
+            new_binary.update()
         except Exception as e:
+            print(e)
             new_binary = self.client.get_resource('{}/files/{}'.format(container.uri_as_string(), basename(filepath)))
             new_binary.binary.data = file_data
             new_binary.binary.mimetype = mimetype
+            new_binary.add_triple(new_binary.rdf.prefixes.rdfs.label, filepath)
+            # this is throwing an error because format is a function name
+            # new_binary.add_triple(new_binary.rdf.prefixes.dc.format, mimetype)
             new_binary.update()
         if new_binary:
             self.log.debug("Binary created in Fedora", object=new_binary.uri_as_string())
