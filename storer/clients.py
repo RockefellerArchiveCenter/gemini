@@ -55,8 +55,14 @@ class FedoraClient(object):
                 container = pcdm.PCDMObject(repo=self.client)
                 container.create()
         except Exception as e:
+            print(e)
             container = self.client.get_resource(uri)
+            if isinstance(container, fcrepo.BasicContainer):
+                container.delete(remove_tombstone=True)
+                container = pcdm.PCDMObject(repo=self.client, uri=uri)
+                container.create(specify_uri=True)
         if container:
+            print(container)
             self.log.debug("Object created in Fedora", object=container.uri_as_string())
             return container
         self.log.error("Could not create object in Fedora")
@@ -68,18 +74,16 @@ class FedoraClient(object):
         mimetype = magic.from_file(filepath, mime=True)
         try:
             new_binary = container.create_file(uri=basename(filepath), specify_uri=True, data=file_data, mimetype=mimetype)
-            new_binary.add_triple(new_binary.rdf.prefixes.rdfs.label, filepath)
-            # this is throwing an error because format is a function name
-            # new_binary.add_triple(new_binary.rdf.prefixes.dc.format, mimetype)
+            new_binary.add_triple(new_binary.rdf.prefixes.rdfs['label'], filepath)
+            new_binary.add_triple(new_binary.rdf.prefixes.dc['format'], mimetype)
             new_binary.update()
         except Exception as e:
             print(e)
             new_binary = self.client.get_resource('{}/files/{}'.format(container.uri_as_string(), basename(filepath)))
             new_binary.binary.data = file_data
             new_binary.binary.mimetype = mimetype
-            new_binary.add_triple(new_binary.rdf.prefixes.rdfs.label, filepath)
-            # this is throwing an error because format is a function name
-            # new_binary.add_triple(new_binary.rdf.prefixes.dc.format, mimetype)
+            new_binary.add_triple(new_binary.rdf.prefixes.rdfs['label'], filepath)
+            new_binary.add_triple(new_binary.rdf.prefixes.dc['format'], mimetype)
             new_binary.update()
         if new_binary:
             self.log.debug("Binary created in Fedora", object=new_binary.uri_as_string())
