@@ -27,7 +27,7 @@ SECRET_KEY = 'j&!jzlr5i!%8g2agh%!6^)*h)y+l0gezhjwt+i2!xitbdsqtn8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '0.0.0.0', 'gemini-web']
+ALLOWED_HOSTS = ['localhost', 'gemini-web']
 
 
 # Application definition
