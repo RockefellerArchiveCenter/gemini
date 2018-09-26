@@ -27,7 +27,7 @@ SECRET_KEY = 'j&!jzlr5i!%8g2agh%!6^)*h)y+l0gezhjwt+i2!xitbdsqtn8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.2.100', 'localhost', '0.0.0.0']
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', 'gemini-web']
 
 
 # Application definition
@@ -85,7 +85,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'HOST': 'gemini_db',
+        'HOST': 'gemini-db',
         'PORT': 5432,
     }
 }

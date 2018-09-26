@@ -15,4 +15,4 @@ before_install:
   - sleep 20s
 install: true
 # script:
-#   - docker-compose exec gemini_web python manage.py test
+#   - docker-compose exec gemini-web python manage.py test

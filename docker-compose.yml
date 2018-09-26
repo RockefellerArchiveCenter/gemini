@@ -1,11 +1,11 @@
 version: '3'
 
 services:
-  gemini_db:
+  gemini-db:
     image: postgres:10.4
     volumes:
       - geminidb:/var/lib/postgresql/data/
-  gemini_web:
+  gemini-web:
     build: .
     entrypoint: /code/entrypoint.sh
     volumes:
@@ -13,7 +13,7 @@ services:
     ports:
       - "8006:8006"
     depends_on:
-      - gemini_db
+      - gemini-db
 
 volumes:
   geminidb:
