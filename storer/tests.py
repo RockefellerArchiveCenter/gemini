@@ -32,13 +32,13 @@ class ComponentTest(TestCase):
     def process_packages(self):
         print('*** Processing packages ***')
         print('*** Storing AIPS ***')
-        # with storer_vcr.use_cassette('store_aips.yml'):
-        store_aips = StoreAIPs().do(dirs={'tmp': settings.TEST_TMP_DIR})
-        self.assertNotEqual(False, store_aips, "AIPS not stored correctly")
+        with storer_vcr.use_cassette('store_aips.yml'):
+            store_aips = StoreAIPs().do(dirs={'tmp': settings.TEST_TMP_DIR})
+            self.assertNotEqual(False, store_aips, "AIPS not stored correctly")
         print('*** Storing DIPS ***')
-        # with storer_vcr.use_cassette('store_dips.yml'):
-        store_dips = StoreDIPs().do(dirs={'tmp': settings.TEST_TMP_DIR})
-        self.assertNotEqual(False, store_dips, "DIPS not stored correctly")
+        with storer_vcr.use_cassette('store_dips.yml'):
+            store_dips = StoreDIPs().do(dirs={'tmp': settings.TEST_TMP_DIR})
+            self.assertNotEqual(False, store_dips, "DIPS not stored correctly")
 
     def get_packages(self):
         print('*** Getting all packages ***')
