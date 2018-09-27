@@ -45,10 +45,11 @@ class ComponentTest(TestCase):
         request = self.factory.get(reverse('package-list'))
         response = PackageViewSet.as_view(actions={"get": "list"})(request)
         self.assertEqual(response.status_code, 200, "Wrong HTTP code")
-        pk = random.randrange(len(response.data))+1
-        request = self.factory.get(reverse('package-detail', args=[pk]), format='json')
-        response = PackageViewSet.as_view(actions={"get": "retrieve"})(request, pk=pk)
-        self.assertEqual(response.status_code, 200, "Wrong HTTP code")
+        if len(response.data):
+            pk = random.randrange(len(response.data))+1
+            request = self.factory.get(reverse('package-detail', args=[pk]), format='json')
+            response = PackageViewSet.as_view(actions={"get": "retrieve"})(request, pk=pk)
+            self.assertEqual(response.status_code, 200, "Wrong HTTP code")
 
     def tearDown(self):
         if isdir(settings.TEST_TMP_DIR):
