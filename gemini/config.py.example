@@ -8,7 +8,7 @@ ARCHIVEMATICA = {
 }
 
 FEDORA = {
-  "baseurl": "http://localhost:8089/",
+  "baseurl": "http://localhost:8080/fedora/rest/",
   "username": "admin",
   "password": "admin",
 }
@@ -17,5 +17,5 @@ TMP_DIR = 'tmp'
 TEST_TMP_DIR = 'test_tmp'
 
 CALLBACK = {
-    "url": "http://aquarius_web:8000/transform/"
+    "url": "http://aquarius-web:8000/transform/"
 }
