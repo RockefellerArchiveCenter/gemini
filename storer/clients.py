@@ -69,22 +69,18 @@ class FedoraClient(object):
         # Uses PCDM plugin: https://github.com/ghukill/pyfc4/blob/master/pyfc4/plugins/pcdm/models.py#L237
         file_data = open(filepath, 'rb')
         mimetype = magic.from_file(filepath, mime=True)
-        print(mimetype)
         try:
             new_binary = container.create_file(uri=basename(filepath), specify_uri=True, data=file_data, mimetype=mimetype)
             new_binary.add_triple(new_binary.rdf.prefixes.rdfs['label'], basename(filepath))
             new_binary.add_triple(new_binary.rdf.prefixes.dc['format'], mimetype)
             new_binary.update()
-            print("create")
         except Exception as e:
-            print(e)
             new_binary = self.client.get_resource('{}/files/{}'.format(container.uri_as_string(), basename(filepath)))
             new_binary.binary.data = file_data
             new_binary.binary.mimetype = mimetype
             new_binary.add_triple(new_binary.rdf.prefixes.rdfs['label'], basename(filepath))
             new_binary.add_triple(new_binary.rdf.prefixes.dc['format'], mimetype)
             new_binary.update()
-            print("update")
         if new_binary:
             self.log.debug("Binary created in Fedora", object=new_binary.uri_as_string())
             return new_binary
