@@ -13,8 +13,8 @@ FEDORA = {
   "password": "admin",
 }
 
-TMP_DIR = 'tmp'
-TEST_TMP_DIR = 'test_tmp'
+TMP_DIR = '/tmp'
+TEST_TMP_DIR = '/test_tmp'
 
 CALLBACK = {
     "url": "http://aquarius-web:8000/transform/"
