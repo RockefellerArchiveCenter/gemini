@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.conf.urls import url
 from django.urls import include
-from storer.views import PackageViewSet
+from storer.views import PackageViewSet, StoreView
 from rest_framework import routers
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -38,6 +38,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     url(r'^', include(router.urls)),
+    url(r'^store/(?P<package>aips|dips)/$', StoreView.as_view(), name='store-packages'),
     url(r'^status/', include('health_check.api.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^schema(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=None), name='schema-json'),
