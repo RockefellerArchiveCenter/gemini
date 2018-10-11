@@ -6,7 +6,7 @@ from shutil import rmtree
 import vcr
 
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework.test import APIRequestFactory
 
@@ -28,6 +28,7 @@ storer_vcr = vcr.VCR(
 class ComponentTest(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
+        self.client = Client()
 
     def process_packages(self):
         print('*** Processing packages ***')
@@ -62,6 +63,16 @@ class ComponentTest(TestCase):
             response = StoreView.as_view()(request, package="dips")
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
 
+    def schema(self):
+        print('*** Getting schema view ***')
+        schema = self.client.get(reverse('schema-json', kwargs={"format": ".json"}))
+        self.assertEqual(schema.status_code, 200, "Wrong HTTP code")
+
+    def health_check(self):
+        print('*** Getting status view ***')
+        status = self.client.get(reverse('api_health_ping'))
+        self.assertEqual(status.status_code, 200, "Wrong HTTP code")
+
     def tearDown(self):
         if isdir(settings.TEST_TMP_DIR):
             rmtree(settings.TEST_TMP_DIR)
@@ -70,3 +81,5 @@ class ComponentTest(TestCase):
         self.process_packages()
         self.get_packages()
         self.store_views()
+        self.schema()
+        self.health_check()

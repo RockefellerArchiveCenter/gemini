@@ -23,7 +23,7 @@ When you're done, shut down docker-compose
 
 ## Usage
 
-Packages are stored on a regular basis when either the `StoreAIPs` or `StoreDIPs` cron jobs are run or when a POST request is sent to the `store` endpoint (these requests can either store AIPs, DIPs or both, see Routes section below).
+Packages are stored on a regular basis when either the `StoreAIPs` or `StoreDIPs` cron jobs are run or when a POST request is sent to the `store/aips` or `store/dips` endpoints.
 
 Storage routines consists of the following steps:
 - Polling the Archivematica Storage Service for packages of a particular type.
@@ -42,7 +42,6 @@ Storage routines consists of the following steps:
 |--------|-----|---|---|---|
 |GET|/packages| |200|Returns a list of SIPs|
 |GET|/packages/{id}| |200|Returns data about an individual SIP|
-|POST|/store/||200|Runs the AIP and DIP store routines|
 |POST|/store/{package_type}||200|Runs the store routine for the package type specified, either `aips` or `dips`|
 
 

@@ -45,11 +45,7 @@ class StoreView(APIView):
         log = logger.new(transaction_id=str(uuid4()))
         package_type = self.kwargs.get('package')
         try:
-            if not package_type:
-                StoreAIPs().do()
-                StoreDIPs().do()
-                return Response({"detail": "AIP and DIP store routines complete."}, status=200)
-            elif package_type == 'aips':
+            if package_type == 'aips':
                 StoreAIPs().do()
                 return Response({"detail": "AIP store routine complete."}, status=200)
             elif package_type == 'dips':
