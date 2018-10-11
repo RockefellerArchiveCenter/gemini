@@ -13,7 +13,7 @@ from rest_framework.test import APIRequestFactory
 from gemini import settings
 from storer.cron import StoreAIPs, StoreDIPs
 from storer.models import Package
-from storer.views import PackageViewSet
+from storer.views import PackageViewSet, StoreView
 
 storer_vcr = vcr.VCR(
     serializer='yaml',
@@ -51,6 +51,17 @@ class ComponentTest(TestCase):
             response = PackageViewSet.as_view(actions={"get": "retrieve"})(request, pk=pk)
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
 
+    def store_views(self):
+        print('*** Testing endpoints to trigger crons ***')
+        with storer_vcr.use_cassette('store_aips.yml'):
+            request = self.factory.post(reverse('store-packages', kwargs={"package": "aips"}))
+            response = StoreView.as_view()(request, package="aips")
+            self.assertEqual(response.status_code, 200, "Wrong HTTP code")
+        with storer_vcr.use_cassette('store_dips.yml'):
+            request = self.factory.post(reverse('store-packages', kwargs={"package": "dips"}))
+            response = StoreView.as_view()(request, package="dips")
+            self.assertEqual(response.status_code, 200, "Wrong HTTP code")
+
     def tearDown(self):
         if isdir(settings.TEST_TMP_DIR):
             rmtree(settings.TEST_TMP_DIR)
@@ -58,3 +69,4 @@ class ComponentTest(TestCase):
     def test_packages(self):
         self.process_packages()
         self.get_packages()
+        self.store_views()
