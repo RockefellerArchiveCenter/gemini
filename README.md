@@ -23,7 +23,27 @@ When you're done, shut down docker-compose
 
 ## Usage
 
+Packages are stored on a regular basis when either the `StoreAIPs` or `StoreDIPs` cron jobs are run or when a POST request is sent to the `store` endpoint (these requests can either store AIPs, DIPs or both, see Routes section below).
+
+Storage routines consists of the following steps:
+- Polling the Archivematica Storage Service for packages of a particular type.
+- Determining if the package has already been stored by checking whether or not it exists as an object in Gemini's database. If the package has already been processed, Gemini skips it and goes to the next one.
+- Downloading the package from the Archivematica Storage Service.
+- Storing the package in Fedora, along with minimal metadata.
+- Creating a package object in Gemini's database.
+- Delivering a POST request to a configurable URL. This request has a payload containing the URI of the stored package in Fedora, the package type ("aip" or "dip") and the value of the `Internal-Sender-Identifier` field from the package's `bag-info.txt` file.
+
 ![File storage diagram](storer.png)
+
+
+### Routes
+
+| Method | URL | Parameters | Response  | Behavior  |
+|--------|-----|---|---|---|
+|GET|/packages| |200|Returns a list of SIPs|
+|GET|/packages/{id}| |200|Returns data about an individual SIP|
+|POST|/store/||200|Runs the AIP and DIP store routines|
+|POST|/store/{package_type}||200|Runs the store routine for the package type specified, either `aips` or `dips`|
 
 
 ## License
