@@ -40,9 +40,14 @@ class StoreRoutine:
             self.uuid = package['uuid']
             if package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid']:
                 if not Package.objects.filter(type=self.package_type, data__uuid=self.uuid).exists():
-                    container = self.store_package(package)
+                    self.download = self.download_package(package)
+                    container = self.store_container(package)
                     if not container:
-                        raise StoreRoutineError("Could not store {} with UUID {} in Fedora".format(self.package_type, self.uuid))
+                        raise StoreRoutineError("Could not create BasicContainer for {} with UUID {} in Fedora".format(self.package_type, self.uuid))
+                    else:
+                        updated_container = self.store_package(package, container)
+                    if not updated_container:
+                        raise StoreRoutineError("Could not store binary for {} with UUID {} in Fedora".format(self.package_type, self.uuid))
                     else:
                         Package.objects.create(
                             type=self.package_type.lower(),
@@ -106,37 +111,24 @@ class AIPStoreRoutine(StoreRoutine):
     """Stores an AIP in Fedora and handles the resulting URI."""
     package_type = 'AIP'
 
-    def store_package(self, package):
-        # https://wiki.archivematica.org/AIP_structure
-        # https://wiki.archivematica.org/DIP_structure
-        self.download = self.download_package(package)
-        container = self.store_container(package)
-        if container:
-            self.mets_path = "METS.{}.xml".format(self.uuid)
-            self.store_binary(self.download.name, container)
-            return container
-        else:
-            raise StoreRoutineError("Could not create BasicContainer for AIP {}".format(self.uuid))
+    def store_package(self, package, container):
+        """AIPS are stored as a single binary file. This assumes AIPs are stored as a compressed package."""
+        self.mets_path = "METS.{}.xml".format(self.uuid)
+        self.store_binary(self.download.name, container)
+        return container
 
 
 class DIPStoreRoutine(StoreRoutine):
     """Stores a DIP in Fedora and handles the resulting URI."""
     package_type = 'DIP'
 
-    def store_package(self, package):
-        # https://wiki.archivematica.org/AIP_structure
-        # https://wiki.archivematica.org/DIP_structure
-        self.download = self.download_package(package)
-        container = self.store_container(package)
-        if container:
-            extracted = helpers.extract_all(self.download.name, join(self.tmp_dir, self.uuid), self.tmp_dir)
-            reserved_names = ['manifest-', 'bagit.txt', 'tagmanifest-', 'rights.csv', 'bag-info.txt']
-            for f in listdir(extracted):
-                if (basename(f).startswith('METS.') and basename(f).endswith('.xml')):
-                    self.mets_path = f
-            for f in listdir(join(extracted, 'objects')):
-                if not any(name in f for name in reserved_names):
-                    self.store_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
-            return container
-        else:
-            raise StoreRoutineError("Could not create BasicContainer for DIP {}".format(self.uuid))
+    def store_package(self, package, container):
+        extracted = helpers.extract_all(self.download.name, join(self.tmp_dir, self.uuid), self.tmp_dir)
+        reserved_names = ['manifest-', 'bagit.txt', 'tagmanifest-', 'rights.csv', 'bag-info.txt']
+        for f in listdir(extracted):
+            if (basename(f).startswith('METS.') and basename(f).endswith('.xml')):
+                self.mets_path = f
+        for f in listdir(join(extracted, 'objects')):
+            if not any(name in f for name in reserved_names):
+                self.store_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
+        return container
