@@ -46,7 +46,7 @@ class StoreView(APIView):
         log = logger.new(transaction_id=str(uuid4()))
         package_type = self.kwargs.get('package')
         dirs = None
-        if request.POST['test']:
+        if request.POST.get('test'):
             dirs = {'tmp': settings.TEST_TMP_DIR}
         try:
             if package_type == 'aips':
