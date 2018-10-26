@@ -129,6 +129,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+CRON_CLASSES = [
+    "storer.cron.StoreAIPs",
+    "storer.cron.StoreDIPs",
+]
+
 ARCHIVEMATICA = CF.ARCHIVEMATICA
 FEDORA = CF.FEDORA
 TMP_DIR = CF.TMP_DIR
