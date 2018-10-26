@@ -31,6 +31,8 @@ class StoreRoutine:
             self.tmp_dir = dirs['tmp']
         else:
             self.tmp_dir = settings.TMP_DIR
+        if not isdir(self.tmp_dir):
+            makedirs(self.tmp_dir)
 
     def run(self):
         url = 'file/?package_type={}'.format(self.package_type)
@@ -53,30 +55,6 @@ class StoreRoutine:
                     return False
         return True
 
-    def store_package(self, package):
-        # https://wiki.archivematica.org/AIP_structure
-        # https://wiki.archivematica.org/DIP_structure
-        if not isdir(self.tmp_dir):
-            makedirs(self.tmp_dir)
-        self.download = self.download_package(package)
-        container = self.store_container(package)
-        if container:
-            if self.package_type == 'DIP':
-                extracted = helpers.extract_all(self.download.name, join(self.tmp_dir, self.uuid), self.tmp_dir)
-                reserved_names = ['manifest-', 'bagit.txt', 'tagmanifest-', 'rights.csv', 'bag-info.txt']
-                for f in listdir(extracted):
-                    if (basename(f).startswith('METS.') and basename(f).endswith('.xml')):
-                        self.mets_path = f
-                for f in listdir(join(extracted, 'objects')):
-                    if not any(name in f for name in reserved_names):
-                        self.store_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
-            elif self.package_type == 'AIP':
-                self.mets_path = "METS.{}.xml".format(self.uuid)
-                self.store_binary(self.download.name, container)
-            return container
-        else:
-            raise StoreRoutineError("Could not create BasicContainer for {} {}".format(self.package_type, self.uuid))
-
     def download_package(self, package_json):
         response = self.am_client.retrieve('/file/{}/download/'.format(self.uuid))
         extension = splitext(package_json['current_path'])[1]
@@ -89,8 +67,6 @@ class StoreRoutine:
 
     def store_container(self, package_json):
         container = self.fedora_client.create_container(self.uuid)
-        # container.add_triple(foo.rdf.prefixes.dc.subject, 'minty')
-        # container.update()
         return container
 
     def store_binary(self, filepath, container):
@@ -130,7 +106,37 @@ class AIPStoreRoutine(StoreRoutine):
     """Stores an AIP in Fedora and handles the resulting URI."""
     package_type = 'AIP'
 
+    def store_package(self, package):
+        # https://wiki.archivematica.org/AIP_structure
+        # https://wiki.archivematica.org/DIP_structure
+        self.download = self.download_package(package)
+        container = self.store_container(package)
+        if container:
+            self.mets_path = "METS.{}.xml".format(self.uuid)
+            self.store_binary(self.download.name, container)
+            return container
+        else:
+            raise StoreRoutineError("Could not create BasicContainer for AIP {}".format(self.uuid))
+
 
 class DIPStoreRoutine(StoreRoutine):
     """Stores a DIP in Fedora and handles the resulting URI."""
     package_type = 'DIP'
+
+    def store_package(self, package):
+        # https://wiki.archivematica.org/AIP_structure
+        # https://wiki.archivematica.org/DIP_structure
+        self.download = self.download_package(package)
+        container = self.store_container(package)
+        if container:
+            extracted = helpers.extract_all(self.download.name, join(self.tmp_dir, self.uuid), self.tmp_dir)
+            reserved_names = ['manifest-', 'bagit.txt', 'tagmanifest-', 'rights.csv', 'bag-info.txt']
+            for f in listdir(extracted):
+                if (basename(f).startswith('METS.') and basename(f).endswith('.xml')):
+                    self.mets_path = f
+            for f in listdir(join(extracted, 'objects')):
+                if not any(name in f for name in reserved_names):
+                    self.store_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
+            return container
+        else:
+            raise StoreRoutineError("Could not create BasicContainer for DIP {}".format(self.uuid))

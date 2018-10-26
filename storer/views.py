@@ -4,6 +4,7 @@ from structlog import wrap_logger
 from uuid import uuid4
 
 from django.shortcuts import render
+from gemini import settings
 
 from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -44,12 +45,15 @@ class StoreView(APIView):
     def post(self, request, format=None, *args, **kwargs):
         log = logger.new(transaction_id=str(uuid4()))
         package_type = self.kwargs.get('package')
+        dirs = None
+        if request.POST['test']:
+            dirs = {'tmp': settings.TEST_TMP_DIR}
         try:
             if package_type == 'aips':
-                StoreAIPs().do()
+                StoreAIPs().do(dirs)
                 return Response({"detail": "AIP store routine complete."}, status=200)
             elif package_type == 'dips':
-                StoreDIPs().do()
+                StoreDIPs().do(dirs)
                 return Response({"detail": "DIP store routine complete."}, status=200)
         except Exception as e:
             return Response({"detail": str(e)}, status=500)

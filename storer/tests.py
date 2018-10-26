@@ -55,11 +55,11 @@ class ComponentTest(TestCase):
     def store_views(self):
         print('*** Testing endpoints to trigger crons ***')
         with storer_vcr.use_cassette('store_aips.yml'):
-            request = self.factory.post(reverse('store-packages', kwargs={"package": "aips"}))
+            request = self.factory.post(reverse('store-packages', kwargs={"package": "aips"}), {"test": True})
             response = StoreView.as_view()(request, package="aips")
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
         with storer_vcr.use_cassette('store_dips.yml'):
-            request = self.factory.post(reverse('store-packages', kwargs={"package": "dips"}))
+            request = self.factory.post(reverse('store-packages', kwargs={"package": "dips"}), {"test": True})
             response = StoreView.as_view()(request, package="dips")
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
 

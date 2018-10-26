@@ -12,6 +12,9 @@ class StorePackage(CronJobBase):
             AIPStoreRoutine(dirs).run()
         elif self.package_type == 'DIP':
             DIPStoreRoutine(dirs).run()
+        else:
+            AIPStoreRoutine(dirs).run()
+            DIPStoreRoutine(dirs).run()
 
 
 class StoreAIPs(StorePackage):
