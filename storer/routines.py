@@ -108,21 +108,25 @@ class StoreRoutine:
 
 
 class AIPStoreRoutine(StoreRoutine):
-    """Stores an AIP in Fedora and handles the resulting URI."""
     package_type = 'AIP'
 
     def store_package(self, package, container):
-        """AIPS are stored as a single binary file. This assumes AIPs are stored as a compressed package."""
+        """
+        Stores an AIP as a single binary in Fedora and handles the resulting URI.
+        Assumes AIPs are stored as a compressed package.
+        """
         self.mets_path = "METS.{}.xml".format(self.uuid)
         self.store_binary(self.download.name, container)
         return container
 
 
 class DIPStoreRoutine(StoreRoutine):
-    """Stores a DIP in Fedora and handles the resulting URI."""
     package_type = 'DIP'
 
     def store_package(self, package, container):
+        """
+        Stores a DIP as multiple binaries in Fedora and handles the resulting URI.
+        """
         extracted = helpers.extract_all(self.download.name, join(self.tmp_dir, self.uuid), self.tmp_dir)
         reserved_names = ['manifest-', 'bagit.txt', 'tagmanifest-', 'rights.csv', 'bag-info.txt']
         for f in listdir(extracted):
