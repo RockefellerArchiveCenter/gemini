@@ -1,6 +1,6 @@
 import json
 import logging
-import magic
+import mimetypes
 from os.path import basename, join, splitext
 from pyfc4 import models as fcrepo
 from pyfc4.plugins.pcdm import models as pcdm
@@ -68,7 +68,7 @@ class FedoraClient(object):
     def create_binary(self, filepath, container):
         # Uses PCDM plugin: https://github.com/ghukill/pyfc4/blob/master/pyfc4/plugins/pcdm/models.py#L237
         file_data = open(filepath, 'rb')
-        mimetype = magic.from_file(filepath, mime=True)
+        mimetype = mimetypes.guess_type(filepath)[0]
         try:
             new_binary = container.create_file(uri=basename(filepath), specify_uri=True, data=file_data, mimetype=mimetype)
             new_binary.add_triple(new_binary.rdf.prefixes.rdfs['label'], basename(filepath))
@@ -112,6 +112,8 @@ class ArchivematicaClient(object):
             del kwargs['params']
 
         current_page = requests.get(full_url, params=params, headers=self.headers, **kwargs)
+        if not current_page:
+            raise FedoraClientError("Authentication error while retrieving {}".format(full_url))
         current_json = current_page.json()
         if current_json.get('meta'):
             while current_json['meta']['offset'] <= current_json['meta']['total_count']:
