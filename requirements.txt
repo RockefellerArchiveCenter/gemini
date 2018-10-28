@@ -37,7 +37,6 @@ pylzma==0.4.9
 pyparsing==2.2.0
 pytest==3.8.0
 pytest-cov==2.6.0
-python-magic==0.4.15
 pytz==2018.5
 PyYAML==3.13
 rdflib==4.2.2
