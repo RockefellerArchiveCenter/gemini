@@ -21,6 +21,11 @@ When you're done, shut down docker-compose
     $ docker-compose down
 
 
+### Configuration
+
+You will likely need to edit the values in `gemini/config.py` for your local environment.
+
+
 ## Usage
 
 Packages are stored on a regular basis when either the `StoreAIPs` or `StoreDIPs` cron jobs are run or when a POST request is sent to the `store/aips` or `store/dips` endpoints.
@@ -40,8 +45,8 @@ Storage routines consists of the following steps:
 
 | Method | URL | Parameters | Response  | Behavior  |
 |--------|-----|---|---|---|
-|GET|/packages| |200|Returns a list of SIPs|
-|GET|/packages/{id}| |200|Returns data about an individual SIP|
+|GET|/packages| |200|Returns a list of packages|
+|GET|/packages/{id}| |200|Returns data about an individual package|
 |POST|/store/{package_type}||200|Runs the store routine for the package type specified, either `aips` or `dips`|
 
 
