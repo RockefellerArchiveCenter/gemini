@@ -35,7 +35,7 @@ class StoreRoutine:
             makedirs(self.tmp_dir)
 
     def run(self):
-        url = 'file/?package_type={}'.format(self.package_type)
+        url = 'file/?package_type={}'.format(self.package_type.upper())
         for package in self.am_client.retrieve_paged(url):
             self.uuid = package['uuid']
             if package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid']:
@@ -50,7 +50,7 @@ class StoreRoutine:
                         raise StoreRoutineError("Could not store binary for {} with UUID {} in Fedora".format(self.package_type, self.uuid))
                     else:
                         Package.objects.create(
-                            type=self.package_type.lower(),
+                            type=self.package_type,
                             data=package
                         )
                         internal_sender_identifier = self.get_internal_sender_identifier()
@@ -65,9 +65,9 @@ class StoreRoutine:
         extension = splitext(package_json['current_path'])[1]
         if not extension:
             extension = '.tar'
-        package = open(join(self.tmp_dir, '{}{}'.format(self.uuid, extension)), "wb")
-        package.write(response._content)
-        package.close()
+        with open(join(self.tmp_dir, '{}{}'.format(self.uuid, extension)), "wb") as package:
+            package.write(response._content)
+            package.close()
         return package
 
     def store_container(self, package_json):
@@ -108,7 +108,7 @@ class StoreRoutine:
 
 
 class AIPStoreRoutine(StoreRoutine):
-    package_type = 'AIP'
+    package_type = 'aip'
 
     def store_package(self, package, container):
         """
@@ -121,7 +121,7 @@ class AIPStoreRoutine(StoreRoutine):
 
 
 class DIPStoreRoutine(StoreRoutine):
-    package_type = 'DIP'
+    package_type = 'dip'
 
     def store_package(self, package, container):
         """
