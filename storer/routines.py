@@ -40,25 +40,33 @@ class StoreRoutine:
             self.uuid = package['uuid']
             if package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid']:
                 if not Package.objects.filter(type=self.package_type, data__uuid=self.uuid).exists():
-                    self.download = self.download_package(package)
-                    container = self.store_container(package)
-                    if not container:
-                        raise StoreRoutineError("Could not create BasicContainer for {} with UUID {} in Fedora".format(self.package_type, self.uuid))
-                    else:
+                    try:
+                        self.download = self.download_package(package)
+                    except Exception as e:
+                        raise StoreRoutineError("Error downloading data: {}".format(e))
+
+                    try:
+                        container = self.fedora_client.create_container(self.uuid)
                         updated_container = self.store_package(package, container)
-                    if not updated_container:
-                        raise StoreRoutineError("Could not store binary for {} with UUID {} in Fedora".format(self.package_type, self.uuid))
-                    else:
-                        Package.objects.create(
-                            type=self.package_type,
-                            data=package
-                        )
-                        internal_sender_identifier = self.get_internal_sender_identifier()
+                    except Exception as e:
+                        raise StoreRoutineError("Error storing data: {}".format(e))
+
+                    Package.objects.create(
+                        type=self.package_type,
+                        data=package
+                    )
+                    internal_sender_identifier = self.get_internal_sender_identifier()
+
+                    try:
                         response = self.send_callback(container.uri_as_string(), internal_sender_identifier)
-                if not self.clean_up():
-                    raise StoreRoutineError("Error cleaning up")
-                    return False
+                    except Exception as e:
+                        raise StoreRoutineError("Error sending callback: {}".format(e))
+            try:
+                self.clean_up()
+            except Exception as e:
+                raise StoreRoutineError("Error cleaning up: {}".format(e))
         return True
+
 
     def download_package(self, package_json):
         response = self.am_client.retrieve('/file/{}/download/'.format(self.uuid))
@@ -69,14 +77,6 @@ class StoreRoutine:
             package.write(response._content)
             package.close()
         return package
-
-    def store_container(self, package_json):
-        container = self.fedora_client.create_container(self.uuid)
-        return container
-
-    def store_binary(self, filepath, container):
-        binary = self.fedora_client.create_binary(filepath, container)
-        return binary
 
     def get_internal_sender_identifier(self):
         mets = helpers.extract_file(self.download.name, self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
@@ -116,7 +116,7 @@ class AIPStoreRoutine(StoreRoutine):
         Assumes AIPs are stored as a compressed package.
         """
         self.mets_path = "METS.{}.xml".format(self.uuid)
-        self.store_binary(self.download.name, container)
+        self.fedora_client.create_binary(self.download.name, container)
         return container
 
 
@@ -134,5 +134,5 @@ class DIPStoreRoutine(StoreRoutine):
                 self.mets_path = f
         for f in listdir(join(extracted, 'objects')):
             if not any(name in f for name in reserved_names):
-                self.store_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
+                self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
         return container
