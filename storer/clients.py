@@ -78,7 +78,6 @@ class FedoraClient(object):
 class ArchivematicaClient(object):
     def __init__(self):
         self.headers = {"Authorization": "ApiKey {}:{}".format(settings.ARCHIVEMATICA['username'], settings.ARCHIVEMATICA['api_key'])}
-        self.params = {"username": settings.ARCHIVEMATICA['username'], "api_key": settings.ARCHIVEMATICA['api_key']}
         self.baseurl = settings.ARCHIVEMATICA['baseurl']
 
     def retrieve(self, uri, *args, **kwargs):

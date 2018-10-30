@@ -88,14 +88,11 @@ class StoreRoutine:
 
     def send_callback(self, fedora_uri, internal_sender_identifier):
         if settings.CALLBACK:
-            print(fedora_uri)
-            print(internal_sender_identifier)
-            print(self.package_type)
-            # response = requests.post(settings.CALLBACK['url'], data={'identifier': internal_sender_identifier, 'uri': fedora_uri, 'package_type': self.package_type})
-            # if response:
-            #     return True
-            # else:
-            #     raise StoreRoutineError("Could not create execute callback for {} {}".format(self, package_type, self.uuid))
+            response = requests.post(settings.CALLBACK['url'], data={'identifier': internal_sender_identifier, 'uri': fedora_uri, 'package_type': self.package_type})
+            if response:
+                return True
+            else:
+                raise StoreRoutineError("Could not create execute callback for {} {}".format(self, package_type, self.uuid))
 
     def clean_up(self):
         for d in listdir(self.tmp_dir):

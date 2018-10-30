@@ -18,14 +18,14 @@ from storer.views import PackageViewSet, StoreView
 storer_vcr = vcr.VCR(
     serializer='yaml',
     cassette_library_dir='fixtures/cassettes',
-    record_mode='once',
+    record_mode='new_episodes',
     match_on=['path', 'method', 'query'],
     filter_query_parameters=['username', 'password'],
     filter_headers=['Authorization'],
 )
 
 
-class ComponentTest(TestCase):
+class PackageTest(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.client = Client()
