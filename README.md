@@ -1,6 +1,8 @@
 # gemini
 A microservice to store AIPs and DIPs in Fedora.
 
+[![Build Status](https://travis-ci.org/RockefellerArchiveCenter/gemini.svg?branch=master)](https://travis-ci.org/RockefellerArchiveCenter/gemini)
+
 ## Setup
 
 Clone the repository
