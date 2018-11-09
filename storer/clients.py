@@ -41,38 +41,28 @@ class FedoraClient(object):
         specify_uri = True if uri else False
         try:
             container = pcdm.PCDMObject(repo=self.client, uri=uri)
-            if container.check_exists():
-                container = self.client.get_resource(uri)
-                container.delete(remove_tombstone=True)
-                container = pcdm.PCDMObject(repo=self.client, uri=uri)
-                container.create(specify_uri=True)
-            else:
+            if not container.check_exists():
                 container.create(specify_uri=specify_uri)
             return container
         except Exception as e:
             raise FedoraClientError("Error creating object: {}".format(e))
 
     def create_binary(self, filepath, container):
-        # Uses PCDM plugin: https://github.com/ghukill/pyfc4/blob/master/pyfc4/plugins/pcdm/models.py#L237
-        file_data = open(filepath, 'rb')
+        # Uses PCDM plugin: https://github.com/ghukill/pyfc4/blob/master/pyfc4/plugins/pcdm/models.py
         mimetype = mimetypes.guess_type(filepath)[0]
-        try:
-            binary = fcrepo.Binary(repo=self.client, uri='{}/files/{}'.format(container.uri_as_string(), basename(filepath)))
-            if binary.check_exists():
-                new_binary = self.client.get_resource('{}/files/{}'.format(container.uri_as_string(), basename(filepath)))
-                new_binary.binary.data = file_data
-                new_binary.binary.mimetype = mimetype
-                new_binary.add_triple(new_binary.rdf.prefixes.rdfs['label'], basename(filepath))
-                new_binary.add_triple(new_binary.rdf.prefixes.dc['format'], mimetype)
-                new_binary.update()
-            else:
-                new_binary = container.create_file(uri=basename(filepath), specify_uri=True, data=file_data, mimetype=mimetype)
-                new_binary.add_triple(new_binary.rdf.prefixes.rdfs['label'], basename(filepath))
-                new_binary.add_triple(new_binary.rdf.prefixes.dc['format'], mimetype)
-                new_binary.update()
-            return new_binary
-        except Exception as e:
-            raise FedoraClientError("Error creating binary: {}".format(e))
+        with open(filepath, 'rb') as f:
+            try:
+                binary = pcdm.PCDMFile(repo=self.client, uri='{}/files/{}'.format(container.uri_as_string(), basename(filepath)), binary_data=f, binary_mimetype=mimetype)
+                if binary.check_exists():
+                    current_binary = self.client.get_resource('{}/files/{}'.format(container.uri_as_string(), basename(filepath)))
+                    current_binary.delete(remove_tombstone=True)
+                binary.create(specify_uri=True)
+                binary.add_triple(binary.rdf.prefixes.rdfs['label'], basename(filepath))
+                binary.add_triple(binary.rdf.prefixes.dc['format'], mimetype)
+                binary.update()
+                return binary
+            except Exception as e:
+                raise FedoraClientError("Error creating binary: {}".format(e))
 
 
 class ArchivematicaClient(object):
@@ -82,7 +72,7 @@ class ArchivematicaClient(object):
 
     def retrieve(self, uri, *args, **kwargs):
         full_url = "/".join([self.baseurl.rstrip("/"), uri.lstrip("/")])
-        response = requests.get(full_url, headers=self.headers, **kwargs)
+        response = requests.get(full_url, headers=self.headers, *args, **kwargs)
         if response:
             return response
         else:

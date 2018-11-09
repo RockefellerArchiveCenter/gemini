@@ -10,8 +10,8 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.response import Response
 
-from storer.cron import StoreAIPs, StoreDIPs
 from storer.models import Package
+from storer.routines import AIPRoutine, DIPRoutine
 from storer.serializers import PackageSerializer, PackageListSerializer
 
 logger = logging.getLogger(__name__)
@@ -39,8 +39,8 @@ class PackageViewSet(ReadOnlyModelViewSet):
         return PackageSerializer
 
 
-class StoreView(APIView):
-    """Runs cron jobs to store AIPs and/or DIPs. Accepts POST requests only."""
+class DownloadView(APIView):
+    """Downloads AIPs and/or DIPs. Accepts POST requests only."""
 
     def post(self, request, format=None, *args, **kwargs):
         log = logger.new(transaction_id=str(uuid4()))
@@ -50,10 +50,30 @@ class StoreView(APIView):
             dirs = {'tmp': settings.TEST_TMP_DIR}
         try:
             if package_type == 'aips':
-                StoreAIPs().do(dirs)
+                AIPRoutine(dirs).download()
+                return Response({"detail": "AIP download routine complete."}, status=200)
+            elif package_type == 'dips':
+                DIPRoutine(dirs).download()
+                return Response({"detail": "DIP download routine complete."}, status=200)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=500)
+
+
+class StoreView(APIView):
+    """Store AIPs and/or DIPs. Accepts POST requests only."""
+
+    def post(self, request, format=None, *args, **kwargs):
+        log = logger.new(transaction_id=str(uuid4()))
+        package_type = self.kwargs.get('package')
+        dirs = None
+        if request.POST.get('test'):
+            dirs = {'tmp': settings.TEST_TMP_DIR}
+        try:
+            if package_type == 'aips':
+                AIPRoutine(dirs).store()
                 return Response({"detail": "AIP store routine complete."}, status=200)
             elif package_type == 'dips':
-                StoreDIPs().do(dirs)
+                DIPRoutine(dirs).store()
                 return Response({"detail": "DIP store routine complete."}, status=200)
         except Exception as e:
             return Response({"detail": str(e)}, status=500)

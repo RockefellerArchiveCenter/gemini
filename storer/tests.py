@@ -11,9 +11,9 @@ from django.urls import reverse
 from rest_framework.test import APIRequestFactory
 
 from gemini import settings
-from storer.cron import StoreAIPs, StoreDIPs
+from storer.routines import AIPRoutine, DIPRoutine
 from storer.models import Package
-from storer.views import PackageViewSet, StoreView
+from storer.views import PackageViewSet, DownloadView, StoreView
 
 storer_vcr = vcr.VCR(
     serializer='yaml',
@@ -32,13 +32,21 @@ class PackageTest(TestCase):
 
     def process_packages(self):
         print('*** Processing packages ***')
+        print('*** Downloading AIPS ***')
+        with storer_vcr.use_cassette('store_aips.yml'):
+            store_aips = AIPRoutine(dirs={'tmp': settings.TEST_TMP_DIR}).download()
+            self.assertNotEqual(False, store_aips, "AIPS not downloaded correctly")
+        print('*** Downloading DIPS ***')
+        with storer_vcr.use_cassette('store_dips.yml'):
+            store_dips = DIPRoutine(dirs={'tmp': settings.TEST_TMP_DIR}).download()
+            self.assertNotEqual(False, store_dips, "DIPS not downloaded correctly")
         print('*** Storing AIPS ***')
         with storer_vcr.use_cassette('store_aips.yml'):
-            store_aips = StoreAIPs().do(dirs={'tmp': settings.TEST_TMP_DIR})
+            store_aips = AIPRoutine(dirs={'tmp': settings.TEST_TMP_DIR}).store()
             self.assertNotEqual(False, store_aips, "AIPS not stored correctly")
         print('*** Storing DIPS ***')
         with storer_vcr.use_cassette('store_dips.yml'):
-            store_dips = StoreDIPs().do(dirs={'tmp': settings.TEST_TMP_DIR})
+            store_dips = DIPRoutine(dirs={'tmp': settings.TEST_TMP_DIR}).store()
             self.assertNotEqual(False, store_dips, "DIPS not stored correctly")
 
     def get_packages(self):
@@ -53,7 +61,15 @@ class PackageTest(TestCase):
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
 
     def store_views(self):
-        print('*** Testing endpoints to trigger crons ***')
+        print('*** Testing endpoints to trigger routines ***')
+        with storer_vcr.use_cassette('store_aips.yml'):
+            request = self.factory.post(reverse('download-packages', kwargs={"package": "aips"}), {"test": True})
+            response = DownloadView.as_view()(request, package="aips")
+            self.assertEqual(response.status_code, 200, "Wrong HTTP code")
+        with storer_vcr.use_cassette('store_dips.yml'):
+            request = self.factory.post(reverse('download-packages', kwargs={"package": "dips"}), {"test": True})
+            response = DownloadView.as_view()(request, package="dips")
+            self.assertEqual(response.status_code, 200, "Wrong HTTP code")
         with storer_vcr.use_cassette('store_aips.yml'):
             request = self.factory.post(reverse('store-packages', kwargs={"package": "aips"}), {"test": True})
             response = StoreView.as_view()(request, package="aips")

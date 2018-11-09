@@ -19,10 +19,10 @@ logger.setLevel(logging.DEBUG)
 logger = wrap_logger(logger)
 
 
-class StoreRoutineError(Exception): pass
+class RoutineError(Exception): pass
 
 
-class StoreRoutine:
+class Routine:
     def __init__(self, dirs):
         self.log = logger.bind(transaction_id=str(uuid4()))
         self.am_client = ArchivematicaClient()
@@ -34,7 +34,7 @@ class StoreRoutine:
         if not isdir(self.tmp_dir):
             makedirs(self.tmp_dir)
 
-    def run(self):
+    def download(self):
         url = 'file/?package_type={}'.format(self.package_type.upper())
         for package in self.am_client.retrieve_paged(url):
             self.uuid = package['uuid']
@@ -43,43 +43,52 @@ class StoreRoutine:
                     try:
                         self.download = self.download_package(package)
                     except Exception as e:
-                        raise StoreRoutineError("Error downloading data: {}".format(e))
-
-                    try:
-                        container = self.fedora_client.create_container(self.uuid)
-                        updated_container = self.store_package(package, container)
-                    except Exception as e:
-                        raise StoreRoutineError("Error storing data: {}".format(e))
+                        raise RoutineError("Error downloading data: {}".format(e))
 
                     Package.objects.create(
                         type=self.package_type,
-                        data=package
+                        data=package,
+                        process_status=10
                     )
-                    internal_sender_identifier = self.get_internal_sender_identifier()
-
-                    try:
-                        response = self.send_callback(container.uri_as_string(), internal_sender_identifier)
-                    except Exception as e:
-                        raise StoreRoutineError("Error sending callback: {}".format(e))
-            try:
-                self.clean_up()
-            except Exception as e:
-                raise StoreRoutineError("Error cleaning up: {}".format(e))
         return True
 
+    def store(self):
+        for package in Package.objects.filter(process_status=10):
+            self.uuid = package.data['uuid']
+            try:
+                container = self.fedora_client.create_container(self.uuid)
+                updated_container = self.store_package(package.data, container)
+            except Exception as e:
+                raise RoutineError("Error storing data: {}".format(e))
+
+            internal_sender_identifier = self.get_internal_sender_identifier()
+
+            try:
+                response = self.send_callback(container.uri_as_string(), internal_sender_identifier)
+            except Exception as e:
+                raise RoutineError("Error sending callback: {}".format(e))
+
+            package.process_status = 20
+            package.save()
+
+        try:
+            self.clean_up()
+        except Exception as e:
+            raise RoutineError("Error cleaning up: {}".format(e))
 
     def download_package(self, package_json):
-        response = self.am_client.retrieve('/file/{}/download/'.format(self.uuid))
+        response = self.am_client.retrieve('/file/{}/download/'.format(self.uuid), stream=True)
         extension = splitext(package_json['current_path'])[1]
         if not extension:
             extension = '.tar'
         with open(join(self.tmp_dir, '{}{}'.format(self.uuid, extension)), "wb") as package:
-            package.write(response._content)
-            package.close()
+            for chunk in response.iter_content(chunk_size=1024):
+                if chunk:
+                    package.write(chunk)
         return package
 
     def get_internal_sender_identifier(self):
-        mets = helpers.extract_file(self.download.name, self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
+        mets = helpers.extract_file(self.uuid, self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
         tree = ET.parse(mets)
         root = tree.getroot()
         ns = {'mets': 'http://www.loc.gov/METS/'}
@@ -92,7 +101,7 @@ class StoreRoutine:
             if response:
                 return True
             else:
-                raise StoreRoutineError("Could not create execute callback for {} {}".format(self, package_type, self.uuid))
+                raise RoutineError("Could not create execute callback for {} {}".format(self, package_type, self.uuid))
 
     def clean_up(self):
         for d in listdir(self.tmp_dir):
@@ -104,7 +113,7 @@ class StoreRoutine:
         return True
 
 
-class AIPStoreRoutine(StoreRoutine):
+class AIPRoutine(Routine):
     package_type = 'aip'
 
     def store_package(self, package, container):
@@ -113,18 +122,18 @@ class AIPStoreRoutine(StoreRoutine):
         Assumes AIPs are stored as a compressed package.
         """
         self.mets_path = "METS.{}.xml".format(self.uuid)
-        self.fedora_client.create_binary(self.download.name, container)
+        self.fedora_client.create_binary(self.uuid, container)
         return container
 
 
-class DIPStoreRoutine(StoreRoutine):
+class DIPRoutine(Routine):
     package_type = 'dip'
 
     def store_package(self, package, container):
         """
         Stores a DIP as multiple binaries in Fedora and handles the resulting URI.
         """
-        extracted = helpers.extract_all(self.download.name, join(self.tmp_dir, self.uuid), self.tmp_dir)
+        extracted = helpers.extract_all(self.uuid, join(self.tmp_dir, self.uuid), self.tmp_dir)
         reserved_names = ['manifest-', 'bagit.txt', 'tagmanifest-', 'rights.csv', 'bag-info.txt']
         for f in listdir(extracted):
             if (basename(f).startswith('METS.') and basename(f).endswith('.xml')):
