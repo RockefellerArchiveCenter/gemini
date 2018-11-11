@@ -11,14 +11,14 @@ from django.urls import reverse
 from rest_framework.test import APIRequestFactory
 
 from gemini import settings
-from storer.routines import AIPRoutine, DIPRoutine
+from storer.routines import DownloadRoutine, StoreRoutine
 from storer.models import Package
 from storer.views import PackageViewSet, DownloadView, StoreView
 
 storer_vcr = vcr.VCR(
     serializer='yaml',
     cassette_library_dir='fixtures/cassettes',
-    record_mode='new_episodes',
+    record_mode='once',
     match_on=['path', 'method', 'query'],
     filter_query_parameters=['username', 'password'],
     filter_headers=['Authorization'],
@@ -31,23 +31,14 @@ class PackageTest(TestCase):
         self.client = Client()
 
     def process_packages(self):
-        print('*** Processing packages ***')
-        print('*** Downloading AIPS ***')
-        with storer_vcr.use_cassette('store_aips.yml'):
-            store_aips = AIPRoutine(dirs={'tmp': settings.TEST_TMP_DIR}).download()
-            self.assertNotEqual(False, store_aips, "AIPS not downloaded correctly")
-        print('*** Downloading DIPS ***')
-        with storer_vcr.use_cassette('store_dips.yml'):
-            store_dips = DIPRoutine(dirs={'tmp': settings.TEST_TMP_DIR}).download()
-            self.assertNotEqual(False, store_dips, "DIPS not downloaded correctly")
-        print('*** Storing AIPS ***')
-        with storer_vcr.use_cassette('store_aips.yml'):
-            store_aips = AIPRoutine(dirs={'tmp': settings.TEST_TMP_DIR}).store()
-            self.assertNotEqual(False, store_aips, "AIPS not stored correctly")
-        print('*** Storing DIPS ***')
-        with storer_vcr.use_cassette('store_dips.yml'):
-            store_dips = DIPRoutine(dirs={'tmp': settings.TEST_TMP_DIR}).store()
-            self.assertNotEqual(False, store_dips, "DIPS not stored correctly")
+        print('*** Downloading packages ***')
+        with storer_vcr.use_cassette('download.yml'):
+            download = DownloadRoutine(dirs={'tmp': settings.TEST_TMP_DIR}).run()
+            self.assertNotEqual(False, download, "Packages not downloaded correctly")
+        print('*** Storing packages ***')
+        with storer_vcr.use_cassette('store.yml'):
+            store = StoreRoutine(dirs={'tmp': settings.TEST_TMP_DIR}).run()
+            self.assertNotEqual(False, store, "Packages not stored correctly")
 
     def get_packages(self):
         print('*** Getting all packages ***')
@@ -62,21 +53,13 @@ class PackageTest(TestCase):
 
     def store_views(self):
         print('*** Testing endpoints to trigger routines ***')
-        with storer_vcr.use_cassette('store_aips.yml'):
-            request = self.factory.post(reverse('download-packages', kwargs={"package": "aips"}), {"test": True})
-            response = DownloadView.as_view()(request, package="aips")
+        with storer_vcr.use_cassette('download.yml'):
+            request = self.factory.post(reverse('download-packages'), {"test": True})
+            response = DownloadView.as_view()(request)
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
-        with storer_vcr.use_cassette('store_dips.yml'):
-            request = self.factory.post(reverse('download-packages', kwargs={"package": "dips"}), {"test": True})
-            response = DownloadView.as_view()(request, package="dips")
-            self.assertEqual(response.status_code, 200, "Wrong HTTP code")
-        with storer_vcr.use_cassette('store_aips.yml'):
-            request = self.factory.post(reverse('store-packages', kwargs={"package": "aips"}), {"test": True})
-            response = StoreView.as_view()(request, package="aips")
-            self.assertEqual(response.status_code, 200, "Wrong HTTP code")
-        with storer_vcr.use_cassette('store_dips.yml'):
-            request = self.factory.post(reverse('store-packages', kwargs={"package": "dips"}), {"test": True})
-            response = StoreView.as_view()(request, package="dips")
+        with storer_vcr.use_cassette('store.yml'):
+            request = self.factory.post(reverse('store-packages'), {"test": True})
+            response = StoreView.as_view()(request)
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
 
     def schema(self):

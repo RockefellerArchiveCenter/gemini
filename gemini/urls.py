@@ -38,8 +38,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^store/(?P<package>aips|dips)/$', StoreView.as_view(), name='store-packages'),
-    url(r'^download/(?P<package>aips|dips)/$', DownloadView.as_view(), name='download-packages'),
+    url(r'^store/', StoreView.as_view(), name='store-packages'),
+    url(r'^download/', DownloadView.as_view(), name='download-packages'),
     url(r'^status/', include('health_check.api.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^schema(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=None), name='schema-json'),

@@ -11,7 +11,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.response import Response
 
 from storer.models import Package
-from storer.routines import AIPRoutine, DIPRoutine
+from storer.routines import DownloadRoutine, StoreRoutine
 from storer.serializers import PackageSerializer, PackageListSerializer
 
 logger = logging.getLogger(__name__)
@@ -40,40 +40,30 @@ class PackageViewSet(ReadOnlyModelViewSet):
 
 
 class DownloadView(APIView):
-    """Downloads AIPs and/or DIPs. Accepts POST requests only."""
+    """Downloads packages. Accepts POST requests only."""
 
     def post(self, request, format=None, *args, **kwargs):
         log = logger.new(transaction_id=str(uuid4()))
-        package_type = self.kwargs.get('package')
         dirs = None
         if request.POST.get('test'):
             dirs = {'tmp': settings.TEST_TMP_DIR}
         try:
-            if package_type == 'aips':
-                AIPRoutine(dirs).download()
-                return Response({"detail": "AIP download routine complete."}, status=200)
-            elif package_type == 'dips':
-                DIPRoutine(dirs).download()
-                return Response({"detail": "DIP download routine complete."}, status=200)
+            DownloadRoutine(dirs).run()
+            return Response({"detail": "Packages downloaded."}, status=200)
         except Exception as e:
             return Response({"detail": str(e)}, status=500)
 
 
 class StoreView(APIView):
-    """Store AIPs and/or DIPs. Accepts POST requests only."""
+    """Store packages. Accepts POST requests only."""
 
     def post(self, request, format=None, *args, **kwargs):
         log = logger.new(transaction_id=str(uuid4()))
-        package_type = self.kwargs.get('package')
         dirs = None
         if request.POST.get('test'):
             dirs = {'tmp': settings.TEST_TMP_DIR}
         try:
-            if package_type == 'aips':
-                AIPRoutine(dirs).store()
-                return Response({"detail": "AIP store routine complete."}, status=200)
-            elif package_type == 'dips':
-                DIPRoutine(dirs).store()
-                return Response({"detail": "DIP store routine complete."}, status=200)
+            StoreRoutine(dirs).run()
+            return Response({"detail": "Packages stored."}, status=200)
         except Exception as e:
             return Response({"detail": str(e)}, status=500)

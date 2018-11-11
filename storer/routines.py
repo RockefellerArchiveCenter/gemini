@@ -22,11 +22,10 @@ logger = wrap_logger(logger)
 class RoutineError(Exception): pass
 
 
-class Routine:
+class DownloadRoutine:
     def __init__(self, dirs):
         self.log = logger.bind(transaction_id=str(uuid4()))
         self.am_client = ArchivematicaClient()
-        self.fedora_client = FedoraClient()
         if dirs:
             self.tmp_dir = dirs['tmp']
         else:
@@ -34,12 +33,11 @@ class Routine:
         if not isdir(self.tmp_dir):
             makedirs(self.tmp_dir)
 
-    def download(self):
-        url = 'file/?package_type={}'.format(self.package_type.upper())
-        for package in self.am_client.retrieve_paged(url):
+    def run(self):
+        for package in self.am_client.retrieve_paged('file/'):
             self.uuid = package['uuid']
             if package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid']:
-                if not Package.objects.filter(type=self.package_type, data__uuid=self.uuid).exists():
+                if not Package.objects.filter(data__uuid=self.uuid).exists():
                     try:
                         self.download = self.download_package(package)
                     except Exception as e:
@@ -52,12 +50,38 @@ class Routine:
                     )
         return True
 
-    def store(self):
+    def download_package(self, package_json):
+        response = self.am_client.retrieve('/file/{}/download/'.format(self.uuid), stream=True)
+        extension = splitext(package_json['current_path'])[1]
+        if not extension:
+            extension = '.tar'
+        with open(join(self.tmp_dir, '{}{}'.format(self.uuid, extension)), "wb") as package:
+            for chunk in response.iter_content(chunk_size=1024):
+                if chunk:
+                    package.write(chunk)
+        return package
+
+
+class StoreRoutine:
+    def __init__(self, dirs):
+        self.log = logger.bind(transaction_id=str(uuid4()))
+        self.fedora_client = FedoraClient()
+        if dirs:
+            self.tmp_dir = dirs['tmp']
+        else:
+            self.tmp_dir = settings.TMP_DIR
+        if not isdir(self.tmp_dir):
+            makedirs(self.tmp_dir)
+
+    def run(self):
         for package in Package.objects.filter(process_status=10):
             self.uuid = package.data['uuid']
             try:
                 container = self.fedora_client.create_container(self.uuid)
-                updated_container = self.store_package(package.data, container)
+                if package.type == 'aip':
+                    updated_container = self.store_aip(package.data, container)
+                elif package.type == 'dip':
+                    updated_container = self.store_dip(package.data, container)
             except Exception as e:
                 raise RoutineError("Error storing data: {}".format(e))
 
@@ -75,17 +99,6 @@ class Routine:
             self.clean_up()
         except Exception as e:
             raise RoutineError("Error cleaning up: {}".format(e))
-
-    def download_package(self, package_json):
-        response = self.am_client.retrieve('/file/{}/download/'.format(self.uuid), stream=True)
-        extension = splitext(package_json['current_path'])[1]
-        if not extension:
-            extension = '.tar'
-        with open(join(self.tmp_dir, '{}{}'.format(self.uuid, extension)), "wb") as package:
-            for chunk in response.iter_content(chunk_size=1024):
-                if chunk:
-                    package.write(chunk)
-        return package
 
     def get_internal_sender_identifier(self):
         mets = helpers.extract_file(self.uuid, self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
@@ -112,11 +125,7 @@ class Routine:
                 remove(filepath)
         return True
 
-
-class AIPRoutine(Routine):
-    package_type = 'aip'
-
-    def store_package(self, package, container):
+    def store_aip(self, package, container):
         """
         Stores an AIP as a single binary in Fedora and handles the resulting URI.
         Assumes AIPs are stored as a compressed package.
@@ -125,11 +134,7 @@ class AIPRoutine(Routine):
         self.fedora_client.create_binary(self.uuid, container)
         return container
 
-
-class DIPRoutine(Routine):
-    package_type = 'dip'
-
-    def store_package(self, package, container):
+    def store_dip(self, package, container):
         """
         Stores a DIP as multiple binaries in Fedora and handles the resulting URI.
         """
