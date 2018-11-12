@@ -42,7 +42,7 @@ class FedoraClient(object):
         try:
             container = pcdm.PCDMObject(repo=self.client, uri=uri)
             if not container.check_exists():
-                container.create(specify_uri=specify_uri)
+                container.create(specify_uri=specify_uri, auto_refresh=False)
             return container
         except Exception as e:
             raise FedoraClientError("Error creating object: {}".format(e))
@@ -56,10 +56,10 @@ class FedoraClient(object):
                 if binary.check_exists():
                     current_binary = self.client.get_resource('{}/files/{}'.format(container.uri_as_string(), basename(filepath)))
                     current_binary.delete(remove_tombstone=True)
-                binary.create(specify_uri=True)
+                binary.create(specify_uri=True, auto_refresh=False)
                 binary.add_triple(binary.rdf.prefixes.rdfs['label'], basename(filepath))
                 binary.add_triple(binary.rdf.prefixes.dc['format'], mimetype)
-                binary.update()
+                binary.update(auto_refresh=False)
                 return binary
             except Exception as e:
                 raise FedoraClientError("Error creating binary: {}".format(e))
