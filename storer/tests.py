@@ -37,7 +37,8 @@ class PackageTest(TestCase):
             self.assertNotEqual(False, download, "Packages not downloaded correctly")
         print('*** Storing packages ***')
         with storer_vcr.use_cassette('store.yml'):
-            store = StoreRoutine(dirs={'tmp': settings.TEST_TMP_DIR}).run()
+            store = StoreRoutine('http://aquarius-web:8002/transfers/',
+                                 dirs={'tmp': settings.TEST_TMP_DIR}).run()
             self.assertNotEqual(False, store, "Packages not stored correctly")
 
     def get_packages(self):

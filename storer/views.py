@@ -60,10 +60,12 @@ class StoreView(APIView):
     def post(self, request, format=None, *args, **kwargs):
         log = logger.new(transaction_id=str(uuid4()))
         dirs = None
+        url = request.GET.get('post_service_url', '')
+        url = (urllib.parse.unquote(url) if url else '')
         if request.POST.get('test'):
             dirs = {'tmp': settings.TEST_TMP_DIR}
         try:
-            StoreRoutine(dirs).run()
+            StoreRoutine(url, dirs).run()
             return Response({"detail": "Packages stored."}, status=200)
         except Exception as e:
             return Response({"detail": str(e)}, status=500)

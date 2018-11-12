@@ -63,8 +63,9 @@ class DownloadRoutine:
 
 
 class StoreRoutine:
-    def __init__(self, dirs):
+    def __init__(self, url, dirs):
         self.log = logger.bind(transaction_id=str(uuid4()))
+        self.url = url
         self.fedora_client = FedoraClient()
         if dirs:
             self.tmp_dir = dirs['tmp']
@@ -106,11 +107,14 @@ class StoreRoutine:
         root = tree.getroot()
         ns = {'mets': 'http://www.loc.gov/METS/'}
         element = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns)
-        return element.text
+        return element.text if element else None
 
     def send_callback(self, fedora_uri, internal_sender_identifier):
         if settings.CALLBACK:
-            response = requests.post(settings.CALLBACK['url'], data={'identifier': internal_sender_identifier, 'uri': fedora_uri, 'package_type': self.package_type})
+            response = requests.post(
+                self.url,
+                data={'identifier': internal_sender_identifier, 'uri': fedora_uri, 'package_type': self.package_type},
+                headers={"Content-Type": "application/json"})
             if response:
                 return True
             else:
