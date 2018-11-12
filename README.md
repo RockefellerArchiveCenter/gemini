@@ -30,12 +30,14 @@ You will likely need to edit the values in `gemini/config.py` for your local env
 
 ## Usage
 
-Packages are stored on a regular basis when either the `StoreAIPs` or `StoreDIPs` cron jobs are run or when a POST request is sent to the `store/aips` or `store/dips` endpoints.
+Packages are downloaded and stored when POST requests are sent to the `store/` and `download/` endpoints, respectively.
 
-Storage routines consists of the following steps:
-- Polling the Archivematica Storage Service for packages of a particular type.
+Download routines consist of the following steps:
+- Polling the Archivematica Storage Service for packages.
 - Determining if the package has already been stored by checking whether or not it exists as an object in Gemini's database. If the package has already been processed, Gemini skips it and goes to the next one.
 - Downloading the package from the Archivematica Storage Service.
+
+Storage routines consist of the following steps:
 - Storing the package in Fedora, along with minimal metadata.
 - Creating a package object in Gemini's database.
 - Delivering a POST request to a configurable URL. This request has a payload containing the URI of the stored package in Fedora, the package type ("aip" or "dip") and the value of the `Internal-Sender-Identifier` field from the package's `bag-info.txt` file.
@@ -49,7 +51,8 @@ Storage routines consists of the following steps:
 |--------|-----|---|---|---|
 |GET|/packages| |200|Returns a list of packages|
 |GET|/packages/{id}| |200|Returns data about an individual package|
-|POST|/store/{package_type}||200|Runs the store routine for the package type specified, either `aips` or `dips`|
+|POST|/download/||200|Runs the download routine|
+|POST|/store/||200|Runs the store routine|
 
 
 ## License
