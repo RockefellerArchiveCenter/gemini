@@ -2,6 +2,7 @@ from datetime import datetime
 import logging
 from structlog import wrap_logger
 from uuid import uuid4
+import urllib
 
 from django.shortcuts import render
 from gemini import settings
