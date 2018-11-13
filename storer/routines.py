@@ -34,6 +34,7 @@ class DownloadRoutine:
             makedirs(self.tmp_dir)
 
     def run(self):
+        package_count = 0
         for package in self.am_client.retrieve_paged('file/'):
             self.uuid = package['uuid']
             if package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid']:
@@ -48,7 +49,8 @@ class DownloadRoutine:
                         data=package,
                         process_status=10
                     )
-        return True
+                    package_count += 1
+        return "{} packages downloaded.".format(package_count)
 
     def download_package(self, package_json):
         response = self.am_client.retrieve('/file/{}/download/'.format(self.uuid), stream=True)
@@ -75,6 +77,7 @@ class StoreRoutine:
             makedirs(self.tmp_dir)
 
     def run(self):
+        package_count = 0
         for package in Package.objects.filter(process_status=10):
             self.uuid = package.data['uuid']
             try:
@@ -96,8 +99,11 @@ class StoreRoutine:
             package.process_status = 20
             package.save()
 
+            package_count += 1
+
         try:
             self.clean_up()
+            return "{} packages stored.".format(package_count)
         except Exception as e:
             raise RoutineError("Error cleaning up: {}".format(e))
 

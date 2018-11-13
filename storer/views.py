@@ -48,8 +48,8 @@ class DownloadView(APIView):
         if request.POST.get('test'):
             dirs = {'tmp': settings.TEST_TMP_DIR}
         try:
-            DownloadRoutine(dirs).run()
-            return Response({"detail": "Packages downloaded."}, status=200)
+            download = DownloadRoutine(dirs).run()
+            return Response({"detail": download}, status=200)
         except Exception as e:
             return Response({"detail": str(e)}, status=500)
 
@@ -65,7 +65,7 @@ class StoreView(APIView):
         if request.POST.get('test'):
             dirs = {'tmp': settings.TEST_TMP_DIR}
         try:
-            StoreRoutine(url, dirs).run()
-            return Response({"detail": "Packages stored."}, status=200)
+            store = StoreRoutine(url, dirs).run()
+            return Response({"detail": store}, status=200)
         except Exception as e:
             return Response({"detail": str(e)}, status=500)
