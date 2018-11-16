@@ -48,7 +48,7 @@ class DownloadRoutine:
                     Package.objects.create(
                         type=self.package_type,
                         data=package,
-                        process_status=10
+                        process_status=Package.DOWNLOADED
                     )
                     package_count += 1
         return "{} packages downloaded.".format(package_count)
@@ -80,7 +80,7 @@ class StoreRoutine:
 
     def run(self):
         package_count = 0
-        for package in Package.objects.filter(process_status=10):
+        for package in Package.objects.filter(process_status=Package.DOWNLOADED):
             self.uuid = package.data['uuid']
             try:
                 container = self.fedora_client.create_container(self.uuid)
@@ -95,7 +95,7 @@ class StoreRoutine:
             except Exception as e:
                 raise RoutineError("Error sending callback: {}".format(e))
 
-            package.process_status = 20
+            package.process_status = package.STORED
             package.save()
 
             package_count += 1

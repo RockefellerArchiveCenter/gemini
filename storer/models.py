@@ -11,8 +11,10 @@ class Package(models.Model):
     )
     type = models.CharField(max_length=50, choices=TYPE_CHOICES)
     data = JSONField()
+    DOWNLOADED = 10
+    STORED = 20
     PROCESS_STATUS_CHOICES = (
-        (10, 'Package downloaded'),
-        (20, 'Package stored')
+        (DOWNLOADED, 'Package downloaded'),
+        (STORED, 'Package stored')
     )
     process_status = models.CharField(max_length=50, choices=PROCESS_STATUS_CHOICES, default=10)
