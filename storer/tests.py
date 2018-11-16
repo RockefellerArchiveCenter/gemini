@@ -1,6 +1,6 @@
 import json
 from os.path import join, isdir
-from os import listdir
+from os import listdir, makedirs
 import random
 from shutil import rmtree
 import vcr
@@ -29,6 +29,8 @@ class PackageTest(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.client = Client()
+        if not isdir(settings.TEST_TMP_DIR):
+            makedirs(settings.TEST_TMP_DIR)
 
     def process_packages(self):
         print('*** Downloading packages ***')
