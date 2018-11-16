@@ -58,6 +58,9 @@ Storage routines consist of the following steps:
 |POST|/download/||200|Runs the download routine|
 |POST|/store/||200|Runs the store routine|
 
+## Logging
+
+gemini uses `structlog` to output structured JSON logs. Logging can be configured in `gemini/settings.py`.
 
 ## License
 
