@@ -17,16 +17,7 @@ class ArchivematicaClientError(Exception): pass
 
 class FedoraClient(object):
     def __init__(self, root, username, password):
-        self.client = fcrepo.Repository(
-            root,
-            username,
-            password,
-            default_serialization="application/ld+json",
-            # context (dict): dictionary of namespace prefixes and namespace URIs that propagate
-            # 	to Resources
-            # default_auto_refresh (bool): if False, resource create/update, and graph modifications
-            # 	will not retrieve or parse updates automatically.  Dramatically improves performance.
-        )
+        self.client = fcrepo.Repository(root, username, password, default_serialization="application/ld+json")
 
     def retrieve(self, identifier):
         object = self.client.get_resource(identifier)
@@ -90,7 +81,7 @@ class ArchivematicaClient(object):
             raise ArchivematicaClientError("retrieve_paged doesn't know how to handle {}".format(full_url))
         while current_json['meta']['offset'] <= current_json['meta']['total_count']:
             for obj in current_json['objects']:
-                yield obj 
+                yield obj
             if not current_json['meta']['next']:
                 break
             params['offset'] += limit
