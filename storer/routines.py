@@ -1,5 +1,5 @@
 import logging
-from os import listdir, makedirs, remove
+from os import listdir, makedirs, remove, access, W_OK
 from os.path import basename, isdir, isfile, join, splitext
 import requests
 import shutil
@@ -25,13 +25,14 @@ class RoutineError(Exception): pass
 class DownloadRoutine:
     def __init__(self, dirs):
         self.log = logger.bind(transaction_id=str(uuid4()))
-        self.am_client = ArchivematicaClient()
-        if dirs:
-            self.tmp_dir = dirs['tmp']
-        else:
-            self.tmp_dir = settings.TMP_DIR
+        self.am_client = ArchivematicaClient(settings.ARCHIVEMATICA['username'],
+                                             settings.ARCHIVEMATICA['api_key'],
+                                             settings.ARCHIVEMATICA['baseurl'])
+        self.tmp_dir = dirs['tmp'] if dirs else settings.TMP_DIR
         if not isdir(self.tmp_dir):
-            makedirs(self.tmp_dir)
+            raise RoutineError('Directory does not exist', self.tmp_dir)
+        if not access(self.tmp_dir, W_OK):
+            raise RoutineError('Directory does not have write permissions', self.tmp_dir)
 
     def run(self):
         package_count = 0
@@ -68,13 +69,14 @@ class StoreRoutine:
     def __init__(self, url, dirs):
         self.log = logger.bind(transaction_id=str(uuid4()))
         self.url = url
-        self.fedora_client = FedoraClient()
-        if dirs:
-            self.tmp_dir = dirs['tmp']
-        else:
-            self.tmp_dir = settings.TMP_DIR
+        self.fedora_client = FedoraClient(root=settings.FEDORA['baseurl'],
+                                          username=settings.FEDORA['username'],
+                                          password=settings.FEDORA['password'])
+        self.tmp_dir = dirs['tmp'] if dirs else settings.TMP_DIR
         if not isdir(self.tmp_dir):
-            makedirs(self.tmp_dir)
+            raise RoutineError('Directory does not exist', self.tmp_dir)
+        if not access(self.tmp_dir, W_OK):
+            raise RoutineError('Directory does not have write permissions', self.tmp_dir)
 
     def run(self):
         package_count = 0
@@ -82,10 +84,7 @@ class StoreRoutine:
             self.uuid = package.data['uuid']
             try:
                 container = self.fedora_client.create_container(self.uuid)
-                if package.type == 'aip':
-                    updated_container = self.store_aip(package.data, container)
-                elif package.type == 'dip':
-                    updated_container = self.store_dip(package.data, container)
+                getattr(self, 'store_{}'.format(package.type))(package.data, container)
             except Exception as e:
                 raise RoutineError("Error storing data: {}".format(e))
 
@@ -133,7 +132,6 @@ class StoreRoutine:
                 shutil.rmtree(filepath)
             elif isfile(filepath):
                 remove(filepath)
-        return True
 
     def store_aip(self, package, container):
         """
@@ -142,7 +140,6 @@ class StoreRoutine:
         """
         self.mets_path = "METS.{}.xml".format(self.uuid)
         self.fedora_client.create_binary(self.uuid, container)
-        return container
 
     def store_dip(self, package, container):
         """
@@ -156,4 +153,3 @@ class StoreRoutine:
         for f in listdir(join(extracted, 'objects')):
             if not any(name in f for name in reserved_names):
                 self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
-        return container
