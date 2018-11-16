@@ -29,7 +29,7 @@ Or, if you want to remove all data
 
 ### Configuration
 
-You will likely need to edit the values in `gemini/config.py` for your local environment.
+You will need to edit configuration values in `gemini/config.py` to point to your instances of Archivematica and Fedora.
 
 
 ## Usage
