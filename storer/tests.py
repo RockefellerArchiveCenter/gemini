@@ -11,9 +11,9 @@ from django.urls import reverse
 from rest_framework.test import APIRequestFactory
 
 from gemini import settings
-from storer.routines import DownloadRoutine, StoreRoutine
+from storer.routines import DownloadRoutine, StoreRoutine, CleanupRequester
 from storer.models import Package
-from storer.views import PackageViewSet, DownloadView, StoreView
+from storer.views import PackageViewSet, DownloadView, StoreView, CleanupRequestView
 
 storer_vcr = vcr.VCR(
     serializer='yaml',
@@ -39,9 +39,15 @@ class PackageTest(TestCase):
             self.assertNotEqual(False, download, "Packages not downloaded correctly")
         print('*** Storing packages ***')
         with storer_vcr.use_cassette('store.yml'):
-            store = StoreRoutine('http://aquarius-web:8002/transfers/',
+            store = StoreRoutine('http://aquarius-web:8002/packages/',
                                  dirs={'tmp': settings.TEST_TMP_DIR}).run()
             self.assertNotEqual(False, store, "Packages not stored correctly")
+
+    def request_cleanup(self):
+        print('*** Requesting cleanup ***')
+        with storer_vcr.use_cassette('cleanup.yml'):
+            cleanup = CleanupRequester('http://fornax-web:8003/cleanup/').run()
+            self.assertNotEqual(False, cleanup, "Cleanup request failed")
 
     def get_packages(self):
         print('*** Getting all packages ***')
@@ -64,6 +70,10 @@ class PackageTest(TestCase):
             request = self.factory.post(reverse('store-packages'), {"test": True})
             response = StoreView.as_view()(request)
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
+        with storer_vcr.use_cassette('cleanup.yml'):
+            request = self.factory.post(reverse('request-cleanup'), {"test": True})
+            response = CleanupRequestView.as_view()(request)
+            self.assertEqual(response.status_code, 200, "Wrong HTTP code")
 
     def schema(self):
         print('*** Getting schema view ***')
@@ -81,6 +91,7 @@ class PackageTest(TestCase):
 
     def test_packages(self):
         self.process_packages()
+        self.request_cleanup()
         self.get_packages()
         self.store_views()
         self.schema()
