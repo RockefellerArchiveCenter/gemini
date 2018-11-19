@@ -1,3 +1,4 @@
+import json
 import logging
 from os import listdir, makedirs, remove, access, W_OK
 from os.path import basename, isdir, isfile, join, splitext
@@ -46,7 +47,7 @@ class DownloadRoutine:
                         raise RoutineError("Error downloading data: {}".format(e))
 
                     Package.objects.create(
-                        type=self.package_type,
+                        type=package['package_type'].lower(),
                         data=package,
                         process_status=Package.DOWNLOADED
                     )
@@ -88,12 +89,13 @@ class StoreRoutine:
             except Exception as e:
                 raise RoutineError("Error storing data: {}".format(e))
 
-            internal_sender_identifier = self.get_internal_sender_identifier()
+            package.internal_sender_identifier = self.get_internal_sender_identifier()
 
-            try:
-                response = self.send_callback(container.uri_as_string(), internal_sender_identifier)
-            except Exception as e:
-                raise RoutineError("Error sending callback: {}".format(e))
+            if self.url:
+                try:
+                    self.send_callback(container.uri_as_string(), package)
+                except Exception as e:
+                    raise RoutineError("Error sending callback: {}".format(e))
 
             package.process_status = package.STORED
             package.save()
@@ -107,23 +109,22 @@ class StoreRoutine:
             raise RoutineError("Error cleaning up: {}".format(e))
 
     def get_internal_sender_identifier(self):
-        mets = helpers.extract_file(self.uuid, self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
+        mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
         tree = ET.parse(mets)
         root = tree.getroot()
         ns = {'mets': 'http://www.loc.gov/METS/'}
         element = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns)
-        return element.text if element else None
+        return element.text
 
-    def send_callback(self, fedora_uri, internal_sender_identifier):
-        if settings.CALLBACK:
-            response = requests.post(
-                self.url,
-                data={'identifier': internal_sender_identifier, 'uri': fedora_uri, 'package_type': self.package_type},
-                headers={"Content-Type": "application/json"})
-            if response:
-                return True
-            else:
-                raise RoutineError("Could not create execute callback for {} {}".format(self, package_type, self.uuid))
+    def send_callback(self, fedora_uri, package):
+        response = requests.post(
+            self.url,
+            data=json.dumps({'identifier': package.internal_sender_identifier, 'uri': fedora_uri, 'package_type': package.type}),
+            headers={"Content-Type": "application/json"})
+        if response:
+            return True
+        else:
+            raise RoutineError("Could not create execute callback for {} {}".format(package.type, self.uuid))
 
     def clean_up(self):
         for d in listdir(self.tmp_dir):
@@ -138,14 +139,16 @@ class StoreRoutine:
         Stores an AIP as a single binary in Fedora and handles the resulting URI.
         Assumes AIPs are stored as a compressed package.
         """
+        self.extension = '.7z'
         self.mets_path = "METS.{}.xml".format(self.uuid)
-        self.fedora_client.create_binary(self.uuid, container)
+        self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), container)
 
     def store_dip(self, package, container):
         """
         Stores a DIP as multiple binaries in Fedora and handles the resulting URI.
         """
-        extracted = helpers.extract_all(self.uuid, join(self.tmp_dir, self.uuid), self.tmp_dir)
+        self.extension = '.tar'
+        extracted = helpers.extract_all(join(self.tmp_dir, "{}.tar".format(self.uuid)), join(self.tmp_dir, self.uuid), self.tmp_dir)
         reserved_names = ['manifest-', 'bagit.txt', 'tagmanifest-', 'rights.csv', 'bag-info.txt']
         for f in listdir(extracted):
             if (basename(f).startswith('METS.') and basename(f).endswith('.xml')):
@@ -153,3 +156,23 @@ class StoreRoutine:
         for f in listdir(join(extracted, 'objects')):
             if not any(name in f for name in reserved_names):
                 self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
+
+
+class CleanupRequester:
+    def __init__(self, url):
+        self.url = url
+
+    def run(self):
+        package_count = 0
+        for package in Package.objects.filter(process_status=Package.STORED):
+            r = requests.post(
+                self.url,
+                data=json.dumps({"identifier": package.internal_sender_identifier}),
+                headers={"Content-Type": "application/json"},
+            )
+            if r.status_code != 200:
+                raise CleanupError(r.status_code, r.reason)
+            package.process_status = Package.CLEANED_UP
+            package.save()
+            package_count += 1
+        return "Requests sent to cleanup {} Packages.".format(package_count)
