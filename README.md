@@ -21,7 +21,7 @@ Once the application starts successfully, you should be able to access the appli
 When you're done, shut down docker-compose
 
     $ docker-compose down
-    
+
 Or, if you want to remove all data
 
     $ docker-compose down -v
@@ -32,21 +32,21 @@ Or, if you want to remove all data
 You will need to edit configuration values in `gemini/config.py` to point to your instances of Archivematica and Fedora.
 
 
-## Usage
+## Services
 
-Packages are downloaded and stored when POST requests are sent to the `store/` and `download/` endpoints, respectively.
+gemini has three services, all of which are exposed via HTTP endpoints (see [Routes](#routes) section below):
 
-Download routines consist of the following steps:
-- Polling the Archivematica Storage Service for packages.
-- Determining if the package has already been stored by checking whether or not it exists as an object in gemini's database. If the package has already been processed, gemini skips it and goes to the next one.
-- Downloading the package from the Archivematica Storage Service.
+* Download Packages
+  * Polling the Archivematica Storage Service for packages.
+  * Determining if the package has already been stored by checking whether or not it exists as an object in gemini's database. If the package has already been processed, gemini skips it and goes to the next one.
+  * Downloading the package from the Archivematica Storage Service.
+* Store Packages
+  * Storing the package in Fedora, along with minimal metadata.
+  * Creating a package object in gemini's database.
+  * Delivering a POST request to a configurable URL. This request has a payload containing the URI of the stored package in Fedora, the package type ("aip" or "dip") and the value of the `Internal-Sender-Identifier` field from the package's `bag-info.txt` file.
+* Request Cleanup - send a request to another service to clean up after a package has been processed.
 
-Storage routines consist of the following steps:
-- Storing the package in Fedora, along with minimal metadata.
-- Creating a package object in gemini's database.
-- Delivering a POST request to a configurable URL. This request has a payload containing the URI of the stored package in Fedora, the package type ("aip" or "dip") and the value of the `Internal-Sender-Identifier` field from the package's `bag-info.txt` file.
-
-![File storage diagram](storer.png)
+![File storage diagram](gemini-services.png)
 
 
 ### Routes
@@ -55,12 +55,17 @@ Storage routines consist of the following steps:
 |--------|-----|---|---|---|
 |GET|/packages| |200|Returns a list of packages|
 |GET|/packages/{id}| |200|Returns data about an individual package|
-|POST|/download/||200|Runs the download routine|
-|POST|/store/||200|Runs the store routine|
+|POST|/download||200|Runs the download routine|
+|POST|/store||200|Runs the store routine|
+|POST|/request-cleanup||200|Notifies another service that processing is complete|
+|GET|/status||200|Return the status of the microservice|
+|GET|/schema.json||200|Returns the OpenAPI schema for this application|
+
 
 ## Logging
 
 gemini uses `structlog` to output structured JSON logs. Logging can be configured in `gemini/settings.py`.
+
 
 ## License
 
