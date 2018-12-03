@@ -1,8 +1,6 @@
-import json
 import logging
 from os import listdir, makedirs, remove, access, W_OK
 from os.path import basename, isdir, isfile, join, splitext
-import requests
 import shutil
 from structlog import wrap_logger
 from uuid import uuid4
@@ -21,6 +19,7 @@ logger = wrap_logger(logger)
 
 
 class RoutineError(Exception): pass
+class CleanupError(Exception): pass
 
 
 class DownloadRoutine:
@@ -51,6 +50,7 @@ class DownloadRoutine:
                         data=package,
                         process_status=Package.DOWNLOADED
                     )
+
                     package_count += 1
         return "{} packages downloaded.".format(package_count)
 
@@ -93,9 +93,9 @@ class StoreRoutine:
 
             if self.url:
                 try:
-                    self.send_callback(container.uri_as_string(), package)
+                    helpers.send_post_request(self.url, {'identifier': package.internal_sender_identifier, 'uri': container.uri_as_string(), 'package_type': package.type})
                 except Exception as e:
-                    raise RoutineError("Error sending callback: {}".format(e))
+                    raise RoutineError("Error sending post callback: {}".format(e))
 
             package.process_status = package.STORED
             package.save()
@@ -115,16 +115,6 @@ class StoreRoutine:
         ns = {'mets': 'http://www.loc.gov/METS/'}
         element = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns)
         return element.text
-
-    def send_callback(self, fedora_uri, package):
-        response = requests.post(
-            self.url,
-            data=json.dumps({'identifier': package.internal_sender_identifier, 'uri': fedora_uri, 'package_type': package.type}),
-            headers={"Content-Type": "application/json"})
-        if response:
-            return True
-        else:
-            raise RoutineError("Could not create execute callback for {} {}".format(package.type, self.uuid))
 
     def clean_up(self):
         for d in listdir(self.tmp_dir):
@@ -165,13 +155,10 @@ class CleanupRequester:
     def run(self):
         package_count = 0
         for package in Package.objects.filter(process_status=Package.STORED):
-            r = requests.post(
-                self.url,
-                data=json.dumps({"identifier": package.internal_sender_identifier}),
-                headers={"Content-Type": "application/json"},
-            )
-            if r.status_code != 200:
-                raise CleanupError(r.status_code, r.reason)
+            try:
+                helpers.send_post_request(self.url, {"identifier": package.internal_sender_identifier})
+            except Exception as e:
+                raise CleanupError("Error sending cleanup request: {}".format(e))
             package.process_status = Package.CLEANED_UP
             package.save()
             package_count += 1

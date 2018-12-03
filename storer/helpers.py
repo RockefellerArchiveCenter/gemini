@@ -1,10 +1,10 @@
+import json
 from os.path import basename, splitext, join, isfile
 import py7zlib
 import re
+import requests
 import shutil
 import tarfile
-
-from gemini import settings
 
 
 # from Aurora files_helper.py
@@ -72,3 +72,13 @@ def extract_all(archive, dest, tmp):
         print("Unrecognized archive extension")
         return False
     return dest
+
+
+def send_post_request(url, data):
+    try:
+        response = requests.post(
+            url,
+            data=json.dumps(data),
+            headers={"Content-Type": "application/json"})
+    except Exception as e:
+        raise Exception(e)
