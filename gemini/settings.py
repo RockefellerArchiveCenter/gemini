@@ -27,8 +27,7 @@ SECRET_KEY = 'j&!jzlr5i!%8g2agh%!6^)*h)y+l0gezhjwt+i2!xitbdsqtn8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'gemini-web']
-
+ALLOWED_HOSTS = CF.ALLOWED_HOSTS
 
 # Application definition
 
@@ -76,20 +75,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'gemini.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'HOST': 'gemini-db',
-        'PORT': 5432,
-    }
-}
-
+DATABASES = CF.DATABASES
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -128,6 +114,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = CF.STATIC_ROOT
 
 CRON_CLASSES = [
     "storer.cron.StoreAIPs",
