@@ -36,9 +36,9 @@ class FedoraClient(object):
         except Exception as e:
             raise FedoraClientError("Error creating object: {}".format(e))
 
-    def create_binary(self, filepath, container):
+    def create_binary(self, filepath, container, mtype=None):
         # Uses PCDM plugin: https://github.com/ghukill/pyfc4/blob/master/pyfc4/plugins/pcdm/models.py
-        mimetype = mimetypes.guess_type(filepath)[0]
+        mimetype = mtype if mtype else mimetypes.guess_type(filepath)[0]
         with open(filepath, 'rb') as f:
             try:
                 binary = pcdm.PCDMFile(repo=self.client, uri='{}/files/{}'.format(container.uri_as_string(), basename(filepath)), binary_data=f, binary_mimetype=mimetype)

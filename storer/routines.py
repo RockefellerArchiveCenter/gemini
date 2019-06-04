@@ -131,7 +131,7 @@ class StoreRoutine:
         """
         self.extension = '.7z'
         self.mets_path = "METS.{}.xml".format(self.uuid)
-        self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), container)
+        self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), container, 'application/x-7z-compressed')
 
     def store_dip(self, package, container):
         """
