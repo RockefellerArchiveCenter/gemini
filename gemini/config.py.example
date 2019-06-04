@@ -1,4 +1,16 @@
-# Local config file - rename to config.py
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'gemini-db',
+        'PORT': 5432,
+    }
+}
+
+ALLOWED_HOSTS = ['localhost', 'gemini-web']
+
+BASE_DIR = ''
 
 ARCHIVEMATICA = {
   "baseurl": "http://archivematica-storage-service:8000/api/v2/",
@@ -13,5 +25,7 @@ FEDORA = {
   "password": "admin",
 }
 
-TMP_DIR = '/tmp'
-TEST_TMP_DIR = '/test_tmp'
+TMP_DIR = '{}/tmp'.format(BASE_DIR)
+TEST_TMP_DIR = '{}/test_tmp'.format(BASE_DIR)
+
+STATIC_ROOT = '/static'
