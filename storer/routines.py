@@ -139,13 +139,9 @@ class StoreRoutine:
         """
         self.extension = '.tar'
         extracted = helpers.extract_all(join(self.tmp_dir, "{}.tar".format(self.uuid)), join(self.tmp_dir, self.uuid), self.tmp_dir)
-        reserved_names = ['manifest-', 'bagit.txt', 'tagmanifest-', 'rights.csv', 'bag-info.txt']
-        for f in listdir(extracted):
-            if (basename(f).startswith('METS.') and basename(f).endswith('.xml')):
-                self.mets_path = f
+        self.mets_path = [f for f in listdir(extracted) if (basename(f).startswith('METS.') and basename(f).endswith('.xml'))][0]
         for f in listdir(join(extracted, 'objects')):
-            if not any(name in f for name in reserved_names):
-                self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
+            self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
 
 
 class CleanupRequester:
