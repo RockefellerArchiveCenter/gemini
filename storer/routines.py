@@ -84,12 +84,15 @@ class StoreRoutine:
         for package in Package.objects.filter(process_status=Package.DOWNLOADED):
             self.uuid = package.data['uuid']
             try:
+                package.internal_sender_identifier = self.get_internal_sender_identifier()
+            except Exception as e:
+                raise RoutineError("Error getting Internal Sender Identifier: {}".format(e))
+
+            try:
                 container = self.fedora_client.create_container(self.uuid)
                 getattr(self, 'store_{}'.format(package.type))(package.data, container)
             except Exception as e:
                 raise RoutineError("Error storing data: {}".format(e))
-
-            package.internal_sender_identifier = self.get_internal_sender_identifier()
 
             if self.url:
                 try:
@@ -97,7 +100,7 @@ class StoreRoutine:
                 except Exception as e:
                     raise RoutineError("Error sending post callback: {}".format(e))
 
-            package.process_status = package.STORED
+            package.process_status = Package.STORED
             package.save()
 
             package_count += 1
@@ -109,12 +112,15 @@ class StoreRoutine:
             raise RoutineError("Error cleaning up: {}".format(e))
 
     def get_internal_sender_identifier(self):
-        mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
-        tree = ET.parse(mets)
-        root = tree.getroot()
-        ns = {'mets': 'http://www.loc.gov/METS/'}
-        element = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns)
-        return element.text
+        try:
+            mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
+            tree = ET.parse(mets)
+            root = tree.getroot()
+            ns = {'mets': 'http://www.loc.gov/METS/'}
+            element = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns)
+            return element.text
+        except Exception as e:
+            return e
 
     def clean_up(self):
         for d in listdir(self.tmp_dir):
