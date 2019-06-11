@@ -83,13 +83,23 @@ class StoreRoutine:
         package_count = 0
         for package in Package.objects.filter(process_status=Package.DOWNLOADED):
             self.uuid = package.data['uuid']
-            try:
-                container = self.fedora_client.create_container(self.uuid)
-                getattr(self, 'store_{}'.format(package.type))(package.data, container)
-            except Exception as e:
-                raise RoutineError("Error storing data: {}".format(e))
+            if package.type == 'aip':
+                self.extension = '.7z'
+                self.mets_path = "METS.{}.xml".format(self.uuid)
+            elif package.type == 'dip':
+                self.extension = '.tar'
+                self.extracted = helpers.extract_all(join(self.tmp_dir, "{}.tar".format(self.uuid)), join(self.tmp_dir, self.uuid), self.tmp_dir)
+                self.mets_path = [f for f in listdir(self.extracted) if (basename(f).startswith('METS.') and basename(f).endswith('.xml'))][0]
+            else:
+                raise RoutineError("Unrecognized package type: {}".format(package.type))
 
             package.internal_sender_identifier = self.get_internal_sender_identifier()
+
+            try:
+                container = self.fedora_client.create_container(self.uuid)
+                getattr(self, 'store_{}'.format(package.type))(package.data, container, )
+            except Exception as e:
+                raise RoutineError("Error storing data: {}".format(e))
 
             if self.url:
                 try:
@@ -97,7 +107,7 @@ class StoreRoutine:
                 except Exception as e:
                     raise RoutineError("Error sending post callback: {}".format(e))
 
-            package.process_status = package.STORED
+            package.process_status = Package.STORED
             package.save()
 
             package_count += 1
@@ -109,12 +119,15 @@ class StoreRoutine:
             raise RoutineError("Error cleaning up: {}".format(e))
 
     def get_internal_sender_identifier(self):
-        mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
-        tree = ET.parse(mets)
-        root = tree.getroot()
-        ns = {'mets': 'http://www.loc.gov/METS/'}
-        element = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns)
-        return element.text
+        try:
+            mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
+            tree = ET.parse(mets)
+            root = tree.getroot()
+            ns = {'mets': 'http://www.loc.gov/METS/'}
+            element = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns)
+            return element.text
+        except Exception as e:
+            raise RoutineError("Error getting Internal Sender Identifier: {}".format(e))
 
     def clean_up(self):
         for d in listdir(self.tmp_dir):
@@ -129,18 +142,13 @@ class StoreRoutine:
         Stores an AIP as a single binary in Fedora and handles the resulting URI.
         Assumes AIPs are stored as a compressed package.
         """
-        self.extension = '.7z'
-        self.mets_path = "METS.{}.xml".format(self.uuid)
         self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), container, 'application/x-7z-compressed')
 
     def store_dip(self, package, container):
         """
         Stores a DIP as multiple binaries in Fedora and handles the resulting URI.
         """
-        self.extension = '.tar'
-        extracted = helpers.extract_all(join(self.tmp_dir, "{}.tar".format(self.uuid)), join(self.tmp_dir, self.uuid), self.tmp_dir)
-        self.mets_path = [f for f in listdir(extracted) if (basename(f).startswith('METS.') and basename(f).endswith('.xml'))][0]
-        for f in listdir(join(extracted, 'objects')):
+        for f in listdir(join(self.extracted, 'objects')):
             self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
 
 
