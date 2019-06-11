@@ -83,10 +83,8 @@ class StoreRoutine:
         package_count = 0
         for package in Package.objects.filter(process_status=Package.DOWNLOADED):
             self.uuid = package.data['uuid']
-            try:
-                package.internal_sender_identifier = self.get_internal_sender_identifier()
-            except Exception as e:
-                raise RoutineError("Error getting Internal Sender Identifier: {}".format(e))
+
+            package.internal_sender_identifier = self.get_internal_sender_identifier()
 
             try:
                 container = self.fedora_client.create_container(self.uuid)
@@ -120,7 +118,7 @@ class StoreRoutine:
             element = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns)
             return element.text
         except Exception as e:
-            return e
+            raise RoutineError("Error getting Internal Sender Identifier: {}".format(e))
 
     def clean_up(self):
         for d in listdir(self.tmp_dir):
