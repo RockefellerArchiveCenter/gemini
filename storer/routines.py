@@ -83,8 +83,15 @@ class StoreRoutine:
         package_count = 0
         for package in Package.objects.filter(process_status=Package.DOWNLOADED):
             self.uuid = package.data['uuid']
-            self.extension = '.7z' if package.type == 'aip' else '.tar'
-            self.mets_path = "METS.{}.xml".format(self.uuid) if package.type == 'aip' else [f for f in listdir(extracted) if (basename(f).startswith('METS.') and basename(f).endswith('.xml'))][0]
+            if package.type == 'aip':
+                self.extension = '.7z'
+                self.mets_path = "METS.{}.xml".format(self.uuid)
+            elif package.type == 'dip':
+                self.extension = '.tar'
+                extracted = helpers.extract_all(join(self.tmp_dir, "{}.tar".format(self.uuid)), join(self.tmp_dir, self.uuid), self.tmp_dir)
+                self.mets_path = [f for f in listdir(extracted) if (basename(f).startswith('METS.') and basename(f).endswith('.xml'))][0]
+            else:
+                raise RoutineError("Unrecognized package type: {}".format(package.type))
 
             package.internal_sender_identifier = self.get_internal_sender_identifier()
 
@@ -141,7 +148,6 @@ class StoreRoutine:
         """
         Stores a DIP as multiple binaries in Fedora and handles the resulting URI.
         """
-        extracted = helpers.extract_all(join(self.tmp_dir, "{}.tar".format(self.uuid)), join(self.tmp_dir, self.uuid), self.tmp_dir)
         for f in listdir(join(extracted, 'objects')):
             self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
 
