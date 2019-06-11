@@ -88,8 +88,8 @@ class StoreRoutine:
                 self.mets_path = "METS.{}.xml".format(self.uuid)
             elif package.type == 'dip':
                 self.extension = '.tar'
-                extracted = helpers.extract_all(join(self.tmp_dir, "{}.tar".format(self.uuid)), join(self.tmp_dir, self.uuid), self.tmp_dir)
-                self.mets_path = [f for f in listdir(extracted) if (basename(f).startswith('METS.') and basename(f).endswith('.xml'))][0]
+                self.extracted = helpers.extract_all(join(self.tmp_dir, "{}.tar".format(self.uuid)), join(self.tmp_dir, self.uuid), self.tmp_dir)
+                self.mets_path = [f for f in listdir(self.extracted) if (basename(f).startswith('METS.') and basename(f).endswith('.xml'))][0]
             else:
                 raise RoutineError("Unrecognized package type: {}".format(package.type))
 
@@ -97,7 +97,7 @@ class StoreRoutine:
 
             try:
                 container = self.fedora_client.create_container(self.uuid)
-                getattr(self, 'store_{}'.format(package.type))(package.data, container)
+                getattr(self, 'store_{}'.format(package.type))(package.data, container, )
             except Exception as e:
                 raise RoutineError("Error storing data: {}".format(e))
 
@@ -148,7 +148,7 @@ class StoreRoutine:
         """
         Stores a DIP as multiple binaries in Fedora and handles the resulting URI.
         """
-        for f in listdir(join(extracted, 'objects')):
+        for f in listdir(join(self.extracted, 'objects')):
             self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
 
 
