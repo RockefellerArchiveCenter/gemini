@@ -83,6 +83,8 @@ class StoreRoutine:
         package_count = 0
         for package in Package.objects.filter(process_status=Package.DOWNLOADED):
             self.uuid = package.data['uuid']
+            self.extension = '.7z' if package.type == 'aip' else '.tar'
+            self.mets_path = "METS.{}.xml".format(self.uuid) if package.type == 'aip' else [f for f in listdir(extracted) if (basename(f).startswith('METS.') and basename(f).endswith('.xml'))][0]
 
             package.internal_sender_identifier = self.get_internal_sender_identifier()
 
@@ -133,17 +135,13 @@ class StoreRoutine:
         Stores an AIP as a single binary in Fedora and handles the resulting URI.
         Assumes AIPs are stored as a compressed package.
         """
-        self.extension = '.7z'
-        self.mets_path = "METS.{}.xml".format(self.uuid)
         self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), container, 'application/x-7z-compressed')
 
     def store_dip(self, package, container):
         """
         Stores a DIP as multiple binaries in Fedora and handles the resulting URI.
         """
-        self.extension = '.tar'
         extracted = helpers.extract_all(join(self.tmp_dir, "{}.tar".format(self.uuid)), join(self.tmp_dir, self.uuid), self.tmp_dir)
-        self.mets_path = [f for f in listdir(extracted) if (basename(f).startswith('METS.') and basename(f).endswith('.xml'))][0]
         for f in listdir(join(extracted, 'objects')):
             self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
 
