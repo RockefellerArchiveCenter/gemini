@@ -32,7 +32,7 @@ class PackageViewSet(ModelViewSet):
     """
     model = Package
     serializer_class = PackageSerializer
-    queryset = Package.objects.all()
+    queryset = Package.objects.all().order_by('-last_modified')
 
     def get_serializer_class(self):
         if self.action == 'list':

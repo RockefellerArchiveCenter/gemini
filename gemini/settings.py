@@ -126,6 +126,11 @@ FEDORA = CF.FEDORA
 TMP_DIR = CF.TMP_DIR
 TEST_TMP_DIR = CF.TEST_TMP_DIR
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 25,
+}
+
 structlog.configure(
     processors=[
         structlog.stdlib.add_logger_name,
