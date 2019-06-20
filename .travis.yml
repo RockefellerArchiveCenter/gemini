@@ -13,6 +13,14 @@ before_install:
   - cp gemini/config.py.example gemini/config.py
   - docker-compose up -d
   - sleep 20s
+  - docker-compose exec gemini-web pip install coverage
 install: true
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 script:
-  - docker-compose exec gemini-web python manage.py test
+  - docker-compose exec gemini-web coverage run manage.py test
+after_script:
+  - docker-compose exec gemini-web coverage xml
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
