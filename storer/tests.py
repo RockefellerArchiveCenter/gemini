@@ -54,8 +54,8 @@ class PackageTest(TestCase):
         request = self.factory.get(reverse('package-list'))
         response = PackageViewSet.as_view(actions={"get": "list"})(request)
         self.assertEqual(response.status_code, 200, "Wrong HTTP code")
-        if len(response.data):
-            pk = random.randrange(len(response.data))+1
+        if response.data['count'] > 0:
+            pk = random.randrange(response.data['count'])+1
             request = self.factory.get(reverse('package-detail', args=[pk]), format='json')
             response = PackageViewSet.as_view(actions={"get": "retrieve"})(request, pk=pk)
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
@@ -92,7 +92,7 @@ class PackageTest(TestCase):
     def test_packages(self):
         self.process_packages()
         self.request_cleanup()
-        self.get_packages()
         self.store_views()
+        self.get_packages()
         self.schema()
         self.health_check()
