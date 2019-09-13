@@ -82,3 +82,12 @@ def send_post_request(url, data):
             headers={"Content-Type": "application/json"})
     except Exception as e:
         raise Exception(e)
+
+
+def tuple_to_dict(data):
+    detail = data[0]
+    objects = data[1] if len(data) > 1 else None
+    if objects and not isinstance(objects, list):
+        objects = [objects]
+    count = len(objects) if objects else 0
+    return {"detail": detail, "objects": objects, "count": count}

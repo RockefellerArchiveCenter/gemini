@@ -65,14 +65,17 @@ class PackageTest(TestCase):
         with storer_vcr.use_cassette('download.yml'):
             request = self.factory.post(reverse('download-packages'), {"test": True})
             response = DownloadView.as_view()(request)
+            print(response.data)
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
         with storer_vcr.use_cassette('store.yml'):
             request = self.factory.post(reverse('store-packages'), {"test": True})
             response = StoreView.as_view()(request)
+            print(response.data)
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
         with storer_vcr.use_cassette('cleanup.yml'):
             request = self.factory.post(reverse('request-cleanup'), {"test": True})
             response = CleanupRequestView.as_view()(request)
+            print(response.data)
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
 
     def schema(self):

@@ -27,7 +27,7 @@ class DownloadRoutine:
             raise RoutineError('Directory does not have write permissions', self.tmp_dir)
 
     def run(self):
-        package_count = 0
+        package_ids = []
         for package in self.am_client.retrieve_paged('file/'):
             self.uuid = package['uuid']
             if (package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid'] and
@@ -36,7 +36,7 @@ class DownloadRoutine:
                     try:
                         self.download = self.download_package(package)
                     except Exception as e:
-                        raise RoutineError("Error downloading data: {}".format(e))
+                        raise RoutineError("Error downloading data: {}".format(e), self.uuid)
 
                     Package.objects.create(
                         type=package['package_type'].lower(),
@@ -44,8 +44,8 @@ class DownloadRoutine:
                         process_status=Package.DOWNLOADED
                     )
 
-                    package_count += 1
-        return "{} packages downloaded.".format(package_count)
+                    package_ids.append(self.uuid)
+        return ("All packages downloaded.", package_ids)
 
     def download_package(self, package_json):
         response = self.am_client.retrieve('/file/{}/download/'.format(self.uuid), stream=True)
@@ -72,7 +72,7 @@ class StoreRoutine:
             raise RoutineError('Directory does not have write permissions', self.tmp_dir)
 
     def run(self):
-        package_count = 0
+        package_ids = []
         for package in Package.objects.filter(process_status=Package.DOWNLOADED):
             self.uuid = package.data['uuid']
             if package.type == 'aip':
@@ -83,32 +83,32 @@ class StoreRoutine:
                 self.extracted = helpers.extract_all(join(self.tmp_dir, "{}.tar".format(self.uuid)), join(self.tmp_dir, self.uuid), self.tmp_dir)
                 self.mets_path = [f for f in listdir(self.extracted) if (basename(f).startswith('METS.') and basename(f).endswith('.xml'))][0]
             else:
-                raise RoutineError("Unrecognized package type: {}".format(package.type))
+                raise RoutineError("Unrecognized package type: {}".format(package.type), self.uuid)
 
             package.internal_sender_identifier = self.get_internal_sender_identifier()
 
             try:
                 container = self.fedora_client.create_container(self.uuid)
-                getattr(self, 'store_{}'.format(package.type))(package.data, container, )
+                getattr(self, 'store_{}'.format(package.type))(package.data, container)
             except Exception as e:
-                raise RoutineError("Error storing data: {}".format(e))
+                raise RoutineError("Error storing data: {}".format(e), self.uuid)
 
             if self.url:
                 try:
                     helpers.send_post_request(self.url, {'identifier': package.internal_sender_identifier, 'uri': container.uri_as_string(), 'package_type': package.type})
                 except Exception as e:
-                    raise RoutineError("Error sending post callback: {}".format(e))
+                    raise RoutineError("Error sending post callback: {}".format(e), self.uuid)
 
             package.process_status = Package.STORED
             package.save()
 
-            package_count += 1
+            package_ids.append(self.uuid)
 
         try:
             self.clean_up()
-            return "{} packages stored.".format(package_count)
+            return ("All packages stored.", package_ids)
         except Exception as e:
-            raise RoutineError("Error cleaning up: {}".format(e))
+            raise RoutineError("Error cleaning up: {}".format(e), self.uuid)
 
     def get_internal_sender_identifier(self):
         try:
@@ -119,7 +119,7 @@ class StoreRoutine:
             element = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns)
             return element.text
         except Exception as e:
-            raise RoutineError("Error getting Internal Sender Identifier: {}".format(e))
+            raise RoutineError("Error getting Internal Sender Identifier: {}".format(e), self.uuid)
 
     def clean_up(self):
         for d in listdir(self.tmp_dir):
@@ -149,13 +149,13 @@ class CleanupRequester:
         self.url = url
 
     def run(self):
-        package_count = 0
+        package_ids = []
         for package in Package.objects.filter(process_status=Package.STORED):
             try:
                 helpers.send_post_request(self.url, {"identifier": package.internal_sender_identifier})
             except Exception as e:
-                raise CleanupError("Error sending cleanup request: {}".format(e))
+                raise CleanupError("Error sending cleanup request: {}".format(e), package.internal_sender_identifier)
             package.process_status = Package.CLEANED_UP
             package.save()
-            package_count += 1
-        return "Requests sent to cleanup {} Packages.".format(package_count)
+            package_ids.append(package.internal_sender_identifier)
+        return ("Requests sent to clean up Packages.", package_ids)

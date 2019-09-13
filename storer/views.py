@@ -1,4 +1,3 @@
-from datetime import datetime
 import urllib
 
 from django.shortcuts import render
@@ -7,6 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 
 from gemini import settings
+from storer.helpers import tuple_to_dict
 from storer.models import Package
 from storer.routines import DownloadRoutine, StoreRoutine, CleanupRequester
 from storer.serializers import PackageSerializer, PackageListSerializer
@@ -39,10 +39,10 @@ class DownloadView(APIView):
         dirs = {'tmp': settings.TEST_TMP_DIR} if request.POST.get('test') else None
 
         try:
-            download = DownloadRoutine(dirs).run()
-            return Response({"detail": download}, status=200)
+            response = DownloadRoutine(dirs).run()
+            return Response(tuple_to_dict(response), status=200)
         except Exception as e:
-            return Response({"detail": str(e)}, status=500)
+            return Response(tuple_to_dict(e.args), status=500)
 
 
 class StoreView(APIView):
@@ -53,10 +53,10 @@ class StoreView(APIView):
         url = request.GET.get('post_service_url')
         url = (urllib.parse.unquote(url) if url else '')
         try:
-            store = StoreRoutine(url, dirs).run()
-            return Response({"detail": store}, status=200)
+            response = StoreRoutine(url, dirs).run()
+            return Response(tuple_to_dict(response), status=200)
         except Exception as e:
-            return Response({"detail": str(e)}, status=500)
+            return Response(tuple_to_dict(e.args), status=500)
 
 
 class CleanupRequestView(APIView):
@@ -66,7 +66,7 @@ class CleanupRequestView(APIView):
         url = request.GET.get('post_service_url')
         url = (urllib.parse.unquote(url) if url else '')
         try:
-            cleanup = CleanupRequester(url).run()
-            return Response({"detail": cleanup}, status=200)
+            response = CleanupRequester(url).run()
+            return Response(tuple_to_dict(response), status=200)
         except Exception as e:
-            return Response({"detail": str(e)}, status=500)
+            return Response(tuple_to_dict(e.args), status=500)
