@@ -1,9 +1,6 @@
-import logging
 from os import listdir, makedirs, remove, access, W_OK
 from os.path import basename, isdir, isfile, join, splitext
 import shutil
-from structlog import wrap_logger
-from uuid import uuid4
 from xml.etree import ElementTree as ET
 import zipfile
 
@@ -13,10 +10,6 @@ from storer.clients import FedoraClient, ArchivematicaClient
 from storer import helpers
 from storer.models import Package
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-logger = wrap_logger(logger)
-
 
 class RoutineError(Exception): pass
 class CleanupError(Exception): pass
@@ -24,7 +17,6 @@ class CleanupError(Exception): pass
 
 class DownloadRoutine:
     def __init__(self, dirs):
-        self.log = logger.bind(transaction_id=str(uuid4()))
         self.am_client = ArchivematicaClient(settings.ARCHIVEMATICA['username'],
                                              settings.ARCHIVEMATICA['api_key'],
                                              settings.ARCHIVEMATICA['baseurl'])
@@ -69,7 +61,6 @@ class DownloadRoutine:
 
 class StoreRoutine:
     def __init__(self, url, dirs):
-        self.log = logger.bind(transaction_id=str(uuid4()))
         self.url = url
         self.fedora_client = FedoraClient(root=settings.FEDORA['baseurl'],
                                           username=settings.FEDORA['username'],

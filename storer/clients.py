@@ -1,12 +1,9 @@
 import json
-import logging
 import mimetypes
 from os.path import basename, join, splitext
 from pyfc4 import models as fcrepo
 from pyfc4.plugins.pcdm import models as pcdm
 import requests
-from structlog import wrap_logger
-from uuid import uuid4
 
 
 class FedoraClientError(Exception): pass

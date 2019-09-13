@@ -62,11 +62,6 @@ gemini has three services, all of which are exposed via HTTP endpoints (see [Rou
 |GET|/schema.json||200|Returns the OpenAPI schema for this application|
 
 
-## Logging
-
-gemini uses `structlog` to output structured JSON logs. Logging can be configured in `gemini/settings.py`.
-
-
 ## License
 
 This code is released under an [MIT License](LICENSE).
