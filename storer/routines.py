@@ -16,6 +16,8 @@ class CleanupError(Exception): pass
 
 
 class DownloadRoutine:
+    """Downloads a package from Archivematica."""
+
     def __init__(self, dirs):
         self.am_client = ArchivematicaClient(settings.ARCHIVEMATICA['username'],
                                              settings.ARCHIVEMATICA['api_key'],
@@ -43,8 +45,8 @@ class DownloadRoutine:
                         data=package,
                         process_status=Package.DOWNLOADED
                     )
-
                     package_ids.append(self.uuid)
+                    break
         return ("All packages downloaded.", package_ids)
 
     def download_package(self, package_json):
@@ -60,6 +62,10 @@ class DownloadRoutine:
 
 
 class StoreRoutine:
+    """
+    Uploads the contents of a package to Fedora.
+    AIPS are uploaded as single 7z files. DIPs are extracted and each file is uploaded.
+    """
     def __init__(self, url, dirs):
         self.url = url
         self.fedora_client = FedoraClient(root=settings.FEDORA['baseurl'],
@@ -103,6 +109,8 @@ class StoreRoutine:
             package.save()
 
             package_ids.append(self.uuid)
+
+            break
 
         try:
             self.clean_up()
