@@ -49,8 +49,8 @@ class FedoraClient(object):
                     binary.delete(remove_tombstone=True)
                 new_binary = pcdm.PCDMFile(repo=self.client, uri='{}/files/{}'.format(container.uri_as_string(), basename(filepath)), binary_data=f, binary_mimetype=mimetype)
                 new_binary.create(specify_uri=True, auto_refresh=False)
-                new_binary.add_triple(binary.rdf.prefixes.rdfs['label'], basename(filepath))
-                new_binary.add_triple(binary.rdf.prefixes.dc['format'], mimetype)
+                new_binary.add_triple(new_binary.rdf.prefixes.rdfs['label'], basename(filepath))
+                new_binary.add_triple(new_binary.rdf.prefixes.dc['format'], mimetype)
                 new_binary.update(auto_refresh=False)
                 return new_binary
             except Exception as e:
