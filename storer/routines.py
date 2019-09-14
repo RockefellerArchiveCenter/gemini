@@ -91,7 +91,7 @@ class StoreRoutine:
             else:
                 raise RoutineError("Unrecognized package type: {}".format(package.type), self.uuid)
 
-            package.internal_sender_identifier = self.get_internal_sender_identifier()
+            package.internal_sender_identifier, self.mimetypes = self.parse_mets()
 
             try:
                 container = self.fedora_client.create_container(self.uuid)
@@ -118,16 +118,28 @@ class StoreRoutine:
         except Exception as e:
             raise RoutineError("Error cleaning up: {}".format(e), self.uuid)
 
-    def get_internal_sender_identifier(self):
+    def parse_mets(self):
+        """
+        Parses Archivematica's METS file and returns the Internal-Sender-Identifier
+        submitted in a bag-info.txt file, as well as a dict of filename UUIDs
+        and mimetypes
+        """
         try:
+            mimetypes = {}
             mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
             tree = ET.parse(mets)
             root = tree.getroot()
-            ns = {'mets': 'http://www.loc.gov/METS/'}
-            element = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns)
-            return element.text
+            ns = {'mets': 'http://www.loc.gov/METS/', 'premis': 'info:lc/xmlns/premis-v2', 'fits': 'http://hul.harvard.edu/ois/xml/ns/fits/fits_output'}
+            internal_sender_identifier = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns).text
+            files = root.findall('mets:amdSec/mets:techMD/mets:mdWrap[@MDTYPE="PREMIS:OBJECT"]/mets:xmlData/premis:object', ns)
+            for f in files:
+                uuid = f.find('premis:objectIdentifier/premis:objectIdentifierValue', ns).text
+                identity = f.find('premis:objectCharacteristics/premis:objectCharacteristicsExtension/', ns)
+                mtype = identity.attrib['mimetype'] if identity else 'application/octet-stream'
+                mimetypes.update({uuid: mtype})
+            return internal_sender_identifier, mimetypes
         except Exception as e:
-            raise RoutineError("Error getting Internal Sender Identifier: {}".format(e), self.uuid)
+            raise RoutineError("Error data from Archivematica METS file: {}".format(e), self.uuid)
 
     def clean_up(self):
         for d in listdir(self.tmp_dir):
@@ -147,9 +159,12 @@ class StoreRoutine:
     def store_dip(self, package, container):
         """
         Stores a DIP as multiple binaries in Fedora and handles the resulting URI.
+        Matches the file UUID (the first 36 characters of the filename) against
+        the mimetypes dictionary to find the relevant mimetype.
         """
         for f in listdir(join(self.extracted, 'objects')):
-            self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
+            mimetype = self.mimetypes[f[0:36]]
+            self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container, mimetype)
 
 
 class CleanupRequester:

@@ -65,7 +65,6 @@ class CleanupRequestView(APIView):
     def post(self, request):
         url = request.GET.get('post_service_url')
         url = (urllib.parse.unquote(url) if url else '')
-        print(url)
         try:
             response = CleanupRequester(url).run()
             return Response(tuple_to_dict(response), status=200)
