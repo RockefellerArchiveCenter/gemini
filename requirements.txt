@@ -36,7 +36,7 @@ pylzma==0.4.9
 pyparsing==2.2.0
 pytest==3.8.0
 pytest-cov==2.6.0
-pytz==2018.5
+pytz==2019.2
 PyYAML==4.2b4
 rdflib==4.2.2
 rdflib-jsonld==0.4.0
