@@ -9,7 +9,7 @@ coverage==4.5.4
 Django==2.0.13
 django-common-helpers==0.9.2
 djangorestframework==3.10.2
-git+git://github.com/RockefellerArchiveCenter/asterism@v0.1#egg=asterism
+git+https://github.com/RockefellerArchiveCenter/asterism@v0.1#egg=asterism
 gitdb2==2.0.4
 GitPython==2.1.11
 health-check==3.4.1
