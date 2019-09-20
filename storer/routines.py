@@ -135,7 +135,7 @@ class StoreRoutine:
             for f in files:
                 uuid = f.find('premis:objectIdentifier/premis:objectIdentifierValue', ns).text
                 identity = f.find('premis:objectCharacteristics/premis:objectCharacteristicsExtension/', ns)
-                mtype = identity.attrib['mimetype'] if identity else 'application/octet-stream'
+                mtype = identity.attrib.get('mimetype', 'application/octet-stream') if identity else 'application/octet-stream'
                 mimetypes.update({uuid: mtype})
             return internal_sender_identifier, mimetypes
         except Exception as e:
