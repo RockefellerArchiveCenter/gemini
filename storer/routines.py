@@ -15,18 +15,22 @@ class RoutineError(Exception): pass
 class CleanupError(Exception): pass
 
 
-class DownloadRoutine:
+class Routine:
+    def __init__(self, dirs):
+        self.tmp_dir = dirs['tmp'] if dirs else settings.TMP_DIR
+        if not isdir(self.tmp_dir):
+            raise RoutineError('Directory does not exist', self.tmp_dir)
+        if not access(self.tmp_dir, W_OK):
+            raise RoutineError('Directory does not have write permissions', self.tmp_dir)
+
+
+class DownloadRoutine(Routine):
     """Downloads a package from Archivematica."""
 
     def __init__(self, dirs):
         self.am_client = ArchivematicaClient(settings.ARCHIVEMATICA['username'],
                                              settings.ARCHIVEMATICA['api_key'],
                                              settings.ARCHIVEMATICA['baseurl'])
-        self.tmp_dir = dirs['tmp'] if dirs else settings.TMP_DIR
-        if not isdir(self.tmp_dir):
-            raise RoutineError('Directory does not exist', self.tmp_dir)
-        if not access(self.tmp_dir, W_OK):
-            raise RoutineError('Directory does not have write permissions', self.tmp_dir)
 
     def run(self):
         package_ids = []
@@ -61,7 +65,7 @@ class DownloadRoutine:
         return package
 
 
-class StoreRoutine:
+class StoreRoutine(Routine):
     """
     Uploads the contents of a package to Fedora.
     AIPS are uploaded as single 7z files. DIPs are extracted and each file is uploaded.
@@ -71,11 +75,6 @@ class StoreRoutine:
         self.fedora_client = FedoraClient(root=settings.FEDORA['baseurl'],
                                           username=settings.FEDORA['username'],
                                           password=settings.FEDORA['password'])
-        self.tmp_dir = dirs['tmp'] if dirs else settings.TMP_DIR
-        if not isdir(self.tmp_dir):
-            raise RoutineError('Directory does not exist', self.tmp_dir)
-        if not access(self.tmp_dir, W_OK):
-            raise RoutineError('Directory does not have write permissions', self.tmp_dir)
 
     def run(self):
         package_ids = []
