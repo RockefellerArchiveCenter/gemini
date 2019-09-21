@@ -16,6 +16,7 @@ class CleanupError(Exception): pass
 
 
 class Routine:
+    """Base class for routines which checks existence and permissions of directories."""
     def __init__(self, dirs):
         self.tmp_dir = dirs['tmp'] if dirs else settings.TMP_DIR
         if not isdir(self.tmp_dir):
