@@ -29,6 +29,7 @@ class DownloadRoutine(Routine):
     """Downloads a package from Archivematica."""
 
     def __init__(self, dirs):
+        super(DownloadRoutine, self).__init__(dirs)
         self.am_client = ArchivematicaClient(settings.ARCHIVEMATICA['username'],
                                              settings.ARCHIVEMATICA['api_key'],
                                              settings.ARCHIVEMATICA['baseurl'])
@@ -72,6 +73,7 @@ class StoreRoutine(Routine):
     AIPS are uploaded as single 7z files. DIPs are extracted and each file is uploaded.
     """
     def __init__(self, url, dirs):
+        super(StoreRoutine, self).__init__(dirs)
         self.url = url
         self.fedora_client = FedoraClient(root=settings.FEDORA['baseurl'],
                                           username=settings.FEDORA['username'],
@@ -139,7 +141,7 @@ class StoreRoutine(Routine):
                 mimetypes.update({uuid: mtype})
             return internal_sender_identifier, mimetypes
         except Exception as e:
-            raise RoutineError("Error data from Archivematica METS file: {}".format(e), self.uuid)
+            raise RoutineError("Error getting data from Archivematica METS file: {}".format(e), self.uuid)
 
     def clean_up(self):
         for d in listdir(self.tmp_dir):
