@@ -115,7 +115,7 @@ class StoreRoutine(Routine):
             break
 
         try:
-            self.clean_up()
+            self.clean_up(self.uuid)
             return ("All packages stored.", package_ids)
         except Exception as e:
             raise RoutineError("Error cleaning up: {}".format(e), self.uuid)
@@ -143,9 +143,9 @@ class StoreRoutine(Routine):
         except Exception as e:
             raise RoutineError("Error getting data from Archivematica METS file: {}".format(e), self.uuid)
 
-    def clean_up(self):
+    def clean_up(self, uuid):
         for d in listdir(self.tmp_dir):
-            if self.uuid in d:
+            if uuid in d:
                 filepath = join(self.tmp_dir, d)
                 if isdir(filepath):
                     shutil.rmtree(filepath)
