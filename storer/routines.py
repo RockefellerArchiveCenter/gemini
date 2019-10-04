@@ -117,7 +117,9 @@ class StoreRoutine(Routine):
             except Exception as e:
                 raise RoutineError("Error cleaning up: {}".format(e), self.uuid)
 
-            return ("Packages stored.", package_ids)
+            break
+
+        return ("Packages stored.", package_ids)
 
     def parse_mets(self):
         """
@@ -144,13 +146,12 @@ class StoreRoutine(Routine):
 
     def clean_up(self, uuid):
         for d in listdir(self.tmp_dir):
-            if d:
-                if uuid in d:
-                    filepath = join(self.tmp_dir, d)
-                    if isdir(filepath):
-                        shutil.rmtree(filepath)
-                    elif isfile(filepath):
-                        remove(filepath)
+            if uuid in d:
+                filepath = join(self.tmp_dir, d)
+                if isdir(filepath):
+                    shutil.rmtree(filepath)
+                elif isfile(filepath):
+                    remove(filepath)
 
     def store_aip(self, package, container):
         """
