@@ -60,7 +60,7 @@ def extract_file(archive, src, dest):
             return False
         return dest
     except Exception as e:
-        raise Exception("extract error: {}".format(e))
+        raise Exception("extract error: {} {}".format(archive, ext))
 
 
 def extract_all(archive, dest, tmp):
