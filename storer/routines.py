@@ -144,7 +144,7 @@ class StoreRoutine(Routine):
 
     def clean_up(self, uuid):
         for d in listdir(self.tmp_dir):
-            if uuid in d:
+            if (d and uuid in d):
                 filepath = join(self.tmp_dir, d)
                 if isdir(filepath):
                     shutil.rmtree(filepath)
