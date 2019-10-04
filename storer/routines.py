@@ -112,13 +112,12 @@ class StoreRoutine(Routine):
 
             package_ids.append(self.uuid)
 
-            break
+            try:
+                self.clean_up(self.uuid)
+            except Exception as e:
+                raise RoutineError("Error cleaning up: {}".format(e), self.uuid)
 
-        try:
-            self.clean_up(self.uuid)
-            return ("All packages stored.", package_ids)
-        except Exception as e:
-            raise RoutineError("Error cleaning up: {}".format(e), self.uuid)
+            return ("Packages stored.", package_ids)
 
     def parse_mets(self):
         """
