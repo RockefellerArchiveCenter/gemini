@@ -145,11 +145,12 @@ class StoreRoutine(Routine):
 
     def clean_up(self):
         for d in listdir(self.tmp_dir):
-            filepath = join(self.tmp_dir, d)
-            if isdir(filepath):
-                shutil.rmtree(filepath)
-            elif isfile(filepath):
-                remove(filepath)
+            if self.uuid in d:
+                filepath = join(self.tmp_dir, d)
+                if isdir(filepath):
+                    shutil.rmtree(filepath)
+                elif isfile(filepath):
+                    remove(filepath)
 
     def store_aip(self, package, container):
         """
