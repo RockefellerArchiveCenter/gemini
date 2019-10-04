@@ -21,7 +21,7 @@ multidict==4.4.0
 pluggy==0.13.0
 psycopg2-binary==2.7.4
 pyfc4==0.6
-pylzma==0.5.0
+pylzma==0.4.9
 pyparsing==2.4.2
 pytz==2019.2
 PyYAML==5.1.2

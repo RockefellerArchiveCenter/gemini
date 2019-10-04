@@ -35,32 +35,29 @@ def get_fields_from_file(fpath):
 
 
 def extract_file(archive, src, dest):
-    try:
-        ext = splitext(archive)[1]
-        if ext == '.7z':
-            fp = open(archive, 'rb')
-            a = py7zlib.Archive7z(fp)
-            for name in a.getnames():
-                if name.endswith(src):
-                    outfile = open(dest, 'wb')
-                    outfile.write(a.getmember(name).read())
-                    outfile.close()
-            fp.close()
-        elif ext == '.tar':
-            tf = tarfile.open(archive, mode="r")
-            for member in tf.getmembers():
-                if member.name.endswith(src):
-                    outfile = open(dest, 'wb')
-                    extracted = tf.extractfile(member)
-                    outfile.write(extracted.read())
-                    outfile.close()
-            tf.close()
-        else:
-            print("Unrecognized archive extension")
-            return False
-        return dest
-    except Exception as e:
-        raise Exception("extract error: {} {}".format(archive, ext))
+    ext = splitext(archive)[1]
+    if ext == '.7z':
+        fp = open(archive, 'rb')
+        a = py7zlib.Archive7z(fp)
+        for name in a.getnames():
+            if name.endswith(src):
+                outfile = open(dest, 'wb')
+                outfile.write(a.getmember(name).read())
+                outfile.close()
+        fp.close()
+    elif ext == '.tar':
+        tf = tarfile.open(archive, mode="r")
+        for member in tf.getmembers():
+            if member.name.endswith(src):
+                outfile = open(dest, 'wb')
+                extracted = tf.extractfile(member)
+                outfile.write(extracted.read())
+                outfile.close()
+        tf.close()
+    else:
+        print("Unrecognized archive extension")
+        return False
+    return dest
 
 
 def extract_all(archive, dest, tmp):
