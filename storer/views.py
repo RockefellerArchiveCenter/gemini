@@ -31,41 +31,45 @@ class PackageViewSet(ModelViewSet):
         return PackageSerializer
 
 
-class DownloadView(APIView):
+class BaseRoutineView(APIView):
+    """Base view for routines."""
+
+    def get_post_service_url(self, request):
+        url = request.GET.get('post_service_url')
+        return urllib.parse.unquote(url) if url else ''
+
+    def post(self, request, format=None):
+        args = self.get_args(request)
+        try:
+            response = self.routine(*args).run()
+            return Response(prepare_response(response), status=200)
+        except Exception as e:
+            return Response(prepare_response(e), status=500)
+
+
+class DownloadView(BaseRoutineView):
     """Downloads packages. Accepts POST requests only."""
+    routine = DownloadRoutine
 
-    def post(self, request, format=None, *args, **kwargs):
+    def get_args(self, request):
         dirs = {'tmp': settings.TEST_TMP_DIR} if request.POST.get('test') else None
-
-        try:
-            response = DownloadRoutine(dirs).run()
-            return Response(prepare_response(response), status=200)
-        except Exception as e:
-            return Response(prepare_response(e), status=500)
+        return (dirs,)
 
 
-class StoreView(APIView):
+class StoreView(BaseRoutineView):
     """Stores packages. Accepts POST requests only."""
+    routine = StoreRoutine
 
-    def post(self, request, format=None, *args, **kwargs):
+    def get_args(self, request):
         dirs = {'tmp': settings.TEST_TMP_DIR} if request.POST.get('test') else None
-        url = request.GET.get('post_service_url')
-        url = (urllib.parse.unquote(url) if url else '')
-        try:
-            response = StoreRoutine(url, dirs).run()
-            return Response(prepare_response(response), status=200)
-        except Exception as e:
-            return Response(prepare_response(e), status=500)
+        url = self.get_post_service_url(request)
+        return (url, dirs)
 
 
-class CleanupRequestView(APIView):
+class CleanupRequestView(BaseRoutineView):
     """Sends request to clean up finished packages. Accepts POST requests only."""
+    routine = CleanupRequester
 
-    def post(self, request):
-        url = request.GET.get('post_service_url')
-        url = (urllib.parse.unquote(url) if url else '')
-        try:
-            response = CleanupRequester(url).run()
-            return Response(prepare_response(response), status=200)
-        except Exception as e:
-            return Response(prepare_response(e), status=500)
+    def get_args(self, request):
+        url = self.get_post_service_url(request)
+        return (url,)

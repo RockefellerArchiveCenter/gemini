@@ -1,5 +1,6 @@
 import json
-from os.path import basename, splitext, join, isfile
+from os import remove
+from os.path import basename, splitext, join, isdir, isfile
 import py7zlib
 import re
 import requests
@@ -58,6 +59,13 @@ def extract_file(archive, src, dest):
         print("Unrecognized archive extension")
         return False
     return dest
+
+
+def remove_file_or_dir(filepath):
+    if isdir(filepath):
+        shutil.rmtree(filepath)
+    elif isfile(filepath):
+        remove(filepath)
 
 
 def extract_all(archive, dest, tmp):

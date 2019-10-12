@@ -1,6 +1,5 @@
-from os import listdir, makedirs, remove, access, W_OK
-from os.path import basename, isdir, isfile, join, splitext
-import shutil
+from os import listdir, access, W_OK
+from os.path import basename, isdir, join, splitext
 from xml.etree import ElementTree as ET
 import zipfile
 
@@ -147,11 +146,7 @@ class StoreRoutine(Routine):
     def clean_up(self, uuid):
         for d in listdir(self.tmp_dir):
             if uuid in d:
-                filepath = join(self.tmp_dir, d)
-                if isdir(filepath):
-                    shutil.rmtree(filepath)
-                elif isfile(filepath):
-                    remove(filepath)
+                helpers.remove_file_or_dir(join(self.tmp_dir, d))
 
     def store_aip(self, package, container):
         """
