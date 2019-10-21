@@ -8,7 +8,7 @@ colorlog==3.2.0
 Django==2.2.5
 djangorestframework==3.10.3
 git+https://github.com/RockefellerArchiveCenter/asterism@v0.1#egg=asterism
-gitdb2==2.0.5
+gitdb2==2.0.6
 GitPython==2.1.11
 health-check==3.4.1
 importlib-metadata==0.22
