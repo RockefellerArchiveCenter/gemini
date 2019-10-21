@@ -66,18 +66,20 @@ class PackageTest(TestCase):
             request = self.factory.post(reverse('download-packages'), {"test": True})
             response = DownloadView.as_view()(request)
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
+            self.assertEqual(response.data['count'], 1, "Wrong number of packages downloaded")
         with storer_vcr.use_cassette('store.yml'):
             request = self.factory.post(reverse('store-packages'), {"test": True})
             response = StoreView.as_view()(request)
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
+            self.assertEqual(response.data['count'], 1, "Wrong number of packages stored")
         with storer_vcr.use_cassette('cleanup.yml'):
-            request = self.factory.post(reverse('request-cleanup'), {"test": True})
+            request = self.factory.post("{}?post_service_url=http://fornax-web:8003/cleanup/".format(reverse('request-cleanup')), {"test": True})
             response = CleanupRequestView.as_view()(request)
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
 
     def schema(self):
         print('*** Getting schema view ***')
-        schema = self.client.get(reverse('schema-json', kwargs={"format": ".json"}))
+        schema = self.client.get(reverse('schema'))
         self.assertEqual(schema.status_code, 200, "Wrong HTTP code")
 
     def health_check(self):

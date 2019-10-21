@@ -1,23 +1,14 @@
-from datetime import datetime
-import logging
-from structlog import wrap_logger
-from uuid import uuid4
 import urllib
 
-from django.shortcuts import render
-from gemini import settings
-
+from asterism.views import prepare_response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 
+from gemini import settings
 from storer.models import Package
 from storer.routines import DownloadRoutine, StoreRoutine, CleanupRequester
 from storer.serializers import PackageSerializer, PackageListSerializer
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-logger = wrap_logger(logger)
 
 
 class PackageViewSet(ModelViewSet):
@@ -40,44 +31,45 @@ class PackageViewSet(ModelViewSet):
         return PackageSerializer
 
 
-class DownloadView(APIView):
+class BaseRoutineView(APIView):
+    """Base view for routines."""
+
+    def get_post_service_url(self, request):
+        url = request.GET.get('post_service_url')
+        return urllib.parse.unquote(url) if url else ''
+
+    def post(self, request, format=None):
+        args = self.get_args(request)
+        try:
+            response = self.routine(*args).run()
+            return Response(prepare_response(response), status=200)
+        except Exception as e:
+            return Response(prepare_response(e), status=500)
+
+
+class DownloadView(BaseRoutineView):
     """Downloads packages. Accepts POST requests only."""
+    routine = DownloadRoutine
 
-    def post(self, request, format=None, *args, **kwargs):
-        log = logger.new(transaction_id=str(uuid4()))
+    def get_args(self, request):
         dirs = {'tmp': settings.TEST_TMP_DIR} if request.POST.get('test') else None
-
-        try:
-            download = DownloadRoutine(dirs).run()
-            return Response({"detail": download}, status=200)
-        except Exception as e:
-            return Response({"detail": str(e)}, status=500)
+        return (dirs,)
 
 
-class StoreView(APIView):
+class StoreView(BaseRoutineView):
     """Stores packages. Accepts POST requests only."""
+    routine = StoreRoutine
 
-    def post(self, request, format=None, *args, **kwargs):
-        log = logger.new(transaction_id=str(uuid4()))
+    def get_args(self, request):
         dirs = {'tmp': settings.TEST_TMP_DIR} if request.POST.get('test') else None
-        url = request.GET.get('post_service_url')
-        url = (urllib.parse.unquote(url) if url else '')
-        try:
-            store = StoreRoutine(url, dirs).run()
-            return Response({"detail": store}, status=200)
-        except Exception as e:
-            return Response({"detail": str(e)}, status=500)
+        url = self.get_post_service_url(request)
+        return (url, dirs)
 
 
-class CleanupRequestView(APIView):
+class CleanupRequestView(BaseRoutineView):
     """Sends request to clean up finished packages. Accepts POST requests only."""
+    routine = CleanupRequester
 
-    def post(self, request):
-        log = logger.new(transaction_id=str(uuid4()))
-        url = request.GET.get('post_service_url')
-        url = (urllib.parse.unquote(url) if url else '')
-        try:
-            cleanup = CleanupRequester(url).run()
-            return Response({"detail": cleanup}, status=200)
-        except Exception as e:
-            return Response({"detail": str(e)}, status=500)
+    def get_args(self, request):
+        url = self.get_post_service_url(request)
+        return (url,)

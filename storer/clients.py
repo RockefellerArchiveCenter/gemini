@@ -1,12 +1,9 @@
 import json
-import logging
 import mimetypes
 from os.path import basename, join, splitext
 from pyfc4 import models as fcrepo
 from pyfc4.plugins.pcdm import models as pcdm
 import requests
-from structlog import wrap_logger
-from uuid import uuid4
 
 
 class FedoraClientError(Exception): pass
@@ -36,12 +33,8 @@ class FedoraClient(object):
         except Exception as e:
             raise FedoraClientError("Error creating object: {}".format(e))
 
-    def create_binary(self, filepath, container, mtype=None):
+    def create_binary(self, filepath, container, mimetype):
         # Uses PCDM plugin: https://github.com/ghukill/pyfc4/blob/master/pyfc4/plugins/pcdm/models.py
-        mimetype = mtype if mtype else mimetypes.guess_type(filepath)[0]
-        # Add fallback for mimetypes
-        if not mimetype:
-            mimetype = 'application/octet-stream'
         with open(filepath, 'rb') as f:
             try:
                 binary = pcdm.PCDMFile(repo=self.client, uri='{}/files/{}'.format(container.uri_as_string(), basename(filepath)))
@@ -49,8 +42,8 @@ class FedoraClient(object):
                     binary.delete(remove_tombstone=True)
                 new_binary = pcdm.PCDMFile(repo=self.client, uri='{}/files/{}'.format(container.uri_as_string(), basename(filepath)), binary_data=f, binary_mimetype=mimetype)
                 new_binary.create(specify_uri=True, auto_refresh=False)
-                new_binary.add_triple(binary.rdf.prefixes.rdfs['label'], basename(filepath))
-                new_binary.add_triple(binary.rdf.prefixes.dc['format'], mimetype)
+                new_binary.add_triple(new_binary.rdf.prefixes.rdfs['label'], basename(filepath))
+                new_binary.add_triple(new_binary.rdf.prefixes.dc['format'], mimetype)
                 new_binary.update(auto_refresh=False)
                 return new_binary
             except Exception as e:

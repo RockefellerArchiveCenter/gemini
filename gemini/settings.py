@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-import structlog
 import gemini.config as CF
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -25,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'j&!jzlr5i!%8g2agh%!6^)*h)y+l0gezhjwt+i2!xitbdsqtn8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = CF.DEBUG
 
 ALLOWED_HOSTS = CF.ALLOWED_HOSTS
 
@@ -38,10 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_cron',
     'rest_framework',
     'health_check',
-    'drf_yasg',
     'storer',
 ]
 
@@ -130,16 +127,3 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 25,
 }
-
-structlog.configure(
-    processors=[
-        structlog.stdlib.add_logger_name,
-        structlog.stdlib.add_log_level,
-        structlog.stdlib.PositionalArgumentsFormatter(),
-        structlog.processors.StackInfoRenderer(),
-        structlog.processors.format_exc_info,
-        structlog.processors.UnicodeDecoder(),
-        structlog.processors.TimeStamper(fmt='iso', utc=True),
-        structlog.processors.JSONRenderer()
-    ],
-)
