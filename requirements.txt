@@ -19,7 +19,7 @@ MarkupSafe==1.0
 more-itertools==4.3.0
 multidict==4.4.0
 pluggy==0.13.0
-psycopg2-binary==2.7.4
+psycopg2-binary==2.8.4
 pyfc4==0.6
 pylzma==0.4.9
 pyparsing==2.4.2
