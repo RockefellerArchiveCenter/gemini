@@ -11,7 +11,7 @@ git+https://github.com/RockefellerArchiveCenter/asterism@v0.1#egg=asterism
 gitdb2==2.0.6
 GitPython==2.1.11
 health-check==3.4.1
-importlib-metadata==0.22
+importlib-metadata==0.23
 isodate==0.6.0
 jsonpointer==2.0
 jsonschema==3.1.1
