@@ -17,7 +17,7 @@ jsonpointer==2.0
 jsonschema==3.1.1
 MarkupSafe==1.1.1
 more-itertools==7.2.0
-multidict==4.4.0
+multidict==4.7.2
 pluggy==0.13.0
 psycopg2-binary==2.8.4
 pyfc4==0.6
