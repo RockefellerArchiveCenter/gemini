@@ -37,7 +37,7 @@ class DownloadRoutine(Routine):
         package_ids = []
         for package in self.am_client.retrieve_paged('file/'):
             self.uuid = package['uuid']
-            if (package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid'] and
+            if (package['origin_pipeline'].split('/')[-2] in settings.ARCHIVEMATICA['pipeline_uuids'] and
                package['status'] == 'UPLOADED'):
                 if not Package.objects.filter(data__uuid=self.uuid).exists():
                     try:
