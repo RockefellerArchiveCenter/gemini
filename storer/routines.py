@@ -37,7 +37,7 @@ class DownloadRoutine(Routine):
         package_ids = []
         for package in self.am_client.retrieve_paged('file/'):
             self.uuid = package['uuid']
-            if (package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid'] and
+            if (package['origin_pipeline'].split('/')[-2] in settings.ARCHIVEMATICA['pipeline_uuids'] and
                package['status'] == 'UPLOADED'):
                 if not Package.objects.filter(data__uuid=self.uuid).exists():
                     try:
@@ -92,7 +92,7 @@ class StoreRoutine(Routine):
             else:
                 raise RoutineError("Unrecognized package type: {}".format(package.type), self.uuid)
 
-            package.internal_sender_identifier, self.mimetypes = self.parse_mets()
+            package.internal_sender_identifier, self.mimetypes, origin, archivesspace_uri = self.parse_mets()
 
             try:
                 container = self.fedora_client.create_container(self.uuid)
@@ -102,7 +102,16 @@ class StoreRoutine(Routine):
 
             if self.url:
                 try:
-                    helpers.send_post_request(self.url, {'identifier': package.internal_sender_identifier, 'uri': container.uri_as_string(), 'package_type': package.type})
+                    helpers.send_post_request(
+                        self.url,
+                        {
+                            'identifier': package.internal_sender_identifier,
+                            'uri': container.uri_as_string(),
+                            'package_type': package.type,
+                            'origin': origin,
+                            'archivesspace_uri': archivesspace_uri,
+                        }
+                    )
                 except Exception as e:
                     raise RoutineError("Error sending post callback: {}".format(e), self.uuid)
 
@@ -132,14 +141,17 @@ class StoreRoutine(Routine):
             tree = ET.parse(mets)
             root = tree.getroot()
             ns = {'mets': 'http://www.loc.gov/METS/', 'premis': 'info:lc/xmlns/premis-v2', 'fits': 'http://hul.harvard.edu/ois/xml/ns/fits/fits_output'}
-            internal_sender_identifier = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns).text
+            bagit_root = "mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/"
+            internal_sender_identifier = root.findtext("{}/Internal-Sender-Identifier".format(bagit_root), namespaces=ns)
+            origin = root.findtext("{}/Origin".format(bagit_root), namespaces=ns)
+            archivesspace_uri = root.findtext("{}/ArchivesSpace-URI".format(bagit_root), namespaces=ns)
             files = root.findall('mets:amdSec/mets:techMD/mets:mdWrap[@MDTYPE="PREMIS:OBJECT"]/mets:xmlData/premis:object', ns)
             for f in files:
-                uuid = f.find('premis:objectIdentifier/premis:objectIdentifierValue', ns).text
+                uuid = f.findtext('premis:objectIdentifier/premis:objectIdentifierValue', namespaces=ns)
                 identity = f.find('premis:objectCharacteristics/premis:objectCharacteristicsExtension/', ns)
                 mtype = identity.attrib.get('mimetype', 'application/octet-stream') if identity else 'application/octet-stream'
                 mimetypes.update({uuid: mtype})
-            return internal_sender_identifier, mimetypes
+            return internal_sender_identifier, mimetypes, origin, archivesspace_uri
         except Exception as e:
             raise RoutineError("Error getting data from Archivematica METS file: {}".format(e), self.uuid)
 
