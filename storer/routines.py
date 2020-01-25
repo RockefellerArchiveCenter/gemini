@@ -46,9 +46,8 @@ class DownloadRoutine(Routine):
                 if not Package.objects.filter(data__uuid=self.uuid).exists():
                     try:
                         download = self.am_client.download_package(self.uuid)
-                        extension = (splitext(package['current_path'])[1]
-                                     if splitext(package['current_path'])[1] else '.tar')
-                        move(download, join(self.tmp_dir, '{}{}'.format(self.uuid, extension)))
+                        move(download, join(self.tmp_dir,
+                             '{}{}'.format(self.uuid, self.get_extension(package))))
                     except Exception as e:
                         raise RoutineError("Error downloading data: {}".format(e), self.uuid)
 
@@ -60,6 +59,11 @@ class DownloadRoutine(Routine):
                     package_ids.append(self.uuid)
                     break
         return ("All packages downloaded.", package_ids)
+
+    def get_extension(self, package):
+        return (splitext(package['current_path'])[1]
+                if splitext(package['current_path'])[1]
+                else '.tar')
 
 
 class StoreRoutine(Routine):
