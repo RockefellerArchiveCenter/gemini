@@ -61,17 +61,6 @@ class DownloadRoutine(Routine):
                     break
         return ("All packages downloaded.", package_ids)
 
-    def download_package(self, package_json):
-        response = self.am_client.download_package(self.uuid)
-        extension = splitext(package_json['current_path'])[1]
-        if not extension:
-            extension = '.tar'
-        with open(join(self.tmp_dir, '{}{}'.format(self.uuid, extension)), "wb") as package:
-            for chunk in response.iter_content(chunk_size=1024):
-                if chunk:
-                    package.write(chunk)
-        return package
-
 
 class StoreRoutine(Routine):
     """
