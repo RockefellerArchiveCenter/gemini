@@ -19,7 +19,7 @@ storer_vcr = vcr.VCR(
     serializer='yaml',
     cassette_library_dir='fixtures/cassettes',
     record_mode='once',
-    match_on=['path', 'method', 'query'],
+    match_on=['path', 'method'],
     filter_query_parameters=['username', 'password'],
     filter_headers=['Authorization'],
 )

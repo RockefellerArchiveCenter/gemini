@@ -1,11 +1,12 @@
 from os import listdir, access, W_OK
 from os.path import basename, isdir, join, splitext
+from shutil import move
+
+from amclient import AMClient
 from xml.etree import ElementTree as ET
-import zipfile
 
 from gemini import settings
-
-from storer.clients import FedoraClient, ArchivematicaClient
+from storer.clients import FedoraClient
 from storer import helpers
 from storer.models import Package
 
@@ -29,19 +30,25 @@ class DownloadRoutine(Routine):
 
     def __init__(self, dirs):
         super(DownloadRoutine, self).__init__(dirs)
-        self.am_client = ArchivematicaClient(settings.ARCHIVEMATICA['username'],
-                                             settings.ARCHIVEMATICA['api_key'],
-                                             settings.ARCHIVEMATICA['baseurl'])
+        self.am_client = AMClient(
+            ss_api_key=settings.ARCHIVEMATICA['api_key'],
+            ss_user_name=settings.ARCHIVEMATICA['username'],
+            ss_url=settings.ARCHIVEMATICA['baseurl'],
+            directory=self.tmp_dir,
+        )
 
     def run(self):
         package_ids = []
-        for package in self.am_client.retrieve_paged('file/'):
+        for package in self.am_client.get_all_packages(params={}):
             self.uuid = package['uuid']
             if (package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid'] and
                package['status'] == 'UPLOADED'):
                 if not Package.objects.filter(data__uuid=self.uuid).exists():
                     try:
-                        self.download = self.download_package(package)
+                        download = self.am_client.download_package(self.uuid)
+                        extension = (splitext(package['current_path'])[1]
+                                     if splitext(package['current_path'])[1] else '.tar')
+                        move(download, join(self.tmp_dir, '{}{}'.format(self.uuid, extension)))
                     except Exception as e:
                         raise RoutineError("Error downloading data: {}".format(e), self.uuid)
 
@@ -55,7 +62,7 @@ class DownloadRoutine(Routine):
         return ("All packages downloaded.", package_ids)
 
     def download_package(self, package_json):
-        response = self.am_client.retrieve('/file/{}/download/'.format(self.uuid), stream=True)
+        response = self.am_client.download_package(self.uuid)
         extension = splitext(package_json['current_path'])[1]
         if not extension:
             extension = '.tar'
