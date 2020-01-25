@@ -41,8 +41,7 @@ class DownloadRoutine(Routine):
         package_ids = []
         for package in self.am_client.get_all_packages(params={}):
             self.uuid = package['uuid']
-            if (package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid'] and
-               package['status'] == 'UPLOADED'):
+            if self.is_downloadable(package):
                 if not Package.objects.filter(data__uuid=self.uuid).exists():
                     try:
                         download = self.am_client.download_package(self.uuid)
@@ -64,6 +63,10 @@ class DownloadRoutine(Routine):
         return (splitext(package['current_path'])[1]
                 if splitext(package['current_path'])[1]
                 else '.tar')
+
+    def is_downloadable(self, package):
+        return (package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid'] and
+               package['status'] == 'UPLOADED')
 
 
 class StoreRoutine(Routine):
