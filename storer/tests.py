@@ -19,7 +19,7 @@ storer_vcr = vcr.VCR(
     serializer='yaml',
     cassette_library_dir='fixtures/cassettes',
     record_mode='once',
-    match_on=['path', 'method', 'query'],
+    match_on=['path', 'method'],
     filter_query_parameters=['username', 'password'],
     filter_headers=['Authorization'],
 )
@@ -37,6 +37,7 @@ class PackageTest(TestCase):
         with storer_vcr.use_cassette('download.yml'):
             download = DownloadRoutine(dirs={'tmp': settings.TEST_TMP_DIR}).run()
             self.assertNotEqual(False, download, "Packages not downloaded correctly")
+        self.assertEqual(len(listdir(settings.TEST_TMP_DIR)), 1, "Wrong number of packages downloaded")
         print('*** Storing packages ***')
         with storer_vcr.use_cassette('store.yml'):
             store = StoreRoutine('http://aquarius-web:8002/packages/',
