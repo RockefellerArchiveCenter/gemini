@@ -95,11 +95,11 @@ class StoreRoutine(Routine):
             else:
                 raise RoutineError("Unrecognized package type: {}".format(package.type), self.uuid)
 
-            package.internal_sender_identifier, self.mimetypes, origin, archivesspace_uri = self.parse_mets()
+            mets_data = self.parse_mets()
 
             try:
                 container = self.fedora_client.create_container(self.uuid)
-                getattr(self, 'store_{}'.format(package.type))(package.data, container)
+                getattr(self, 'store_{}'.format(package.type))(package.data, container, mets_data['mimetypes'])
             except Exception as e:
                 raise RoutineError("Error storing data: {}".format(e), self.uuid)
 
@@ -108,16 +108,17 @@ class StoreRoutine(Routine):
                     helpers.send_post_request(
                         self.url,
                         {
-                            'identifier': package.internal_sender_identifier,
+                            'identifier': mets_data['internal_sender_identifier'],
                             'uri': container.uri_as_string(),
                             'package_type': package.type,
-                            'origin': origin,
-                            'archivesspace_uri': archivesspace_uri,
+                            'origin': mets_data['origin'],
+                            'archivesspace_uri': mets_data['archivesspace_uri'],
                         }
                     )
                 except Exception as e:
-                    raise RoutineError("Error sending post callback: {}".format(e), self.uuid)
+                    raise RoutineError("Error sending POST request to {}: {}".format(self.url, e), self.uuid)
 
+            package.internal_sender_identifier = mets_data['internal_sender_identifier']
             package.process_status = Package.STORED
             package.save()
 
@@ -139,45 +140,56 @@ class StoreRoutine(Routine):
         and mimetypes
         """
         try:
-            mimetypes = {}
+            mets_data = {}
             mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
-            tree = ET.parse(mets)
-            root = tree.getroot()
             ns = {'mets': 'http://www.loc.gov/METS/', 'premis': 'info:lc/xmlns/premis-v2', 'fits': 'http://hul.harvard.edu/ois/xml/ns/fits/fits_output'}
-            bagit_root = "mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/"
-            internal_sender_identifier = root.findtext("{}/Internal-Sender-Identifier".format(bagit_root), namespaces=ns)
-            origin = root.findtext("{}/Origin".format(bagit_root), namespaces=ns)
-            archivesspace_uri = root.findtext("{}/ArchivesSpace-URI".format(bagit_root), namespaces=ns)
-            files = root.findall('mets:amdSec/mets:techMD/mets:mdWrap[@MDTYPE="PREMIS:OBJECT"]/mets:xmlData/premis:object', ns)
-            for f in files:
-                uuid = f.findtext('premis:objectIdentifier/premis:objectIdentifierValue', namespaces=ns)
+            tree = ET.parse(mets)
+            bagit_root = tree.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata", ns)
+            mets_data['internal_sender_identifier'] = self.findtext_with_exception(bagit_root, "Internal-Sender-Identifier", ns)
+            mets_data['archivesspace_uri'] = bagit_root.findtext("ArchivesSpace-URI", namespaces=ns)
+            mets_data['origin'] = bagit_root.findtext("Origin", default="aurora", namespaces=ns)
+            files_root = tree.findall('mets:amdSec/mets:techMD/mets:mdWrap[@MDTYPE="PREMIS:OBJECT"]/mets:xmlData/premis:object', ns)
+            mimetypes = {}
+            for f in files_root:
+                uuid = self.findtext_with_exception(f, 'premis:objectIdentifier/premis:objectIdentifierValue', ns)
                 identity = f.find('premis:objectCharacteristics/premis:objectCharacteristicsExtension/', ns)
                 mtype = identity.attrib.get('mimetype', 'application/octet-stream') if identity else 'application/octet-stream'
                 mimetypes.update({uuid: mtype})
-            return internal_sender_identifier, mimetypes, origin, archivesspace_uri
+            mets_data['mimetypes'] = mimetypes
+            return mets_data
+        except FileNotFoundError:
+            raise RoutineError("No METS file found at {}".format(self.mets_path), self.uuid)
+        except ValueError as e:
+            raise RoutineError("Could not find element {} in METS file".format(e), self.uuid)
         except Exception as e:
             raise RoutineError("Error getting data from Archivematica METS file: {}".format(e), self.uuid)
+
+    def findtext_with_exception(self, element, xpath, namespaces):
+        ret = element.findtext(xpath, namespaces=namespaces)
+        if not ret:
+            raise ValueError(xpath)
+        return ret
 
     def clean_up(self, uuid):
         for d in listdir(self.tmp_dir):
             if uuid in d:
                 helpers.remove_file_or_dir(join(self.tmp_dir, d))
 
-    def store_aip(self, package, container):
+    def store_aip(self, package, container, mimetypes):
         """
         Stores an AIP as a single binary in Fedora and handles the resulting URI.
         Assumes AIPs are stored as a compressed package.
         """
         self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), container, 'application/x-7z-compressed')
 
-    def store_dip(self, package, container):
+    def store_dip(self, package, container, mimetypes):
         """
         Stores a DIP as multiple binaries in Fedora and handles the resulting URI.
         Matches the file UUID (the first 36 characters of the filename) against
         the mimetypes dictionary to find the relevant mimetype.
         """
         for f in listdir(join(self.extracted, 'objects')):
-            mimetype = self.mimetypes[f[0:36]]
+            mimetype = mimetypes[f[0:36]]
             self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container, mimetype)
 
 
