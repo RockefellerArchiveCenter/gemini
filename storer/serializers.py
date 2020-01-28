@@ -6,7 +6,7 @@ class PackageSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Package
-        exclude = ('data',)
+        fields = '__all__'
 
 
 class PackageListSerializer(serializers.HyperlinkedModelSerializer):
