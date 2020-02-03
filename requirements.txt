@@ -22,7 +22,7 @@ pluggy==0.13.0
 psycopg2-binary==2.8.4
 pyfc4==0.6
 pylzma==0.4.9
-pyparsing==2.4.2
+pyparsing==2.4.6
 pytz==2019.3
 PyYAML==5.1.2
 rdflib==4.2.2
