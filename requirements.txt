@@ -24,7 +24,7 @@ pyfc4==0.6
 pylzma==0.4.9
 pyparsing==2.4.2
 pytz==2019.3
-PyYAML==5.1.2
+PyYAML==5.3
 rdflib==4.2.2
 rdflib-jsonld==0.4.0
 requests==2.22.0
