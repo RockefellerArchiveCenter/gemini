@@ -164,7 +164,7 @@ class StoreRoutine(Routine):
         the mimetypes dictionary to find the relevant mimetype.
         """
         for f in listdir(join(self.extracted, 'objects')):
-            # mimetype = self.mimetypes[f[0:36]]
+            mimetype = self.mimetypes[f[0:36]]
             self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container, mimetype)
 
 
