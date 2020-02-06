@@ -144,7 +144,7 @@ class StoreRoutine(Routine):
         except Exception as e:
             raise RoutineError("Error getting data from Archivematica METS file: {}".format(e), self.uuid)
 
-    def get_premis_schemalocation(version):
+    def get_premis_schemalocation(self, version):
         """Returns a PREMIS schema URL based on the version number provided."""
         return 'http://www.loc.gov/premis/v3' if version.startswith("3.") else 'info:lc/xmlns/premis-v2'
 
