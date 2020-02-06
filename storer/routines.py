@@ -131,14 +131,16 @@ class StoreRoutine(Routine):
             mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
             tree = ET.parse(mets)
             root = tree.getroot()
-            ns = {'mets': 'http://www.loc.gov/METS/', 'premis': 'info:lc/xmlns/premis-v2', 'fits': 'http://hul.harvard.edu/ois/xml/ns/fits/fits_output'}
+            ns = {'mets': 'http://www.loc.gov/METS/', 'fits': 'http://hul.harvard.edu/ois/xml/ns/fits/fits_output'}
             internal_sender_identifier = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns).text
-            files = root.findall('mets:amdSec/mets:techMD/mets:mdWrap[@MDTYPE="PREMIS:OBJECT"]/mets:xmlData/premis:object', ns)
-            for f in files:
-                uuid = f.find('premis:objectIdentifier/premis:objectIdentifierValue', ns).text
-                identity = f.find('premis:objectCharacteristics/premis:objectCharacteristicsExtension/', ns)
-                mtype = identity.attrib.get('mimetype', 'application/octet-stream') if identity else 'application/octet-stream'
-                mimetypes.update({uuid: mtype})
+            # files = root.findall('mets:amdSec/mets:techMD/mets:mdWrap[@MDTYPE="PREMIS:OBJECT"]/mets:xmlData/', ns)
+            # for f in files:
+            #     version = f.attrib['version']
+            #     ns['premis'] = 'http://www.loc.gov/premis/v3' if version == '3.0' else 'info:lc/xmlns/premis-v2'
+            #     uuid = f.find('premis:objectIdentifier/premis:objectIdentifierValue', ns).text
+            #     identity = f.find('premis:objectCharacteristics/premis:objectCharacteristicsExtension/fits:fits/fits:identification/fits:identity', ns)
+                # mtype = identity.attrib.get('mimetype', 'application/octet-stream') if identity else 'application/octet-stream'
+                # mimetypes.update({uuid: mtype})
             return internal_sender_identifier, mimetypes
         except Exception as e:
             raise RoutineError("Error getting data from Archivematica METS file: {}".format(e), self.uuid)
@@ -153,7 +155,7 @@ class StoreRoutine(Routine):
         Stores an AIP as a single binary in Fedora and handles the resulting URI.
         Assumes AIPs are stored as a compressed package.
         """
-        self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), container, 'application/x-7z-compressed')
+        self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), container)
 
     def store_dip(self, package, container):
         """
@@ -162,8 +164,8 @@ class StoreRoutine(Routine):
         the mimetypes dictionary to find the relevant mimetype.
         """
         for f in listdir(join(self.extracted, 'objects')):
-            mimetype = self.mimetypes[f[0:36]]
-            self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container, mimetype)
+            # mimetype = self.mimetypes[f[0:36]]
+            self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
 
 
 class CleanupRequester:
