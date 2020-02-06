@@ -133,14 +133,14 @@ class StoreRoutine(Routine):
             root = tree.getroot()
             ns = {'mets': 'http://www.loc.gov/METS/', 'fits': 'http://hul.harvard.edu/ois/xml/ns/fits/fits_output'}
             internal_sender_identifier = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns).text
-            # files = root.findall('mets:amdSec/mets:techMD/mets:mdWrap[@MDTYPE="PREMIS:OBJECT"]/mets:xmlData/', ns)
-            # for f in files:
-            #     version = f.attrib['version']
-            #     ns['premis'] = 'http://www.loc.gov/premis/v3' if version == '3.0' else 'info:lc/xmlns/premis-v2'
-            #     uuid = f.find('premis:objectIdentifier/premis:objectIdentifierValue', ns).text
-            #     identity = f.find('premis:objectCharacteristics/premis:objectCharacteristicsExtension/fits:fits/fits:identification/fits:identity', ns)
-                # mtype = identity.attrib.get('mimetype', 'application/octet-stream') if identity else 'application/octet-stream'
-                # mimetypes.update({uuid: mtype})
+            files = root.findall('mets:amdSec/mets:techMD/mets:mdWrap[@MDTYPE="PREMIS:OBJECT"]/mets:xmlData/', ns)
+            for f in files:
+                version = f.attrib['version']
+                ns['premis'] = 'http://www.loc.gov/premis/v3' if version == '3.0' else 'info:lc/xmlns/premis-v2'
+                uuid = f.find('premis:objectIdentifier/premis:objectIdentifierValue', ns).text
+                identity = f.find('premis:objectCharacteristics/premis:objectCharacteristicsExtension/fits:fits/fits:identification/fits:identity', ns)
+                mtype = identity.attrib.get('mimetype', 'application/octet-stream') if identity else 'application/octet-stream'
+                mimetypes.update({uuid: mtype})
             return internal_sender_identifier, mimetypes
         except Exception as e:
             raise RoutineError("Error getting data from Archivematica METS file: {}".format(e), self.uuid)
