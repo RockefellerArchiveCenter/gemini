@@ -93,6 +93,7 @@ class StoreRoutine(Routine):
                 self.extracted = helpers.extract_all(join(self.tmp_dir, "{}.tar".format(self.uuid)), join(self.tmp_dir, self.uuid), self.tmp_dir)
                 self.mets_path = [f for f in listdir(self.extracted) if (basename(f).startswith('METS.') and basename(f).endswith('.xml'))][0]
             else:
+                self.clean_up(self.uuid)
                 raise RoutineError("Unrecognized package type: {}".format(package.type), self.uuid)
 
             mets_data = self.parse_mets()
@@ -101,6 +102,7 @@ class StoreRoutine(Routine):
                 container = self.fedora_client.create_container(self.uuid)
                 getattr(self, 'store_{}'.format(package.type))(package.data, container, mets_data['mimetypes'])
             except Exception as e:
+                self.clean_up(self.uuid)
                 raise RoutineError("Error storing data: {}".format(e), self.uuid)
 
             if self.url:
@@ -116,6 +118,7 @@ class StoreRoutine(Routine):
                         }
                     )
                 except Exception as e:
+                    self.clean_up(self.uuid)
                     raise RoutineError("Error sending POST request to {}: {}".format(self.url, e), self.uuid)
 
             package.internal_sender_identifier = mets_data['internal_sender_identifier']
@@ -124,10 +127,7 @@ class StoreRoutine(Routine):
 
             package_ids.append(self.uuid)
 
-            try:
-                self.clean_up(self.uuid)
-            except Exception as e:
-                raise RoutineError("Error cleaning up: {}".format(e), self.uuid)
+            self.clean_up(self.uuid)
 
             break
 
