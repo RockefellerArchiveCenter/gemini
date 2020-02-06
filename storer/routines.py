@@ -135,7 +135,7 @@ class StoreRoutine(Routine):
             internal_sender_identifier = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns).text
             files = root.findall('mets:amdSec/mets:techMD/mets:mdWrap[@MDTYPE="PREMIS:OBJECT"]/mets:xmlData/', ns)
             for f in files:
-                ns['premis'] = get_premis_schemalocation(f.attrib['version'])
+                ns['premis'] = self.get_premis_schemalocation(f.attrib['version'])
                 uuid = f.find('premis:objectIdentifier/premis:objectIdentifierValue', ns).text
                 identity = f.find('premis:objectCharacteristics/premis:objectCharacteristicsExtension/fits:fits/fits:identification/fits:identity', ns)
                 mtype = identity.attrib.get('mimetype', 'application/octet-stream') if identity else 'application/octet-stream'
