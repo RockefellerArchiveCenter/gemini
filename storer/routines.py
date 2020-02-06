@@ -155,7 +155,7 @@ class StoreRoutine(Routine):
         Stores an AIP as a single binary in Fedora and handles the resulting URI.
         Assumes AIPs are stored as a compressed package.
         """
-        self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), container)
+        self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), container, mimetype)
 
     def store_dip(self, package, container):
         """
@@ -165,7 +165,7 @@ class StoreRoutine(Routine):
         """
         for f in listdir(join(self.extracted, 'objects')):
             # mimetype = self.mimetypes[f[0:36]]
-            self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container)
+            self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container, mimetype)
 
 
 class CleanupRequester:
