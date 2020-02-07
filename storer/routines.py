@@ -142,7 +142,7 @@ class StoreRoutine(Routine):
         try:
             mets_data = {}
             mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
-            ns = {'mets': 'http://www.loc.gov/METS/', 'premis': 'info:lc/xmlns/premis-v2', 'fits': 'http://hul.harvard.edu/ois/xml/ns/fits/fits_output'}
+            ns = {'mets': 'http://www.loc.gov/METS/', 'fits': 'http://hul.harvard.edu/ois/xml/ns/fits/fits_output'}
             tree = ET.parse(mets)
             bagit_root = tree.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata", ns)
             mets_data['internal_sender_identifier'] = self.findtext_with_exception(bagit_root, "Internal-Sender-Identifier", ns)
@@ -151,8 +151,9 @@ class StoreRoutine(Routine):
             files_root = tree.findall('mets:amdSec/mets:techMD/mets:mdWrap[@MDTYPE="PREMIS:OBJECT"]/mets:xmlData/premis:object', ns)
             mimetypes = {}
             for f in files_root:
-                uuid = self.findtext_with_exception(f, 'premis:objectIdentifier/premis:objectIdentifierValue', ns)
-                identity = f.find('premis:objectCharacteristics/premis:objectCharacteristicsExtension/', ns)
+                ns['premis'] = self.get_premis_schemalocation(f.attrib['version'])
+                uuid = f.find('premis:objectIdentifier/premis:objectIdentifierValue', ns).text
+                identity = f.find('premis:objectCharacteristics/premis:objectCharacteristicsExtension/fits:fits/fits:identification/fits:identity', ns)
                 mtype = identity.attrib.get('mimetype', 'application/octet-stream') if identity else 'application/octet-stream'
                 mimetypes.update({uuid: mtype})
             mets_data['mimetypes'] = mimetypes
@@ -170,7 +171,12 @@ class StoreRoutine(Routine):
             raise ValueError(xpath)
         return ret
 
+    def get_premis_schemalocation(self, version):
+        """Returns a PREMIS schema URL based on the version number provided."""
+        return 'http://www.loc.gov/premis/v3' if version.startswith("3.") else 'info:lc/xmlns/premis-v2'
+
     def clean_up(self, uuid):
+        """Removes files and directories for a given transfer."""
         for d in listdir(self.tmp_dir):
             if uuid in d:
                 helpers.remove_file_or_dir(join(self.tmp_dir, d))
