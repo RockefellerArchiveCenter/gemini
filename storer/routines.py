@@ -148,7 +148,7 @@ class StoreRoutine(Routine):
             mets_data['internal_sender_identifier'] = self.findtext_with_exception(bagit_root, "Internal-Sender-Identifier", ns)
             mets_data['archivesspace_uri'] = bagit_root.findtext("ArchivesSpace-URI", namespaces=ns)
             mets_data['origin'] = bagit_root.findtext("Origin", default="aurora", namespaces=ns)
-            files_root = tree.findall('mets:amdSec/mets:techMD/mets:mdWrap[@MDTYPE="PREMIS:OBJECT"]/mets:xmlData/premis:object', ns)
+            files_root = tree.findall('mets:amdSec/mets:techMD/mets:mdWrap[@MDTYPE="PREMIS:OBJECT"]/mets:xmlData/', ns)
             mimetypes = {}
             for f in files_root:
                 ns['premis'] = self.get_premis_schemalocation(f.attrib['version'])
