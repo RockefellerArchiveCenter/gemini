@@ -1,6 +1,6 @@
 import json
 from os import remove
-from os.path import basename, splitext, join, isdir, isfile
+from os.path import splitext, join, isdir, isfile
 import py7zlib
 import re
 import requests
@@ -13,16 +13,15 @@ def get_fields_from_file(fpath):
     fields = {}
     try:
         patterns = [
-            '(?P<key>[\w\-]+)',
+            r'(?P<key>[\w\-]+)',
             '(?P<val>.+)'
         ]
         with open(fpath, 'r') as f:
             for line in f.readlines():
                 line = line.strip('\n')
-
-                row_search = re.search(":?(\s)?".join(patterns), line)
+                row_search = re.search(r":?(\s)?".join(patterns), line)
                 if row_search:
-                    key = row_search.group('key').replace('-','_').strip()
+                    key = row_search.group('key').replace('-', '_').strip()
                     val = row_search.group('val').strip()
                     if key in fields:
                         listval = [fields[key]]
@@ -74,7 +73,8 @@ def extract_all(archive, dest, tmp):
         tf = tarfile.open(archive, 'r')
         tf.extractall(tmp)
         tf.close()
-        # Archivematica creates DIPs with filenames that don't match their UUIDs, so we have to rename here
+        # Archivematica creates DIPs with filenames that don't match their
+        # UUIDs, so we have to rename here
         shutil.move(join(tmp, tf.members[0].name), dest)
     else:
         print("Unrecognized archive extension")
@@ -83,10 +83,8 @@ def extract_all(archive, dest, tmp):
 
 
 def send_post_request(url, data):
-    try:
-        response = requests.post(
-            url,
-            data=json.dumps(data),
-            headers={"Content-Type": "application/json"})
-    except Exception as e:
-        raise Exception(e)
+    response = requests.post(
+        url,
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+    response.raise_for_status()
