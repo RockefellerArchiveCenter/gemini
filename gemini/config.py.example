@@ -28,6 +28,5 @@ FEDORA = {
 }
 
 TMP_DIR = '{}/tmp'.format(BASE_DIR)
-TEST_TMP_DIR = '{}/test_tmp'.format(BASE_DIR)
 
 STATIC_ROOT = '/static'

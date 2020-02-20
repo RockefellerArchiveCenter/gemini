@@ -21,8 +21,8 @@ class CleanupError(Exception):
 class Routine:
     """Base class for routines which checks existence and permissions of directories."""
 
-    def __init__(self, dirs):
-        self.tmp_dir = dirs['tmp'] if dirs else settings.TMP_DIR
+    def __init__(self):
+        self.tmp_dir = settings.TMP_DIR
         if not isdir(self.tmp_dir):
             raise RoutineError('Directory does not exist', self.tmp_dir)
         if not access(self.tmp_dir, W_OK):
@@ -32,8 +32,8 @@ class Routine:
 class DownloadRoutine(Routine):
     """Downloads a package from Archivematica."""
 
-    def __init__(self, dirs):
-        super(DownloadRoutine, self).__init__(dirs)
+    def __init__(self):
+        super(DownloadRoutine, self).__init__()
         self.am_client = AMClient(
             ss_api_key=settings.ARCHIVEMATICA['api_key'],
             ss_user_name=settings.ARCHIVEMATICA['username'],
@@ -78,8 +78,8 @@ class StoreRoutine(Routine):
     AIPS are uploaded as single 7z files. DIPs are extracted and each file is uploaded.
     """
 
-    def __init__(self, url, dirs):
-        super(StoreRoutine, self).__init__(dirs)
+    def __init__(self, url):
+        super(StoreRoutine, self).__init__()
         self.url = url
         self.fedora_client = FedoraClient(root=settings.FEDORA['baseurl'],
                                           username=settings.FEDORA['username'],
@@ -145,7 +145,9 @@ class StoreRoutine(Routine):
         """
         try:
             mets_data = {}
-            mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
+            mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(
+                self.uuid, self.extension)), self.mets_path,
+                join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
             ns = {'mets': 'http://www.loc.gov/METS/', 'fits': 'http://hul.harvard.edu/ois/xml/ns/fits/fits_output'}
             tree = ET.parse(mets)
             bagit_root = tree.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata", ns)
@@ -190,7 +192,8 @@ class StoreRoutine(Routine):
         Stores an AIP as a single binary in Fedora and handles the resulting URI.
         Assumes AIPs are stored as a compressed package.
         """
-        self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), container, 'application/x-7z-compressed')
+        self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(
+            self.uuid, self.extension)), container, 'application/x-7z-compressed')
 
     def store_dip(self, package, container, mimetypes):
         """

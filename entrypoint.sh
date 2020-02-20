@@ -13,8 +13,5 @@ fi
 echo "Apply database migrations"
 python manage.py makemigrations && python manage.py migrate
 
-echo "Create dirs"
-python manage.py shell < make_dirs.py
-
 echo "Starting server"
 python manage.py runserver 0.0.0.0:8006

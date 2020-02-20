@@ -1,7 +1,6 @@
 import urllib
 
 from asterism.views import prepare_response
-from gemini import settings
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -51,8 +50,7 @@ class DownloadView(BaseRoutineView):
     routine = DownloadRoutine
 
     def get_args(self, request):
-        dirs = {'tmp': settings.TEST_TMP_DIR} if request.POST.get('test') else None
-        return (dirs,)
+        return ()
 
 
 class StoreView(BaseRoutineView):
@@ -60,9 +58,8 @@ class StoreView(BaseRoutineView):
     routine = StoreRoutine
 
     def get_args(self, request):
-        dirs = {'tmp': settings.TEST_TMP_DIR} if request.POST.get('test') else None
         url = self.get_post_service_url(request)
-        return (url, dirs)
+        return url,
 
 
 class CleanupRequestView(BaseRoutineView):
