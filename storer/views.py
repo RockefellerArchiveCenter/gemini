@@ -1,5 +1,3 @@
-import urllib
-
 from asterism.views import prepare_response
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -32,14 +30,9 @@ class PackageViewSet(ModelViewSet):
 class BaseRoutineView(APIView):
     """Base view for routines."""
 
-    def get_post_service_url(self, request):
-        url = request.GET.get('post_service_url')
-        return urllib.parse.unquote(url) if url else ''
-
     def post(self, request, format=None):
-        args = self.get_args(request)
         try:
-            response = self.routine(*args).run()
+            response = self.routine().run()
             return Response(prepare_response(response), status=200)
         except Exception as e:
             return Response(prepare_response(e), status=500)
@@ -49,23 +42,12 @@ class DownloadView(BaseRoutineView):
     """Downloads packages. Accepts POST requests only."""
     routine = DownloadRoutine
 
-    def get_args(self, request):
-        return ()
-
 
 class StoreView(BaseRoutineView):
     """Stores packages. Accepts POST requests only."""
     routine = StoreRoutine
 
-    def get_args(self, request):
-        url = self.get_post_service_url(request)
-        return url,
-
 
 class CleanupRequestView(BaseRoutineView):
     """Sends request to clean up finished packages. Accepts POST requests only."""
     routine = CleanupRequester
-
-    def get_args(self, request):
-        url = self.get_post_service_url(request)
-        return (url,)

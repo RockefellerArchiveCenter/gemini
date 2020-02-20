@@ -26,8 +26,9 @@ class PackageTest(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.client = Client()
-        if not isdir(settings.TMP_DIR):
-            makedirs(settings.TMP_DIR)
+        if isdir(settings.TMP_DIR):
+            rmtree(settings.TMP_DIR)
+        makedirs(settings.TMP_DIR)
 
     def process_packages(self):
         print('*** Downloading packages ***')
@@ -37,13 +38,13 @@ class PackageTest(TestCase):
         self.assertEqual(len(listdir(settings.TMP_DIR)), 1, "Wrong number of packages downloaded")
         print('*** Storing packages ***')
         with storer_vcr.use_cassette('store.yml'):
-            store = StoreRoutine('http://aquarius-web:8002/packages/').run()
+            store = StoreRoutine().run()
             self.assertNotEqual(False, store, "Packages not stored correctly")
 
     def request_cleanup(self):
         print('*** Requesting cleanup ***')
         with storer_vcr.use_cassette('cleanup.yml'):
-            cleanup = CleanupRequester('http://fornax-web:8003/cleanup/').run()
+            cleanup = CleanupRequester().run()
             self.assertNotEqual(False, cleanup, "Cleanup request failed")
 
     def get_packages(self):
@@ -70,7 +71,7 @@ class PackageTest(TestCase):
             self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
             self.assertEqual(response.data['count'], 1, "Wrong number of packages stored")
         with storer_vcr.use_cassette('cleanup.yml'):
-            request = self.factory.post("{}?post_service_url=http://fornax-web:8003/cleanup/".format(reverse('request-cleanup')))
+            request = self.factory.post(reverse('request-cleanup'))
             response = CleanupRequestView.as_view()(request)
             self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
 

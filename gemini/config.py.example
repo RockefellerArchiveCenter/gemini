@@ -30,3 +30,7 @@ FEDORA = {
 TMP_DIR = '{}/tmp'.format(BASE_DIR)
 
 STATIC_ROOT = '/static'
+
+DELIVERY_URL = 'http://aquarius-web:8002/packages/'
+
+CLEANUP_URL = 'http://fornax-web:8003/cleanup/'

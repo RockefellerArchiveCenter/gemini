@@ -19,7 +19,9 @@ class CleanupError(Exception):
 
 
 class Routine:
-    """Base class for routines which checks existence and permissions of directories."""
+    """
+    Base class for routines which checks existence and permissions of tmp directory.
+    """
 
     def __init__(self):
         self.tmp_dir = settings.TMP_DIR
@@ -78,9 +80,8 @@ class StoreRoutine(Routine):
     AIPS are uploaded as single 7z files. DIPs are extracted and each file is uploaded.
     """
 
-    def __init__(self, url):
+    def __init__(self):
         super(StoreRoutine, self).__init__()
-        self.url = url
         self.fedora_client = FedoraClient(root=settings.FEDORA['baseurl'],
                                           username=settings.FEDORA['username'],
                                           password=settings.FEDORA['password'])
@@ -109,23 +110,10 @@ class StoreRoutine(Routine):
                 self.clean_up(self.uuid)
                 raise RoutineError("Error storing data: {}".format(e), self.uuid)
 
-            if self.url:
-                try:
-                    helpers.send_post_request(
-                        self.url,
-                        {
-                            'identifier': mets_data['internal_sender_identifier'],
-                            'uri': container.uri_as_string(),
-                            'package_type': package.type,
-                            'origin': mets_data['origin'],
-                            'archivesspace_uri': mets_data['archivesspace_uri'],
-                        }
-                    )
-                except Exception as e:
-                    self.clean_up(self.uuid)
-                    raise RoutineError("Error sending POST request to {}: {}".format(self.url, e), self.uuid)
-
             package.internal_sender_identifier = mets_data['internal_sender_identifier']
+            package.fedora_uri = container.uri_as_string()
+            package.origin = mets_data['origin']
+            package.archivesspace_uri = mets_data['archivesspace_uri']
             package.process_status = Package.STORED
             package.save()
 
@@ -206,18 +194,45 @@ class StoreRoutine(Routine):
             self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container, mimetype)
 
 
-class CleanupRequester:
-    def __init__(self, url):
-        self.url = url
+class PostRoutine:
+    """Base Routine for sending POST requests to another service. Exposes a
+    `get_data()` method for adding data into POST requests."""
 
     def run(self):
         package_ids = []
-        for package in Package.objects.filter(process_status=Package.STORED):
+        for package in Package.objects.filter(process_status=self.start_status):
             try:
-                helpers.send_post_request(self.url, {"identifier": package.internal_sender_identifier})
+                data = self.get_data(package)
+                helpers.send_post_request(self.url, data)
             except Exception as e:
-                raise CleanupError("Error sending cleanup request: {}".format(e), package.internal_sender_identifier)
-            package.process_status = Package.CLEANED_UP
+                raise RoutineError("Error sending POST request to {}: {}".format(self.url, e), package.internal_sender_identifier)
+            package.process_status = self.end_status
             package.save()
             package_ids.append(package.internal_sender_identifier)
-        return ("Requests sent to clean up Packages.", package_ids)
+        return (self.success_message, package_ids)
+
+
+class DeliverRoutine(PostRoutine):
+    """Delivers package data to next service."""
+    start_status = Package.STORED
+    end_status = Package.DELIVERED
+    url = settings.DELIVERY_URL
+    success_message = "Requests sent to clean up Packages."
+
+    def get_data(self, package):
+        return {'identifier': package.internal_sender_identifier,
+                'uri': package.fedora_uri,
+                'package_type': package.type,
+                'origin': package.origin,
+                'archivesspace_uri': package.archivesspace_uri}
+
+
+class CleanupRequester(PostRoutine):
+    """Requests cleanup of packages from previous service."""
+    start_status = Package.DELIVERED
+    end_status = Package.CLEANED_UP
+    url = settings.CLEANUP_URL
+    success_message = "Requests sent to clean up Packages."
+
+    def get_data(self, package):
+        return {"identifier": package.internal_sender_identifier}
