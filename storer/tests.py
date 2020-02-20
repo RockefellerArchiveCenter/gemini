@@ -1,19 +1,16 @@
-import json
-from os.path import join, isdir
-from os import listdir, makedirs
 import random
+from os import listdir, makedirs
+from os.path import isdir
 from shutil import rmtree
-import vcr
 
-from django.contrib.auth.models import User
+import vcr
 from django.test import Client, TestCase
 from django.urls import reverse
-from rest_framework.test import APIRequestFactory
-
 from gemini import settings
-from storer.routines import DownloadRoutine, StoreRoutine, CleanupRequester
-from storer.models import Package
-from storer.views import PackageViewSet, DownloadView, StoreView, CleanupRequestView
+from rest_framework.test import APIRequestFactory
+from storer.routines import CleanupRequester, DownloadRoutine, StoreRoutine
+from storer.views import (CleanupRequestView, DownloadView, PackageViewSet,
+                          StoreView)
 
 storer_vcr = vcr.VCR(
     serializer='yaml',
@@ -56,7 +53,7 @@ class PackageTest(TestCase):
         response = PackageViewSet.as_view(actions={"get": "list"})(request)
         self.assertEqual(response.status_code, 200, "Wrong HTTP code")
         if response.data['count'] > 0:
-            pk = random.randrange(response.data['count'])+1
+            pk = random.randrange(response.data['count']) + 1
             request = self.factory.get(reverse('package-detail', args=[pk]), format='json')
             response = PackageViewSet.as_view(actions={"get": "retrieve"})(request, pk=pk)
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")

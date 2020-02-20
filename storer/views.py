@@ -1,14 +1,13 @@
 import urllib
 
 from asterism.views import prepare_response
+from gemini import settings
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.response import Response
-
-from gemini import settings
 from storer.models import Package
-from storer.routines import DownloadRoutine, StoreRoutine, CleanupRequester
-from storer.serializers import PackageSerializer, PackageListSerializer
+from storer.routines import CleanupRequester, DownloadRoutine, StoreRoutine
+from storer.serializers import PackageListSerializer, PackageSerializer
 
 
 class PackageViewSet(ModelViewSet):

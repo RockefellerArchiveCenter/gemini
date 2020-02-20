@@ -1,11 +1,12 @@
 import json
-from os import remove
-from os.path import splitext, join, isdir, isfile
-import py7zlib
 import re
-import requests
 import shutil
 import tarfile
+from os import remove
+from os.path import isdir, isfile, join, splitext
+
+import py7zlib
+import requests
 
 
 # from Aurora files_helper.py

@@ -1,22 +1,26 @@
-from os import listdir, access, W_OK
+from os import W_OK, access, listdir
 from os.path import basename, isdir, join, splitext
 from shutil import move
-
-from amclient import AMClient
 from xml.etree import ElementTree as ET
 
+from amclient import AMClient
 from gemini import settings
-from storer.clients import FedoraClient
 from storer import helpers
+from storer.clients import FedoraClient
 from storer.models import Package
 
 
-class RoutineError(Exception): pass
-class CleanupError(Exception): pass
+class RoutineError(Exception):
+    pass
+
+
+class CleanupError(Exception):
+    pass
 
 
 class Routine:
     """Base class for routines which checks existence and permissions of directories."""
+
     def __init__(self, dirs):
         self.tmp_dir = dirs['tmp'] if dirs else settings.TMP_DIR
         if not isdir(self.tmp_dir):
@@ -46,7 +50,7 @@ class DownloadRoutine(Routine):
                     try:
                         download = self.am_client.download_package(self.uuid)
                         move(download, join(self.tmp_dir,
-                             '{}{}'.format(self.uuid, self.get_extension(package))))
+                                            '{}{}'.format(self.uuid, self.get_extension(package))))
                     except Exception as e:
                         raise RoutineError("Error downloading data: {}".format(e), self.uuid)
 
@@ -65,8 +69,7 @@ class DownloadRoutine(Routine):
                 else '.tar')
 
     def is_downloadable(self, package):
-        return (package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid'] and
-               package['status'] == 'UPLOADED')
+        return (package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid'] and package['status'] == 'UPLOADED')
 
 
 class StoreRoutine(Routine):
@@ -74,6 +77,7 @@ class StoreRoutine(Routine):
     Uploads the contents of a package to Fedora.
     AIPS are uploaded as single 7z files. DIPs are extracted and each file is uploaded.
     """
+
     def __init__(self, url, dirs):
         super(StoreRoutine, self).__init__(dirs)
         self.url = url
