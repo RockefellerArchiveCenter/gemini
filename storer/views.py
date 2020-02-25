@@ -1,6 +1,4 @@
-from asterism.views import prepare_response
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from asterism.views import RoutineView
 from rest_framework.viewsets import ModelViewSet
 from storer.models import Package
 from storer.routines import CleanupRequester, DownloadRoutine, StoreRoutine
@@ -27,27 +25,16 @@ class PackageViewSet(ModelViewSet):
         return PackageSerializer
 
 
-class BaseRoutineView(APIView):
-    """Base view for routines."""
-
-    def post(self, request, format=None):
-        try:
-            response = self.routine().run()
-            return Response(prepare_response(response), status=200)
-        except Exception as e:
-            return Response(prepare_response(e), status=500)
-
-
-class DownloadView(BaseRoutineView):
+class DownloadView(RoutineView):
     """Downloads packages. Accepts POST requests only."""
     routine = DownloadRoutine
 
 
-class StoreView(BaseRoutineView):
+class StoreView(RoutineView):
     """Stores packages. Accepts POST requests only."""
     routine = StoreRoutine
 
 
-class CleanupRequestView(BaseRoutineView):
+class CleanupRequestView(RoutineView):
     """Sends request to clean up finished packages. Accepts POST requests only."""
     routine = CleanupRequester
