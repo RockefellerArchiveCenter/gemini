@@ -6,8 +6,8 @@ repos:
     args:
       - --in-place
       - --aggressive
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v2.4.0
+- repo: https://gitlab.com/pycqa/flake8
+  rev: 3.7.9
   hooks:
   - id: flake8
 - repo: git://github.com/doublify/pre-commit-isort
