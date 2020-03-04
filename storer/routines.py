@@ -1,11 +1,12 @@
 from os import listdir, access, W_OK
 from os.path import basename, isdir, join, splitext
+from shutil import move
+
+from amclient import AMClient
 from xml.etree import ElementTree as ET
-import zipfile
 
 from gemini import settings
-
-from storer.clients import FedoraClient, ArchivematicaClient
+from storer.clients import FedoraClient
 from storer import helpers
 from storer.models import Package
 
@@ -29,19 +30,23 @@ class DownloadRoutine(Routine):
 
     def __init__(self, dirs):
         super(DownloadRoutine, self).__init__(dirs)
-        self.am_client = ArchivematicaClient(settings.ARCHIVEMATICA['username'],
-                                             settings.ARCHIVEMATICA['api_key'],
-                                             settings.ARCHIVEMATICA['baseurl'])
+        self.am_client = AMClient(
+            ss_api_key=settings.ARCHIVEMATICA['api_key'],
+            ss_user_name=settings.ARCHIVEMATICA['username'],
+            ss_url=settings.ARCHIVEMATICA['baseurl'],
+            directory=self.tmp_dir,
+        )
 
     def run(self):
         package_ids = []
-        for package in self.am_client.retrieve_paged('file/'):
+        for package in self.am_client.get_all_packages(params={}):
             self.uuid = package['uuid']
-            if (package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid'] and
-               package['status'] == 'UPLOADED'):
+            if self.is_downloadable(package):
                 if not Package.objects.filter(data__uuid=self.uuid).exists():
                     try:
-                        self.download = self.download_package(package)
+                        download = self.am_client.download_package(self.uuid)
+                        move(download, join(self.tmp_dir,
+                             '{}{}'.format(self.uuid, self.get_extension(package))))
                     except Exception as e:
                         raise RoutineError("Error downloading data: {}".format(e), self.uuid)
 
@@ -54,16 +59,14 @@ class DownloadRoutine(Routine):
                     break
         return ("All packages downloaded.", package_ids)
 
-    def download_package(self, package_json):
-        response = self.am_client.retrieve('/file/{}/download/'.format(self.uuid), stream=True)
-        extension = splitext(package_json['current_path'])[1]
-        if not extension:
-            extension = '.tar'
-        with open(join(self.tmp_dir, '{}{}'.format(self.uuid, extension)), "wb") as package:
-            for chunk in response.iter_content(chunk_size=1024):
-                if chunk:
-                    package.write(chunk)
-        return package
+    def get_extension(self, package):
+        return (splitext(package['current_path'])[1]
+                if splitext(package['current_path'])[1]
+                else '.tar')
+
+    def is_downloadable(self, package):
+        return (package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid'] and
+               package['status'] == 'UPLOADED')
 
 
 class StoreRoutine(Routine):
@@ -90,31 +93,41 @@ class StoreRoutine(Routine):
                 self.extracted = helpers.extract_all(join(self.tmp_dir, "{}.tar".format(self.uuid)), join(self.tmp_dir, self.uuid), self.tmp_dir)
                 self.mets_path = [f for f in listdir(self.extracted) if (basename(f).startswith('METS.') and basename(f).endswith('.xml'))][0]
             else:
+                self.clean_up(self.uuid)
                 raise RoutineError("Unrecognized package type: {}".format(package.type), self.uuid)
 
-            package.internal_sender_identifier, self.mimetypes = self.parse_mets()
+            mets_data = self.parse_mets()
 
             try:
                 container = self.fedora_client.create_container(self.uuid)
-                getattr(self, 'store_{}'.format(package.type))(package.data, container)
+                getattr(self, 'store_{}'.format(package.type))(package.data, container, mets_data['mimetypes'])
             except Exception as e:
+                self.clean_up(self.uuid)
                 raise RoutineError("Error storing data: {}".format(e), self.uuid)
 
             if self.url:
                 try:
-                    helpers.send_post_request(self.url, {'identifier': package.internal_sender_identifier, 'uri': container.uri_as_string(), 'package_type': package.type})
+                    helpers.send_post_request(
+                        self.url,
+                        {
+                            'identifier': mets_data['internal_sender_identifier'],
+                            'uri': container.uri_as_string(),
+                            'package_type': package.type,
+                            'origin': mets_data['origin'],
+                            'archivesspace_uri': mets_data['archivesspace_uri'],
+                        }
+                    )
                 except Exception as e:
-                    raise RoutineError("Error sending post callback: {}".format(e), self.uuid)
+                    self.clean_up(self.uuid)
+                    raise RoutineError("Error sending POST request to {}: {}".format(self.url, e), self.uuid)
 
+            package.internal_sender_identifier = mets_data['internal_sender_identifier']
             package.process_status = Package.STORED
             package.save()
 
             package_ids.append(self.uuid)
 
-            try:
-                self.clean_up(self.uuid)
-            except Exception as e:
-                raise RoutineError("Error cleaning up: {}".format(e), self.uuid)
+            self.clean_up(self.uuid)
 
             break
 
@@ -127,22 +140,36 @@ class StoreRoutine(Routine):
         and mimetypes
         """
         try:
-            mimetypes = {}
+            mets_data = {}
             mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
-            tree = ET.parse(mets)
-            root = tree.getroot()
             ns = {'mets': 'http://www.loc.gov/METS/', 'fits': 'http://hul.harvard.edu/ois/xml/ns/fits/fits_output'}
-            internal_sender_identifier = root.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata/Internal-Sender-Identifier", ns).text
-            files = root.findall('mets:amdSec/mets:techMD/mets:mdWrap[@MDTYPE="PREMIS:OBJECT"]/mets:xmlData/', ns)
-            for f in files:
+            tree = ET.parse(mets)
+            bagit_root = tree.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata", ns)
+            mets_data['internal_sender_identifier'] = self.findtext_with_exception(bagit_root, "Internal-Sender-Identifier", ns)
+            mets_data['archivesspace_uri'] = bagit_root.findtext("ArchivesSpace-URI", namespaces=ns)
+            mets_data['origin'] = bagit_root.findtext("Origin", default="aurora", namespaces=ns)
+            files_root = tree.findall('mets:amdSec/mets:techMD/mets:mdWrap[@MDTYPE="PREMIS:OBJECT"]/mets:xmlData/', ns)
+            mimetypes = {}
+            for f in files_root:
                 ns['premis'] = self.get_premis_schemalocation(f.attrib['version'])
                 uuid = f.find('premis:objectIdentifier/premis:objectIdentifierValue', ns).text
                 identity = f.find('premis:objectCharacteristics/premis:objectCharacteristicsExtension/fits:fits/fits:identification/fits:identity', ns)
                 mtype = identity.attrib.get('mimetype', 'application/octet-stream') if identity else 'application/octet-stream'
                 mimetypes.update({uuid: mtype})
-            return internal_sender_identifier, mimetypes
+            mets_data['mimetypes'] = mimetypes
+            return mets_data
+        except FileNotFoundError:
+            raise RoutineError("No METS file found at {}".format(self.mets_path), self.uuid)
+        except ValueError as e:
+            raise RoutineError("Could not find element {} in METS file".format(e), self.uuid)
         except Exception as e:
             raise RoutineError("Error getting data from Archivematica METS file: {}".format(e), self.uuid)
+
+    def findtext_with_exception(self, element, xpath, namespaces):
+        ret = element.findtext(xpath, namespaces=namespaces)
+        if not ret:
+            raise ValueError(xpath)
+        return ret
 
     def get_premis_schemalocation(self, version):
         """Returns a PREMIS schema URL based on the version number provided."""
@@ -154,21 +181,21 @@ class StoreRoutine(Routine):
             if uuid in d:
                 helpers.remove_file_or_dir(join(self.tmp_dir, d))
 
-    def store_aip(self, package, container):
+    def store_aip(self, package, container, mimetypes):
         """
         Stores an AIP as a single binary in Fedora and handles the resulting URI.
         Assumes AIPs are stored as a compressed package.
         """
         self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), container, 'application/x-7z-compressed')
 
-    def store_dip(self, package, container):
+    def store_dip(self, package, container, mimetypes):
         """
         Stores a DIP as multiple binaries in Fedora and handles the resulting URI.
         Matches the file UUID (the first 36 characters of the filename) against
         the mimetypes dictionary to find the relevant mimetype.
         """
         for f in listdir(join(self.extracted, 'objects')):
-            mimetype = self.mimetypes[f[0:36]]
+            mimetype = mimetypes[f[0:36]]
             self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container, mimetype)
 
 

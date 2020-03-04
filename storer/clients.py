@@ -1,9 +1,7 @@
 import json
-import mimetypes
-from os.path import basename, join, splitext
+from os.path import basename
 from pyfc4 import models as fcrepo
 from pyfc4.plugins.pcdm import models as pcdm
-import requests
 
 
 class FedoraClientError(Exception): pass
@@ -48,38 +46,3 @@ class FedoraClient(object):
                 return new_binary
             except Exception as e:
                 raise FedoraClientError("Error creating binary: {}".format(e))
-
-
-class ArchivematicaClient(object):
-    def __init__(self, username, api_key, baseurl):
-        self.headers = {"Authorization": "ApiKey {}:{}".format(username, api_key)}
-        self.baseurl = baseurl
-
-    def retrieve(self, uri, *args, **kwargs):
-        full_url = "/".join([self.baseurl.rstrip("/"), uri.lstrip("/")])
-        response = requests.get(full_url, headers=self.headers, *args, **kwargs)
-        if not response:
-            raise ArchivematicaClientError("Could not return a valid response for {}".format(full_url))
-        return response
-
-    def retrieve_paged(self, uri, *args, limit=10, **kwargs):
-        full_url = "/".join([self.baseurl.rstrip("/"), uri.lstrip("/")])
-        params = {"limit": limit, "offset": 0}
-        if "params" in kwargs:
-            params.update(**kwargs['params'])
-            del kwargs['params']
-
-        current_page = requests.get(full_url, params=params, headers=self.headers, **kwargs)
-        if not current_page:
-            raise ArchivematicaClientError("Authentication error while retrieving {}".format(full_url))
-        current_json = current_page.json()
-        if not current_json.get('meta'):
-            raise ArchivematicaClientError("retrieve_paged doesn't know how to handle {}".format(full_url))
-        while current_json['meta']['offset'] <= current_json['meta']['total_count']:
-            for obj in current_json['objects']:
-                yield obj
-            if not current_json['meta']['next']:
-                break
-            params['offset'] += limit
-            current_page = requests.get(full_url, params=params, headers=self.headers, **kwargs)
-            current_json = current_page.json()
