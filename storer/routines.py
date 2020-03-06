@@ -65,7 +65,7 @@ class DownloadRoutine(Routine):
                 else '.tar')
 
     def is_downloadable(self, package):
-        return (package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid'] and
+        return (package['origin_pipeline'].split('/')[-2] in settings.ARCHIVEMATICA['pipeline_uuids'] and
                package['status'] == 'UPLOADED')
 
 
