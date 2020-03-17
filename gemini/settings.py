@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'health_check',
     'storer',
+    'asterism',
 ]
 
 MIDDLEWARE = [

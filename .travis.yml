@@ -14,14 +14,14 @@ before_install:
   - docker-compose up -d
   - sleep 20s
   - docker-compose exec gemini-web pip install coverage pre-commit
-  - docker-compose exec pisces-web pre-commit install
+  - docker-compose exec gemini-web pre-commit install
 install: true
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - docker-compose exec pisces-web pre-commit run --all-files --show-diff-on-failure
+  - docker-compose exec gemini-web pre-commit run --all-files --show-diff-on-failure
   - docker-compose exec gemini-web coverage run manage.py test
 after_script:
   - docker-compose exec gemini-web coverage xml
