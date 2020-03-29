@@ -217,7 +217,7 @@ class DeliverRoutine(PostRoutine):
     start_status = Package.STORED
     end_status = Package.DELIVERED
     url = settings.DELIVERY_URL
-    success_message = "Requests sent to clean up Packages."
+    success_message = "Package data delivered."
 
     def get_data(self, package):
         return {'identifier': package.internal_sender_identifier,

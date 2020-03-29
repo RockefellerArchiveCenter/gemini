@@ -1,7 +1,8 @@
 from asterism.views import RoutineView
 from rest_framework.viewsets import ModelViewSet
 from storer.models import Package
-from storer.routines import CleanupRequester, DownloadRoutine, StoreRoutine
+from storer.routines import (CleanupRequester, DeliverRoutine, DownloadRoutine,
+                             StoreRoutine)
 from storer.serializers import PackageListSerializer, PackageSerializer
 
 
@@ -33,6 +34,11 @@ class DownloadView(RoutineView):
 class StoreView(RoutineView):
     """Stores packages. Accepts POST requests only."""
     routine = StoreRoutine
+
+
+class DeliverView(RoutineView):
+    """Stores packages. Accepts POST requests only."""
+    routine = DeliverRoutine
 
 
 class CleanupRequestView(RoutineView):

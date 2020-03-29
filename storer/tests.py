@@ -9,8 +9,8 @@ from django.urls import reverse
 from gemini import settings
 from rest_framework.test import APIRequestFactory
 from storer.routines import CleanupRequester, DownloadRoutine, StoreRoutine
-from storer.views import (CleanupRequestView, DownloadView, PackageViewSet,
-                          StoreView)
+from storer.views import (CleanupRequestView, DeliverView, DownloadView,
+                          PackageViewSet, StoreView)
 
 storer_vcr = vcr.VCR(
     serializer='yaml',
@@ -70,6 +70,11 @@ class PackageTest(TestCase):
             response = StoreView.as_view()(request)
             self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
             self.assertEqual(response.data['count'], 1, "Wrong number of packages stored")
+        with storer_vcr.use_cassette('store.yml'):
+            request = self.factory.post(reverse('deliver-packages'))
+            response = DeliverView.as_view()(request)
+            self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
+            print(response.data)
         with storer_vcr.use_cassette('cleanup.yml'):
             request = self.factory.post(reverse('request-cleanup'))
             response = CleanupRequestView.as_view()(request)
