@@ -4,6 +4,7 @@ from shutil import move
 from xml.etree import ElementTree as ET
 
 from amclient import AMClient
+from asterism.file_helpers import remove_file_or_dir
 from gemini import settings
 from storer import helpers
 from storer.clients import FedoraClient
@@ -173,7 +174,7 @@ class StoreRoutine(Routine):
         """Removes files and directories for a given transfer."""
         for d in listdir(self.tmp_dir):
             if uuid in d:
-                helpers.remove_file_or_dir(join(self.tmp_dir, d))
+                remove_file_or_dir(join(self.tmp_dir, d))
 
     def store_aip(self, package, container, mimetypes):
         """
