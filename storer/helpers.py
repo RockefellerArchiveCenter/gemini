@@ -1,38 +1,10 @@
 import json
-import re
 import shutil
 import tarfile
-from os import remove
-from os.path import isdir, isfile, join, splitext
+from os.path import join, splitext
 
 import py7zlib
 import requests
-
-
-# from Aurora files_helper.py
-def get_fields_from_file(fpath):
-    fields = {}
-    try:
-        patterns = [
-            r'(?P<key>[\w\-]+)',
-            '(?P<val>.+)'
-        ]
-        with open(fpath, 'r') as f:
-            for line in f.readlines():
-                line = line.strip('\n')
-                row_search = re.search(r":?(\s)?".join(patterns), line)
-                if row_search:
-                    key = row_search.group('key').replace('-', '_').strip()
-                    val = row_search.group('val').strip()
-                    if key in fields:
-                        listval = [fields[key]]
-                        listval.append(val)
-                        fields[key] = listval
-                    else:
-                        fields[key] = val
-    except Exception as e:
-        print(e)
-    return fields
 
 
 def extract_file(archive, src, dest):
@@ -59,13 +31,6 @@ def extract_file(archive, src, dest):
         print("Unrecognized archive extension")
         return False
     return dest
-
-
-def remove_file_or_dir(filepath):
-    if isdir(filepath):
-        shutil.rmtree(filepath)
-    elif isfile(filepath):
-        remove(filepath)
 
 
 def extract_all(archive, dest, tmp):
