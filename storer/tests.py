@@ -1,3 +1,4 @@
+import json
 import random
 from os import listdir, makedirs
 from os.path import isdir
@@ -8,9 +9,11 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from gemini import settings
 from rest_framework.test import APIRequestFactory
-from storer.routines import CleanupRequester, DownloadRoutine, StoreRoutine
-from storer.views import (CleanupRequestView, DeliverView, DownloadView,
-                          PackageViewSet, StoreView)
+
+from .models import Package
+from .routines import CleanupRequester, DownloadRoutine, StoreRoutine
+from .views import (CleanupRequestView, DeliverView, DownloadView,
+                    PackageViewSet, StoreView)
 
 storer_vcr = vcr.VCR(
     serializer='yaml',
@@ -33,7 +36,7 @@ class PackageTest(TestCase):
     def process_packages(self):
         print('*** Downloading packages ***')
         with storer_vcr.use_cassette('download.yml'):
-            download = DownloadRoutine().run()
+            download = DownloadRoutine("70588e68-7742-49aa-a0ef-774a46b17b0a").run()
             self.assertNotEqual(False, download, "Packages not downloaded correctly")
         self.assertEqual(len(listdir(settings.TMP_DIR)), 1, "Wrong number of packages downloaded")
         print('*** Storing packages ***')
@@ -53,28 +56,30 @@ class PackageTest(TestCase):
         response = PackageViewSet.as_view(actions={"get": "list"})(request)
         self.assertEqual(response.status_code, 200, "Wrong HTTP code")
         if response.data['count'] > 0:
-            pk = random.randrange(response.data['count']) + 1
+            pk = random.choice(Package.objects.all()).pk
             request = self.factory.get(reverse('package-detail', args=[pk]), format='json')
             response = PackageViewSet.as_view(actions={"get": "retrieve"})(request, pk=pk)
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
 
     def store_views(self):
         print('*** Testing endpoints to trigger routines ***')
+        Package.objects.all().delete()
         with storer_vcr.use_cassette('download.yml'):
-            request = self.factory.post(reverse('download-packages'))
+            request = self.factory.post(
+                reverse('download-packages'),
+                data=json.dumps({"identifier": "70588e68-7742-49aa-a0ef-774a46b17b0a", "action": "stored"}),
+                content_type="application/json")
             response = DownloadView.as_view()(request)
             self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
-            self.assertEqual(response.data['count'], 1, "Wrong number of packages downloaded")
         with storer_vcr.use_cassette('store.yml'):
             request = self.factory.post(reverse('store-packages'))
             response = StoreView.as_view()(request)
             self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
-            self.assertEqual(response.data['count'], 1, "Wrong number of packages stored")
+            self.assertEqual(response.data['count'], 1, "Wrong number of packages stored {}".format(response.data))
         with storer_vcr.use_cassette('store.yml'):
             request = self.factory.post(reverse('deliver-packages'))
             response = DeliverView.as_view()(request)
             self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
-            print(response.data)
         with storer_vcr.use_cassette('cleanup.yml'):
             request = self.factory.post(reverse('request-cleanup'))
             response = CleanupRequestView.as_view()(request)

@@ -1,4 +1,6 @@
-from asterism.views import RoutineView
+import json
+
+from asterism.views import BaseServiceView, RoutineView
 from rest_framework.viewsets import ModelViewSet
 from storer.models import Package
 from storer.routines import (CleanupRequester, DeliverRoutine, DownloadRoutine,
@@ -26,9 +28,13 @@ class PackageViewSet(ModelViewSet):
         return PackageSerializer
 
 
-class DownloadView(RoutineView):
+class DownloadView(BaseServiceView):
     """Downloads packages. Accepts POST requests only."""
-    routine = DownloadRoutine
+
+    def get_service_response(self, request):
+        body_json = json.loads(request.body)
+        identifier = body_json.get("identifier")
+        return DownloadRoutine(identifier).run()
 
 
 class StoreView(RoutineView):
