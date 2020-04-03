@@ -37,9 +37,8 @@ class PackageTest(TestCase):
         print('*** Downloading packages ***')
         with storer_vcr.use_cassette('download.yml'):
             download = DownloadRoutine("70588e68-7742-49aa-a0ef-774a46b17b0a").run()
-            print(download)
-            print(listdir(settings.TMP_DIR))
             self.assertNotEqual(False, download, "Packages not downloaded correctly")
+            self.assertEqual("Package downloaded.", download[0])
         self.assertEqual(len(listdir(settings.TMP_DIR)), 1, "Wrong number of packages downloaded")
         print('*** Storing packages ***')
         with storer_vcr.use_cassette('store.yml'):
