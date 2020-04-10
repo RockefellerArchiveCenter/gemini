@@ -60,25 +60,17 @@ class PackageTest(TestCase):
 
     def store_views(self):
         print('*** Testing endpoints to trigger routines ***')
-        with storer_vcr.use_cassette('download.yml'):
-            request = self.factory.post(reverse('download-packages'))
-            response = DownloadView.as_view()(request)
-            self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
-            self.assertEqual(response.data['count'], 1, "Wrong number of packages downloaded")
-        with storer_vcr.use_cassette('store.yml'):
-            request = self.factory.post(reverse('store-packages'))
-            response = StoreView.as_view()(request)
-            self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
-            self.assertEqual(response.data['count'], 1, "Wrong number of packages stored")
-        with storer_vcr.use_cassette('store.yml'):
-            request = self.factory.post(reverse('deliver-packages'))
-            response = DeliverView.as_view()(request)
-            self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
-            print(response.data)
-        with storer_vcr.use_cassette('cleanup.yml'):
-            request = self.factory.post(reverse('request-cleanup'))
-            response = CleanupRequestView.as_view()(request)
-            self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
+        for cassette, view_str, view in [
+                ("download.yml", "download-packages", DownloadView),
+                ("store.yml", "store-packages", StoreView),
+                ("store.yml", "deliver-packages", DeliverView),
+                ("cleanup.yml", "request-cleanup", CleanupRequestView)]:
+            with storer_vcr.use_cassette(cassette):
+                request = self.factory.post(reverse(view_str))
+                response = view.as_view()(request)
+                self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
+                if view_str in ["download-packages", "store-packages"]:
+                    self.assertEqual(response.data['count'], 1, "Wrong number of packages processed by {}".format(view_str))
 
     def schema(self):
         print('*** Getting schema view ***')
