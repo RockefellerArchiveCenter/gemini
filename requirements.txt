@@ -1,5 +1,5 @@
 amclient==1.0.0
-asterism==0.5
+asterism==0.5.2
 atomicwrites==1.3.0
 attrs==19.3.0
 certifi==2019.9.11

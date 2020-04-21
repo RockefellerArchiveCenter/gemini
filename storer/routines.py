@@ -3,7 +3,7 @@ from os.path import basename, isdir, join, splitext
 from shutil import move
 from xml.etree import ElementTree as ET
 
-from amclient import AMClient
+from amclient import AMClient, errors
 from asterism.file_helpers import remove_file_or_dir
 from gemini import settings
 from storer import helpers
@@ -35,36 +35,42 @@ class Routine:
 class DownloadRoutine(Routine):
     """Downloads a package from Archivematica."""
 
-    def __init__(self):
+    def __init__(self, identifier):
         super(DownloadRoutine, self).__init__()
         self.am_client = AMClient(
             ss_api_key=settings.ARCHIVEMATICA['api_key'],
             ss_user_name=settings.ARCHIVEMATICA['username'],
             ss_url=settings.ARCHIVEMATICA['baseurl'],
             directory=self.tmp_dir,
+            package_uuid=identifier,
         )
+        self.package = self.am_client.get_package_details()
+        if isinstance(self.package, int):
+            raise Exception(errors.error_lookup(self.package))
 
     def run(self):
-        package_ids = []
-        for package in self.am_client.get_all_packages(params={}):
-            self.uuid = package['uuid']
-            if self.is_downloadable(package):
-                if not Package.objects.filter(data__uuid=self.uuid).exists():
-                    try:
-                        download = self.am_client.download_package(self.uuid)
-                        move(download, join(self.tmp_dir,
-                                            '{}{}'.format(self.uuid, self.get_extension(package))))
-                    except Exception as e:
-                        raise RoutineError("Error downloading data: {}".format(e), self.uuid)
+        package = self.am_client.get_package_details()
+        if self.is_downloadable(package):
+            if not Package.objects.filter(data__uuid=self.am_client.package_uuid).exists():
+                try:
+                    download_path = self.am_client.download_package(self.am_client.package_uuid)
+                    tmp_path = join(
+                        self.tmp_dir, '{}{}'.format(self.am_client.package_uuid, self.get_extension(package)))
+                    move(download_path, tmp_path)
+                except Exception as e:
+                    raise RoutineError("Error downloading data: {}".format(e), self.am_client.package_uuid)
 
-                    Package.objects.create(
-                        type=package['package_type'].lower(),
-                        data=package,
-                        process_status=Package.DOWNLOADED
-                    )
-                    package_ids.append(self.uuid)
-                    break
-        return ("All packages downloaded.", package_ids)
+                Package.objects.create(
+                    type=package['package_type'].lower(),
+                    data=package,
+                    process_status=Package.DOWNLOADED
+                )
+                msg = "Package downloaded."
+            else:
+                msg = "Package already downloaded."
+        else:
+            msg = "Package not downloadable."
+        return (msg, self.am_client.package_uuid)
 
     def get_extension(self, package):
         return (splitext(package['current_path'])[1]
@@ -72,7 +78,8 @@ class DownloadRoutine(Routine):
                 else '.tar')
 
     def is_downloadable(self, package):
-        return (package['origin_pipeline'].split('/')[-2] == settings.ARCHIVEMATICA['pipeline_uuid'] and package['status'] == 'UPLOADED')
+        pipeline = package['origin_pipeline'].split('/')[-2]
+        return (pipeline == settings.ARCHIVEMATICA['pipeline_uuid'])
 
 
 class StoreRoutine(Routine):
@@ -206,7 +213,9 @@ class PostRoutine:
                 data = self.get_data(package)
                 helpers.send_post_request(self.url, data)
             except Exception as e:
-                raise RoutineError("Error sending POST request to {}: {}".format(self.url, e), package.internal_sender_identifier)
+                raise RoutineError(
+                    "Error sending POST request to {}: {}".format(
+                        self.url, e), package.internal_sender_identifier)
             package.process_status = self.end_status
             package.save()
             package_ids.append(package.internal_sender_identifier)
