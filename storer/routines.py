@@ -79,7 +79,7 @@ class DownloadRoutine(Routine):
 
     def is_downloadable(self, package):
         pipeline = package['origin_pipeline'].split('/')[-2]
-        return (pipeline == settings.ARCHIVEMATICA['pipeline_uuid'])
+        return (pipeline in settings.ARCHIVEMATICA['pipeline_uuids'])
 
 
 class StoreRoutine(Routine):
