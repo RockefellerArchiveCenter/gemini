@@ -11,7 +11,8 @@ from gemini import settings
 from rest_framework.test import APIRequestFactory
 
 from .models import Package
-from .routines import CleanupRequester, DownloadRoutine, StoreRoutine
+from .routines import (CleanupRequester, DeliverRoutine, DownloadRoutine,
+                       StoreRoutine)
 from .views import (CleanupRequestView, DeliverView, DownloadView,
                     PackageViewSet, StoreView)
 
@@ -33,23 +34,19 @@ class PackageTest(TestCase):
             rmtree(settings.TMP_DIR)
         makedirs(settings.TMP_DIR)
 
-    def process_packages(self):
-        print('*** Downloading packages ***')
+    def routines(self):
         with storer_vcr.use_cassette('download.yml'):
             download = DownloadRoutine("70588e68-7742-49aa-a0ef-774a46b17b0a").run()
             self.assertNotEqual(False, download, "Packages not downloaded correctly")
             self.assertEqual("Package downloaded.", download[0])
         self.assertEqual(len(listdir(settings.TMP_DIR)), 1, "Wrong number of packages downloaded")
-        print('*** Storing packages ***')
-        with storer_vcr.use_cassette('store.yml'):
-            store = StoreRoutine().run()
-            self.assertNotEqual(False, store, "Packages not stored correctly")
-
-    def request_cleanup(self):
-        print('*** Requesting cleanup ***')
-        with storer_vcr.use_cassette('cleanup.yml'):
-            cleanup = CleanupRequester().run()
-            self.assertNotEqual(False, cleanup, "Cleanup request failed")
+        for cassette, routine, msg in [
+                ('store.yml', StoreRoutine, "Packages not stored correctly"),
+                ('store.yml', DeliverRoutine, "Package data not delivered"),
+                ('cleanup.yml', CleanupRequester, "Cleanup request failed")]:
+            with storer_vcr.use_cassette(cassette):
+                res = routine().run()
+                self.assertNotEqual(False, res, msg)
 
     def get_packages(self):
         print('*** Getting all packages ***')
@@ -62,7 +59,7 @@ class PackageTest(TestCase):
             response = PackageViewSet.as_view(actions={"get": "retrieve"})(request, pk=pk)
             self.assertEqual(response.status_code, 200, "Wrong HTTP code")
 
-    def store_views(self):
+    def views(self):
         print('*** Testing endpoints to trigger routines ***')
         Package.objects.all().delete()
         with storer_vcr.use_cassette('download.yml'):
@@ -98,9 +95,8 @@ class PackageTest(TestCase):
             rmtree(settings.TMP_DIR)
 
     def test_packages(self):
-        self.process_packages()
-        self.request_cleanup()
-        self.store_views()
+        self.routines()
+        self.views()
         self.get_packages()
         self.schema()
         self.health_check()
