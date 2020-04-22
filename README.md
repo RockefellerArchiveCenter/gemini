@@ -63,6 +63,27 @@ gemini has three services, all of which are exposed via HTTP endpoints (see [Rou
 |GET|/schema.json||200|Returns the OpenAPI schema for this application|
 
 
+## Archivematica Configuration
+
+gemini relies on the proper configuration of Archivematica Storage Service [post-store callbacks](https://www.archivematica.org/en/docs/storage-service-0.16/administrators/#service-callbacks). Two service callbacks, one each for `Post-store AIP` and `Post-store DIP` events, need to be set up as follows:
+
+- Event: either `Post-store AIP` or `Post-store DIP`
+- URI: http://zodiac.dev.rockarch.org/api/download-package/ (This is the configured value of the Download Package service's `external_uri` field, prepended by `api/`, and using the correct host name for production or dev).
+- Method: POST
+- Headers (key/value): key: Content-Type, value: application/json
+- Body: {"identifier": <package_uuid>}
+- Expected status: 200
+- Enabled: make sure this is checked
+
+Unfortunately, Archivematica currently does not have a way of testing a service callback, so in order to make sure your newly configured callback is working it is necessary to process a transfer through the pipeline.
+
+### Troubleshooting tips
+If the callback is not triggered as expected, you can try a couple of things to troubleshoot:
+- Look at the request logs in Zodiac to see if any useful information is provided.
+- Make sure that Archivematica can reach Zodiac by sending a cURL request to the configured URL.
+- Try mocking the body data required in a cURL request to make sure that Archivematica is sending what you expect.
+
+
 ## License
 
 This code is released under an [MIT License](LICENSE).
