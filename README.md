@@ -70,7 +70,7 @@ gemini relies on the proper configuration of Archivematica Storage Service [post
 - URI: http://zodiac.dev.rockarch.org/api/download-package/ (This is the configured value of the Download Package service's `external_uri` field, prepended by `api/`, and using the correct host name for production or dev).
 - Method: POST
 - Headers (key/value): key: Content-Type, value: application/json
-- Body: {"identifier": <package_uuid>}
+- Body: {"identifier": "<package_uuid>"}
 - Expected status: 200
 - Enabled: make sure this is checked
 
