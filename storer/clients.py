@@ -1,13 +1,16 @@
 import json
 from os.path import basename
+
 from pyfc4 import models as fcrepo
 from pyfc4.plugins.pcdm import models as pcdm
 
 
-class FedoraClientError(Exception): pass
+class FedoraClientError(Exception):
+    pass
 
 
-class ArchivematicaClientError(Exception): pass
+class ArchivematicaClientError(Exception):
+    pass
 
 
 class FedoraClient(object):

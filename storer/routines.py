@@ -1,24 +1,31 @@
-from os import listdir, access, W_OK
+from os import W_OK, access, listdir
 from os.path import basename, isdir, join, splitext
 from shutil import move
-
-from amclient import AMClient
 from xml.etree import ElementTree as ET
 
+from amclient import AMClient, errors
+from asterism.file_helpers import remove_file_or_dir
 from gemini import settings
-from storer.clients import FedoraClient
 from storer import helpers
+from storer.clients import FedoraClient
 from storer.models import Package
 
 
-class RoutineError(Exception): pass
-class CleanupError(Exception): pass
+class RoutineError(Exception):
+    pass
+
+
+class CleanupError(Exception):
+    pass
 
 
 class Routine:
-    """Base class for routines which checks existence and permissions of directories."""
-    def __init__(self, dirs):
-        self.tmp_dir = dirs['tmp'] if dirs else settings.TMP_DIR
+    """
+    Base class for routines which checks existence and permissions of tmp directory.
+    """
+
+    def __init__(self):
+        self.tmp_dir = settings.TMP_DIR
         if not isdir(self.tmp_dir):
             raise RoutineError('Directory does not exist', self.tmp_dir)
         if not access(self.tmp_dir, W_OK):
@@ -28,36 +35,42 @@ class Routine:
 class DownloadRoutine(Routine):
     """Downloads a package from Archivematica."""
 
-    def __init__(self, dirs):
-        super(DownloadRoutine, self).__init__(dirs)
+    def __init__(self, identifier):
+        super(DownloadRoutine, self).__init__()
         self.am_client = AMClient(
             ss_api_key=settings.ARCHIVEMATICA['api_key'],
             ss_user_name=settings.ARCHIVEMATICA['username'],
             ss_url=settings.ARCHIVEMATICA['baseurl'],
             directory=self.tmp_dir,
+            package_uuid=identifier,
         )
+        self.package = self.am_client.get_package_details()
+        if isinstance(self.package, int):
+            raise Exception(errors.error_lookup(self.package))
 
     def run(self):
-        package_ids = []
-        for package in self.am_client.get_all_packages(params={}):
-            self.uuid = package['uuid']
-            if self.is_downloadable(package):
-                if not Package.objects.filter(data__uuid=self.uuid).exists():
-                    try:
-                        download = self.am_client.download_package(self.uuid)
-                        move(download, join(self.tmp_dir,
-                             '{}{}'.format(self.uuid, self.get_extension(package))))
-                    except Exception as e:
-                        raise RoutineError("Error downloading data: {}".format(e), self.uuid)
+        package = self.am_client.get_package_details()
+        if self.is_downloadable(package):
+            if not Package.objects.filter(data__uuid=self.am_client.package_uuid).exists():
+                try:
+                    download_path = self.am_client.download_package(self.am_client.package_uuid)
+                    tmp_path = join(
+                        self.tmp_dir, '{}{}'.format(self.am_client.package_uuid, self.get_extension(package)))
+                    move(download_path, tmp_path)
+                except Exception as e:
+                    raise RoutineError("Error downloading data: {}".format(e), self.am_client.package_uuid)
 
-                    Package.objects.create(
-                        type=package['package_type'].lower(),
-                        data=package,
-                        process_status=Package.DOWNLOADED
-                    )
-                    package_ids.append(self.uuid)
-                    break
-        return ("All packages downloaded.", package_ids)
+                Package.objects.create(
+                    type=package['package_type'].lower(),
+                    data=package,
+                    process_status=Package.DOWNLOADED
+                )
+                msg = "Package downloaded."
+            else:
+                msg = "Package already downloaded."
+        else:
+            msg = "Package not downloadable."
+        return (msg, self.am_client.package_uuid)
 
     def get_extension(self, package):
         return (splitext(package['current_path'])[1]
@@ -65,8 +78,8 @@ class DownloadRoutine(Routine):
                 else '.tar')
 
     def is_downloadable(self, package):
-        return (package['origin_pipeline'].split('/')[-2] in settings.ARCHIVEMATICA['pipeline_uuids'] and
-               package['status'] == 'UPLOADED')
+        pipeline = package['origin_pipeline'].split('/')[-2]
+        return (pipeline in settings.ARCHIVEMATICA['pipeline_uuids'])
 
 
 class StoreRoutine(Routine):
@@ -74,9 +87,9 @@ class StoreRoutine(Routine):
     Uploads the contents of a package to Fedora.
     AIPS are uploaded as single 7z files. DIPs are extracted and each file is uploaded.
     """
-    def __init__(self, url, dirs):
-        super(StoreRoutine, self).__init__(dirs)
-        self.url = url
+
+    def __init__(self):
+        super(StoreRoutine, self).__init__()
         self.fedora_client = FedoraClient(root=settings.FEDORA['baseurl'],
                                           username=settings.FEDORA['username'],
                                           password=settings.FEDORA['password'])
@@ -105,23 +118,10 @@ class StoreRoutine(Routine):
                 self.clean_up(self.uuid)
                 raise RoutineError("Error storing data: {}".format(e), self.uuid)
 
-            if self.url:
-                try:
-                    helpers.send_post_request(
-                        self.url,
-                        {
-                            'identifier': mets_data['internal_sender_identifier'],
-                            'uri': container.uri_as_string(),
-                            'package_type': package.type,
-                            'origin': mets_data['origin'],
-                            'archivesspace_uri': mets_data['archivesspace_uri'],
-                        }
-                    )
-                except Exception as e:
-                    self.clean_up(self.uuid)
-                    raise RoutineError("Error sending POST request to {}: {}".format(self.url, e), self.uuid)
-
             package.internal_sender_identifier = mets_data['internal_sender_identifier']
+            package.fedora_uri = container.uri_as_string()
+            package.origin = mets_data['origin']
+            package.archivesspace_uri = mets_data['archivesspace_uri']
             package.process_status = Package.STORED
             package.save()
 
@@ -141,7 +141,9 @@ class StoreRoutine(Routine):
         """
         try:
             mets_data = {}
-            mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), self.mets_path, join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
+            mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(
+                self.uuid, self.extension)), self.mets_path,
+                join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
             ns = {'mets': 'http://www.loc.gov/METS/', 'fits': 'http://hul.harvard.edu/ois/xml/ns/fits/fits_output'}
             tree = ET.parse(mets)
             bagit_root = tree.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata", ns)
@@ -179,14 +181,15 @@ class StoreRoutine(Routine):
         """Removes files and directories for a given transfer."""
         for d in listdir(self.tmp_dir):
             if uuid in d:
-                helpers.remove_file_or_dir(join(self.tmp_dir, d))
+                remove_file_or_dir(join(self.tmp_dir, d))
 
     def store_aip(self, package, container, mimetypes):
         """
         Stores an AIP as a single binary in Fedora and handles the resulting URI.
         Assumes AIPs are stored as a compressed package.
         """
-        self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(self.uuid, self.extension)), container, 'application/x-7z-compressed')
+        self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(
+            self.uuid, self.extension)), container, 'application/x-7z-compressed')
 
     def store_dip(self, package, container, mimetypes):
         """
@@ -199,18 +202,47 @@ class StoreRoutine(Routine):
             self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container, mimetype)
 
 
-class CleanupRequester:
-    def __init__(self, url):
-        self.url = url
+class PostRoutine:
+    """Base Routine for sending POST requests to another service. Exposes a
+    `get_data()` method for adding data into POST requests."""
 
     def run(self):
         package_ids = []
-        for package in Package.objects.filter(process_status=Package.STORED):
+        for package in Package.objects.filter(process_status=self.start_status):
             try:
-                helpers.send_post_request(self.url, {"identifier": package.internal_sender_identifier})
+                data = self.get_data(package)
+                helpers.send_post_request(self.url, data)
             except Exception as e:
-                raise CleanupError("Error sending cleanup request: {}".format(e), package.internal_sender_identifier)
-            package.process_status = Package.CLEANED_UP
+                raise RoutineError(
+                    "Error sending POST request to {}: {}".format(
+                        self.url, e), package.internal_sender_identifier)
+            package.process_status = self.end_status
             package.save()
             package_ids.append(package.internal_sender_identifier)
-        return ("Requests sent to clean up Packages.", package_ids)
+        return (self.success_message, package_ids)
+
+
+class DeliverRoutine(PostRoutine):
+    """Delivers package data to next service."""
+    start_status = Package.STORED
+    end_status = Package.DELIVERED
+    url = settings.DELIVERY_URL
+    success_message = "Package data delivered."
+
+    def get_data(self, package):
+        return {'identifier': package.internal_sender_identifier,
+                'uri': package.fedora_uri,
+                'package_type': package.type,
+                'origin': package.origin,
+                'archivesspace_uri': package.archivesspace_uri}
+
+
+class CleanupRequester(PostRoutine):
+    """Requests cleanup of packages from previous service."""
+    start_status = Package.DELIVERED
+    end_status = Package.CLEANED_UP
+    url = settings.CLEANUP_URL
+    success_message = "Requests sent to clean up Packages."
+
+    def get_data(self, package):
+        return {"identifier": package.internal_sender_identifier}

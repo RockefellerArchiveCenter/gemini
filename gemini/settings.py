@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+
 import gemini.config as CF
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'health_check',
     'storer',
+    'asterism',
 ]
 
 MIDDLEWARE = [
@@ -121,7 +123,8 @@ CRON_CLASSES = [
 ARCHIVEMATICA = CF.ARCHIVEMATICA
 FEDORA = CF.FEDORA
 TMP_DIR = CF.TMP_DIR
-TEST_TMP_DIR = CF.TEST_TMP_DIR
+DELIVERY_URL = CF.DELIVERY_URL
+CLEANUP_URL = CF.CLEANUP_URL
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

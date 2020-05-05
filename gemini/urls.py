@@ -13,12 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.conf.urls import url
+from django.contrib import admin
 from django.urls import include
-from storer.views import PackageViewSet, DownloadView, StoreView, CleanupRequestView
 from rest_framework import routers
 from rest_framework.schemas import get_schema_view
+from storer.views import (CleanupRequestView, DeliverView, DownloadView,
+                          PackageViewSet, StoreView)
 
 router = routers.DefaultRouter()
 router.register(r'packages', PackageViewSet, 'package')
@@ -30,8 +31,9 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^store/', StoreView.as_view(), name='store-packages'),
     url(r'^download/', DownloadView.as_view(), name='download-packages'),
+    url(r'^store/', StoreView.as_view(), name='store-packages'),
+    url(r'^deliver/', DeliverView.as_view(), name='deliver-packages'),
     url(r'^request-cleanup/', CleanupRequestView.as_view(), name='request-cleanup'),
     url(r'^status/', include('health_check.api.urls')),
     url(r'^admin/', admin.site.urls),
