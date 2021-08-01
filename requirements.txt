@@ -18,7 +18,7 @@ bagit==1.8.1
     # via asterism
 certifi==2021.5.30
     # via requests
-chardet==4.0.0
+charset-normalizer==2.0.4
     # via requests
 clinner==1.12.3
     # via health-check
@@ -45,11 +45,6 @@ idna==2.10
     # via
     #   requests
     #   yarl
-importlib-metadata==4.6.0
-    # via
-    #   jsonschema
-    #   pluggy
-    #   pytest
 iniconfig==1.1.1
     # via pytest
 isodate==0.6.0
@@ -98,7 +93,7 @@ rdflib==5.0.0
     #   rdflib-jsonld
 rdflib-jsonld==0.5.0
     # via pyfc4
-requests==2.25.1
+requests==2.26.0
     # via
     #   -r requirements.in
     #   amclient
@@ -119,12 +114,6 @@ toml==0.10.2
     # via
     #   pytest
     #   pytest-cov
-typing-extensions==3.10.0.0
-    # via
-    #   asgiref
-    #   gitpython
-    #   importlib-metadata
-    #   yarl
 uritemplate==3.0.1
     # via -r requirements.in
 urllib3==1.26.6
@@ -137,8 +126,6 @@ wrapt==1.12.1
     # via vcrpy
 yarl==1.6.3
     # via vcrpy
-zipp==3.4.1
-    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
