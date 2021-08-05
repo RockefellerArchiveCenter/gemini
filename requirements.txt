@@ -18,7 +18,7 @@ bagit==1.8.1
     # via asterism
 certifi==2021.5.30
     # via requests
-chardet==4.0.0
+charset-normalizer==2.0.4
     # via requests
 clinner==1.12.3
     # via health-check
@@ -41,11 +41,11 @@ gitpython==3.1.18
     # via health-check
 health-check==3.4.1
     # via -r requirements.in
-idna==2.10
+idna==3.2
     # via
     #   requests
     #   yarl
-importlib-metadata==4.6.0
+importlib-metadata==4.6.3
     # via
     #   jsonschema
     #   pluggy
@@ -58,9 +58,9 @@ jsonschema==3.2.0
     # via -r requirements.in
 multidict==5.1.0
     # via yarl
-odin==1.7.0
+odin==1.7.1
     # via asterism
-packaging==20.9
+packaging==21.0
     # via pytest
 pluggy==0.13.1
     # via pytest
@@ -98,7 +98,7 @@ rdflib==5.0.0
     #   rdflib-jsonld
 rdflib-jsonld==0.5.0
     # via pyfc4
-requests==2.25.1
+requests==2.26.0
     # via
     #   -r requirements.in
     #   amclient
@@ -137,7 +137,7 @@ wrapt==1.12.1
     # via vcrpy
 yarl==1.6.3
     # via vcrpy
-zipp==3.4.1
+zipp==3.5.0
     # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
