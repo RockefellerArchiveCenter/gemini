@@ -18,7 +18,7 @@ bagit==1.8.1
     # via asterism
 certifi==2021.5.30
     # via requests
-charset-normalizer==2.0.4
+charset-normalizer==2.0.6
     # via requests
 clinner==1.12.3
     # via health-check
@@ -45,7 +45,7 @@ idna==3.2
     # via
     #   requests
     #   yarl
-importlib-metadata==4.6.3
+importlib-metadata==4.8.1
     # via
     #   jsonschema
     #   pluggy
@@ -58,11 +58,11 @@ jsonschema==3.2.0
     # via -r requirements.in
 multidict==5.1.0
     # via yarl
-odin==1.7.1
+odin==1.7.2
     # via asterism
 packaging==21.0
     # via pytest
-pluggy==0.13.1
+pluggy==1.0.0
     # via pytest
 psycopg2-binary==2.9.1
     # via
@@ -80,7 +80,7 @@ pyparsing==2.4.7
     #   rdflib
 pyrsistent==0.18.0
     # via jsonschema
-pytest==6.2.4
+pytest==6.2.5
     # via
     #   pyfc4
     #   pytest-cov
@@ -96,7 +96,7 @@ rdflib==5.0.0
     # via
     #   pyfc4
     #   rdflib-jsonld
-rdflib-jsonld==0.5.0
+rdflib-jsonld==0.6.2
     # via pyfc4
 requests==2.26.0
     # via
@@ -113,13 +113,13 @@ six==1.16.0
     #   vcrpy
 smmap==4.0.0
     # via gitdb
-sqlparse==0.4.1
+sqlparse==0.4.2
     # via django
 toml==0.10.2
     # via
     #   pytest
     #   pytest-cov
-typing-extensions==3.10.0.0
+typing-extensions==3.10.0.2
     # via
     #   asgiref
     #   gitpython
