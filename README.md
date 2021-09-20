@@ -3,7 +3,7 @@ A microservice to store AIPs and DIPs in Fedora.
 
 gemini is part of [Project Electron](https://github.com/RockefellerArchiveCenter/project_electron), an initiative to build sustainable, open and user-centered infrastructure for the archival management of digital records at the [Rockefeller Archive Center](http://rockarch.org/).
 
-[![Build Status](https://travis-ci.org/RockefellerArchiveCenter/gemini.svg?branch=master)](https://travis-ci.org/RockefellerArchiveCenter/gemini)
+[![Build Status](https://travis-ci.org/RockefellerArchiveCenter/gemini.svg?branch=base)](https://travis-ci.org/RockefellerArchiveCenter/gemini)
 ![GitHub (pre-)release](https://img.shields.io/github/release/RockefellerArchiveCenter/gemini/all.svg)
 
 ## Setup
@@ -82,6 +82,10 @@ If the callback is not triggered as expected, you can try a couple of things to 
 - Make sure that Archivematica can reach Zodiac by sending a cURL request to the configured URL.
 - Try mocking the body data required in a cURL request to make sure that Archivematica is sending what you expect.
 
+
+## Development
+
+This repository contains a configuration file for git [pre-commit](https://pre-commit.com/) hooks which help ensure that code is linted before it is checked into version control. It is strongly recommended that you install these hooks locally by installing pre-commit and running `pre-commit install`.
 
 ## License
 
