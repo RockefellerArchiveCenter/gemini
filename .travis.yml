@@ -1,30 +1,22 @@
 language: python
-sudo: required
+cache: pip
 services:
   - docker
 env:
-  global:
-    - DOCKER_COMPOSE_VERSION: 1.18.0
+  - APPLICATION_NAME: gemini
+  - CONTAINER: gemini-web
+  - DJANGO_PORT: 8006
 before_install:
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-  - cp gemini/config.py.example gemini/config.py
+  - cp ${APPLICATION_NAME}/config.py.example ${APPLICATION_NAME}/config.py
+  - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
   - docker-compose up -d
-  - sleep 20s
-  - docker-compose exec gemini-web pip install coverage pre-commit
-  - docker-compose exec gemini-web pre-commit install
-install: true
-before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+install:
+  - ./wait-for-it.sh $CONTAINER:$DJANGO_PORT -- docker-compose exec $CONTAINER pip install coverage pre-commit
+  - docker-compose exec $CONTAINER pre-commit install
 script:
-  - docker-compose exec gemini-web pre-commit run --all-files --show-diff-on-failure
-  - docker-compose exec gemini-web coverage run manage.py test
+  - docker-compose exec $CONTAINER pre-commit run --all-files --show-diff-on-failure
+  - docker-compose exec $CONTAINER coverage run manage.py test
 after_script:
-  - docker-compose exec gemini-web coverage xml
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - docker-compose exec $CONTAINER coverage report --omit=*/migrations/* -m
 notifications:
   email: false
