@@ -3,9 +3,10 @@ cache: pip
 services:
   - docker
 env:
-  - APPLICATION_NAME=gemini
-  - CONTAINER=gemini-web
-  - DJANGO_PORT=8006
+  global:
+    - APPLICATION_NAME: gemini
+    - CONTAINER: gemini-web
+    - DJANGO_PORT: 8006
 before_install:
   - cp ${APPLICATION_NAME}/config.py.example ${APPLICATION_NAME}/config.py
   - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
