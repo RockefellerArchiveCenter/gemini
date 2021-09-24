@@ -1,6 +1,6 @@
-import json
-
-from asterism.views import BaseServiceView, RoutineView
+from asterism.views import RoutineView
+from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from storer.models import Package
 from storer.routines import (CleanupRequester, DeliverRoutine, DownloadRoutine,
@@ -27,14 +27,31 @@ class PackageViewSet(ModelViewSet):
             return PackageListSerializer
         return PackageSerializer
 
+    def create(self, request):
+        """Handles data from Archivematica post-store callbacks.
 
-class DownloadView(BaseServiceView):
+        Expects an `identifier` to be passed in the request data.
+        """
+        if "identifier" not in request.data:
+            return Response(
+                {"detail": "Expected `identifier` to be in request data, none found"},
+                status=status.HTTP_400_BAD_REQUEST)
+        archivematica_identifier = request.data["identifier"]
+        if not Package.objects.filter(archivematica_identifier=archivematica_identifier).exists():
+            Package.objects.create(
+                archivematica_identifier=archivematica_identifier,
+                process_status=Package.CREATED)
+            return Response(
+                {"detail": f"Package for identifier {archivematica_identifier} created"},
+                status=status.HTTP_201_CREATED)
+        return Response(
+            {"detail": f"A package with the identifier {archivematica_identifier} already exists."},
+            status=status.HTTP_400_BAD_REQUEST)
+
+
+class DownloadView(RoutineView):
     """Downloads packages. Accepts POST requests only."""
-
-    def get_service_response(self, request):
-        body_json = json.loads(request.body)
-        identifier = body_json.get("identifier")
-        return DownloadRoutine(identifier).run()
+    routine = DownloadRoutine
 
 
 class StoreView(RoutineView):

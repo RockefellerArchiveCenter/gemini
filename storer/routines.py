@@ -35,42 +35,34 @@ class Routine:
 class DownloadRoutine(Routine):
     """Downloads a package from Archivematica."""
 
-    def __init__(self, identifier):
-        super(DownloadRoutine, self).__init__()
-        self.am_client = AMClient(
+    def run(self):
+        am_client = AMClient(
             ss_api_key=settings.ARCHIVEMATICA['api_key'],
             ss_user_name=settings.ARCHIVEMATICA['username'],
             ss_url=settings.ARCHIVEMATICA['baseurl'],
-            directory=self.tmp_dir,
-            package_uuid=identifier,
-        )
-        self.package = self.am_client.get_package_details()
-        if isinstance(self.package, int):
-            raise Exception(errors.error_lookup(self.package))
+            directory=self.tmp_dir)
+        created = []
+        for package in Package.objects.filter(process_status=Package.CREATED):
+            am_client.package_uuid = package.archivematica_identifier
+            package_data = am_client.get_package_details()
+            if isinstance(package_data, int):
+                raise Exception(errors.error_lookup(package_data))
 
-    def run(self):
-        package = self.am_client.get_package_details()
-        if self.is_downloadable(package):
-            if not Package.objects.filter(data__uuid=self.am_client.package_uuid).exists():
+            if self.is_downloadable(package_data):
                 try:
-                    download_path = self.am_client.download_package(self.am_client.package_uuid)
+                    download_path = am_client.download_package(am_client.package_uuid)
                     tmp_path = join(
-                        self.tmp_dir, '{}{}'.format(self.am_client.package_uuid, self.get_extension(package)))
+                        self.tmp_dir, '{}{}'.format(am_client.package_uuid, self.get_extension(package_data)))
                     move(download_path, tmp_path)
                 except Exception as e:
-                    raise RoutineError("Error downloading data: {}".format(e), self.am_client.package_uuid)
-
-                Package.objects.create(
-                    type=package['package_type'].lower(),
-                    data=package,
-                    process_status=Package.DOWNLOADED
-                )
-                msg = "Package downloaded."
-            else:
-                msg = "Package already downloaded."
-        else:
-            msg = "Package not downloadable."
-        return (msg, self.am_client.package_uuid)
+                    raise RoutineError("Error downloading data: {}".format(e), am_client.package_uuid)
+                package.type = package_data['package_type'].lower()
+                package.data = package_data
+                package.process_status = Package.DOWNLOADED
+                package.save()
+                created.append(package.archivematica_identifier)
+        msg = "All packages downloaded." if len(created) else "No packages waiting to be downloaded."
+        return msg, created
 
     def get_extension(self, package):
         return (splitext(package['current_path'])[1]
@@ -83,9 +75,10 @@ class DownloadRoutine(Routine):
 
 
 class StoreRoutine(Routine):
-    """
-    Uploads the contents of a package to Fedora.
-    AIPS are uploaded as single 7z files. DIPs are extracted and each file is uploaded.
+    """Uploads the contents of a package to Fedora.
+
+    AIPS are uploaded as single 7z files. DIPs are extracted and each file is
+    uploaded. Only one package is processed at a time.
     """
 
     def __init__(self):
@@ -95,9 +88,10 @@ class StoreRoutine(Routine):
                                           password=settings.FEDORA['password'])
 
     def run(self):
-        package_ids = []
-        for package in Package.objects.filter(process_status=Package.DOWNLOADED):
-            self.uuid = package.data['uuid']
+        stored = []
+        package = Package.objects.filter(process_status=Package.DOWNLOADED).first()
+        if package:
+            self.uuid = package.archivematica_identifier
             if package.type == 'aip':
                 self.extension = '.7z'
                 self.mets_path = "METS.{}.xml".format(self.uuid)
@@ -124,14 +118,10 @@ class StoreRoutine(Routine):
             package.archivesspace_uri = mets_data['archivesspace_uri']
             package.process_status = Package.STORED
             package.save()
-
-            package_ids.append(self.uuid)
-
+            stored.append(self.uuid)
             self.clean_up(self.uuid)
-
-            break
-
-        return ("Packages stored.", package_ids)
+        msg = "Packages stored." if len(stored) else "No packages to store."
+        return (msg, stored)
 
     def parse_mets(self):
         """
