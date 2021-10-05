@@ -35,12 +35,13 @@ You will need to edit configuration values in `gemini/config.py` to point to you
 
 ## Services
 
-gemini has four services, all of which are exposed via HTTP endpoints (see [Routes](#routes) section below):
+gemini has five services, all of which are exposed via HTTP endpoints (see [Routes](#routes) section below):
 
+* Create Packages
+  * Handles data from Archivematica's post-store callback and creates database
+    objects representing packages to be downloaded.
 * Download Packages
-  * Polling the Archivematica Storage Service for packages.
-  * Determining if the package has already been stored by checking whether or not it exists as an object in gemini's database. If the package has already been processed, gemini skips it and goes to the next one.
-  * Downloading the package from the Archivematica Storage Service.
+  * Downloads packages from the Archivematica Storage Service.
 * Store Packages
   * Storing the package in Fedora, along with minimal metadata.
   * Creating a package object in gemini's database.
@@ -67,7 +68,7 @@ gemini has four services, all of which are exposed via HTTP endpoints (see [Rout
 gemini relies on the proper configuration of Archivematica Storage Service [post-store callbacks](https://www.archivematica.org/en/docs/storage-service-0.16/administrators/#service-callbacks). Two service callbacks, one each for `Post-store AIP` and `Post-store DIP` events, need to be set up as follows:
 
 - Event: either `Post-store AIP` or `Post-store DIP`
-- URI: http://zodiac.dev.rockarch.org/api/download-package/ (This is the configured value of the Download Package service's `external_uri` field, prepended by `api/`, and using the correct host name for production or dev).
+- URI: http://zodiac.dev.rockarch.org/api/create-packages/ (This is the configured value of the CreatePackage service's `external_uri` field, prepended by `api/`, and using the correct host name for production or dev).
 - Method: POST
 - Headers (key/value): key: Content-Type, value: application/json
 - Body: {"identifier": "<package_uuid>"}
