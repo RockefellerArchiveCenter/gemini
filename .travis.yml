@@ -1,6 +1,6 @@
 language: python
-cache:
-  directories:
+# cache:
+#   directories:
     - $HOME/.cache/pip
     # - $HOME/.cache/pre-commit
 services:
