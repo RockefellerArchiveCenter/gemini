@@ -16,9 +16,7 @@ before_install:
   - docker-compose up -d
 install:
   - ./wait-for-it.sh $CONTAINER:$DJANGO_PORT -- docker-compose exec $CONTAINER pip install coverage
-  - pip install "setuptools==40.6.2" && pip freeze && easy_install --version
-  - python -c "import sys; import setuptools; print(setuptools.version.__version__)"
-  - pip install pre-commit && pre-commit install
+  - pip install "pre-commit===2.13.0" && pre-commit install
 script:
   - pre-commit run --all-files --show-diff-on-failure
   - docker-compose exec $CONTAINER coverage run manage.py test
