@@ -16,7 +16,7 @@ before_install:
   - docker-compose up -d
 install:
   - ./wait-for-it.sh $CONTAINER:$DJANGO_PORT -- docker-compose exec $CONTAINER pip install coverage
-  - pip install "setuptools<58" && pip freeze
+  - pip install "setuptools==40.6.2" && pip freeze
   - pip install pre-commit && pre-commit install
 script:
   - pre-commit run --all-files --show-diff-on-failure
