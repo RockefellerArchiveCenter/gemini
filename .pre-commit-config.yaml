@@ -18,4 +18,4 @@ repos:
   rev: 6.2.0
   hooks:
   - id: pip-compile
-    additional_dependencies: [setuptools]
+    additional_dependencies: [setuptools<58]
