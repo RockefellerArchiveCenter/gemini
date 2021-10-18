@@ -33,42 +33,46 @@ class PackageTest(TestCase):
         if isdir(settings.TMP_DIR):
             rmtree(settings.TMP_DIR)
         makedirs(settings.TMP_DIR)
-        Package.objects.create(
-            archivematica_identifier="70588e68-7742-49aa-a0ef-774a46b17b0a",
-            process_status=Package.CREATED)
+        for uuid in ["b663b040-5718-427c-ac84-26fc48191072", "70588e68-7742-49aa-a0ef-774a46b17b0a"]:
+            Package.objects.create(
+                archivematica_identifier=uuid,
+                process_status=Package.CREATED)
 
     def test_routines(self):
-        with storer_vcr.use_cassette('download.yml'):
-            msg, count = DownloadRoutine().run()
-            self.assertNotEqual(False, msg, "Packages not downloaded correctly")
-            self.assertEqual("All packages downloaded.", msg)
-        self.assertEqual(len(listdir(settings.TMP_DIR)), 1, "Wrong number of packages downloaded")
-        for cassette, routine, msg in [
-                ('store.yml', StoreRoutine, "Packages not stored correctly"),
-                ('store.yml', DeliverRoutine, "Package data not delivered"),
-                ('cleanup.yml', CleanupRequester, "Cleanup request failed")]:
-            with storer_vcr.use_cassette(cassette):
-                res = routine().run()
-                self.assertNotEqual(False, res, msg)
+        for x in range(0, len(Package.objects.all())):
+            with storer_vcr.use_cassette('download.yml'):
+                msg, count = DownloadRoutine().run()
+                self.assertNotEqual(False, msg, "Packages not downloaded correctly")
+                self.assertEqual("All packages downloaded.", msg)
+            self.assertEqual(len(listdir(settings.TMP_DIR)), x + 1, "Wrong number of packages downloaded")
+        for x in range(0, len(Package.objects.all())):
+            for cassette, routine, msg in [
+                    ('store.yml', StoreRoutine, "Packages not stored correctly"),
+                    ('store.yml', DeliverRoutine, "Package data not delivered"),
+                    ('cleanup.yml', CleanupRequester, "Cleanup request failed")]:
+                with storer_vcr.use_cassette(cassette):
+                    res = routine().run()
+                    self.assertNotEqual(False, res, msg)
 
     def test_routine_views(self):
-        with storer_vcr.use_cassette('download.yml'):
-            request = self.factory.post(
-                reverse('download-packages'),
-                data=json.dumps({"identifier": "70588e68-7742-49aa-a0ef-774a46b17b0a", "action": "stored"}),
-                content_type="application/json")
-            response = DownloadView.as_view()(request)
-            self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
-        for cassette, view_str, view in [
-                ("store.yml", "store-packages", StoreView),
-                ("store.yml", "deliver-packages", DeliverView),
-                ("cleanup.yml", "request-cleanup", CleanupRequestView)]:
-            with storer_vcr.use_cassette(cassette):
-                request = self.factory.post(reverse(view_str))
-                response = view.as_view()(request)
+        for x in range(0, len(Package.objects.all())):
+            with storer_vcr.use_cassette('download.yml'):
+                request = self.factory.post(
+                    reverse('download-packages'),
+                    data=json.dumps({"identifier": "70588e68-7742-49aa-a0ef-774a46b17b0a", "action": "stored"}),
+                    content_type="application/json")
+                response = DownloadView.as_view()(request)
                 self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
-                if view_str in ["download-packages", "store-packages"]:
-                    self.assertEqual(response.data['count'], 1, "Wrong number of packages processed by {}".format(view_str))
+            for cassette, view_str, view in [
+                    ("store.yml", "store-packages", StoreView),
+                    ("store.yml", "deliver-packages", DeliverView),
+                    ("cleanup.yml", "request-cleanup", CleanupRequestView)]:
+                with storer_vcr.use_cassette(cassette):
+                    request = self.factory.post(reverse(view_str))
+                    response = view.as_view()(request)
+                    self.assertEqual(response.status_code, 200, "Return error: {}".format(response.data))
+                    if view_str in ["download-packages", "store-packages"]:
+                        self.assertEqual(response.data['count'], 1, "Wrong number of packages processed by {}".format(view_str))
 
     def test_package_views(self):
         request = self.factory.get(reverse('package-list'))

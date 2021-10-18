@@ -8043,4 +8043,816 @@ interactions:
     status:
       code: 200
       message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+    method: GET
+    uri: http://archivematica-storage-service.dev.rockarch.org:8000/api/v2/file/b663b040-5718-427c-ac84-26fc48191072
+  response:
+    body:
+      string: ''
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      Content-Type:
+      - text/html; charset=utf-8
+      Date:
+      - Mon, 18 Oct 2021 20:53:31 GMT
+      Location:
+      - /api/v2/file/b663b040-5718-427c-ac84-26fc48191072/
+      Server:
+      - nginx
+    status:
+      code: 301
+      message: Moved Permanently
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+    method: GET
+    uri: http://archivematica-storage-service.dev.rockarch.org:8000/api/v2/file/b663b040-5718-427c-ac84-26fc48191072/
+  response:
+    body:
+      string: '{"current_full_path": "/var/archivematica/sharedDirectory/www/DIPsStore/b663/b040/5718/427c/ac84/26fc/4819/1072/6b3c7d3d-c037-4542-9951-f8db45a4e89b-ddef17b8-0434-41d3-93d5-a89c63d38556",
+        "current_location": "/api/v2/location/eb45c70d-da71-4bb6-88e8-178ac2cc73d0/",
+        "current_path": "b663/b040/5718/427c/ac84/26fc/4819/1072/6b3c7d3d-c037-4542-9951-f8db45a4e89b-ddef17b8-0434-41d3-93d5-a89c63d38556",
+        "encrypted": false, "misc_attributes": {}, "origin_pipeline": "/api/v2/pipeline/537994ea-8aee-43ea-a2c4-693d0843990c/",
+        "package_type": "DIP", "related_packages": ["/api/v2/file/ddef17b8-0434-41d3-93d5-a89c63d38556/"],
+        "replicas": [], "replicated_package": null, "resource_uri": "/api/v2/file/b663b040-5718-427c-ac84-26fc48191072/",
+        "size": 66226, "status": "UPLOADED", "uuid": "b663b040-5718-427c-ac84-26fc48191072"}'
+    headers:
+      Cache-Control:
+      - no-cache
+      Connection:
+      - keep-alive
+      Content-Language:
+      - en
+      Content-Length:
+      - '816'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 18 Oct 2021 20:53:32 GMT
+      Server:
+      - nginx
+      Vary:
+      - Accept, Accept-Language, Cookie
+      X-Frame-Options:
+      - SAMEORIGIN
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+    method: GET
+    uri: http://archivematica-storage-service.dev.rockarch.org:8000/api/v2/file/b663b040-5718-427c-ac84-26fc48191072/download/?api_key=1700bdfeabb148f9b3ce0e6064719adc13433463
+  response:
+    body:
+      string: "6b3c7d3d-c037-4542-9951-f8db45a4e89b-ddef17b8-0434-41d3-93d5-a89c63d38556/\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\00000774\00000515\00000515\000000000000\014030667063\0024562\0
+        5\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0ustar
+        \ \0archivematica\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0archivematica\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\06b3c7d3d-c037-4542-9951-f8db45a4e89b-ddef17b8-0434-41d3-93d5-a89c63d38556/objects/\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\00000774\00000515\00000515\000000000000\014030667063\0026213\0
+        5\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0ustar
+        \ \0archivematica\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0archivematica\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0././@LongLink\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\00000000\00000000\00000000\000000000207\000000000000\0011564\0
+        L\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0ustar
+        \ \0root\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0root\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\06b3c7d3d-c037-4542-9951-f8db45a4e89b-ddef17b8-0434-41d3-93d5-a89c63d38556/objects/03246b9e-1616-4053-a33e-11c3581de328-sample_file.txt\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\06b3c7d3d-c037-4542-9951-f8db45a4e89b-ddef17b8-0434-41d3-93d5-a89c63d38556/objects/03246b9e-1616-40530000664\00000515\00000515\000000000016\014030667061\0030174\0
+        0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0ustar
+        \ \0archivematica\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0archivematica\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0jlksfjlajflsd\n\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0././@LongLink\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\00000000\00000000\00000000\000000000170\000000000000\0011563\0
+        L\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0ustar
+        \ \0root\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0root\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\06b3c7d3d-c037-4542-9951-f8db45a4e89b-ddef17b8-0434-41d3-93d5-a89c63d38556/METS.ddef17b8-0434-41d3-93d5-a89c63d38556.xml\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\06b3c7d3d-c037-4542-9951-f8db45a4e89b-ddef17b8-0434-41d3-93d5-a89c63d38556/METS.ddef17b8-0434-41d3-930000664\00000515\00000515\000000165431\014030667061\0030063\0
+        0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0ustar
+        \ \0archivematica\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0archivematica\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0<?xml
+        version='1.0' encoding='UTF-8'?>\n<mets:mets xmlns:mets=\"http://www.loc.gov/METS/\"
+        xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
+        xsi:schemaLocation=\"http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/version1121/mets.xsd\">\n
+        \ <mets:metsHdr CREATEDATE=\"2021-03-30T18:30:05\"/>\n  <mets:dmdSec ID=\"dmdSec_1\">\n
+        \   <mets:mdWrap MDTYPE=\"PREMIS:OBJECT\">\n      <mets:xmlData>\n        <premis:object
+        xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:type=\"premis:intellectualEntity\"
+        xsi:schemaLocation=\"http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd\"
+        version=\"3.0\">\n          <premis:objectIdentifier>\n            <premis:objectIdentifierType>UUID</premis:objectIdentifierType>\n
+        \           <premis:objectIdentifierValue>ddef17b8-0434-41d3-93d5-a89c63d38556</premis:objectIdentifierValue>\n
+        \         </premis:objectIdentifier>\n          <premis:originalName>6b3c7d3d-c037-4542-9951-f8db45a4e89b-ddef17b8-0434-41d3-93d5-a89c63d38556</premis:originalName>\n
+        \       </premis:object>\n      </mets:xmlData>\n    </mets:mdWrap>\n  </mets:dmdSec>\n
+        \ <mets:amdSec ID=\"amdSec_1\">\n    <mets:techMD ID=\"techMD_1\">\n      <mets:mdWrap
+        MDTYPE=\"PREMIS:OBJECT\">\n        <mets:xmlData>\n          <premis:object
+        xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:type=\"premis:file\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:objectIdentifier>\n
+        \             <premis:objectIdentifierType>UUID</premis:objectIdentifierType>\n
+        \             <premis:objectIdentifierValue>41c06bf0-6003-4c09-afea-ab15a769f198</premis:objectIdentifierValue>\n
+        \           </premis:objectIdentifier>\n            <premis:objectCharacteristics>\n
+        \             <premis:compositionLevel>0</premis:compositionLevel>\n              <premis:fixity>\n
+        \               <premis:messageDigestAlgorithm>sha256</premis:messageDigestAlgorithm>\n
+        \               <premis:messageDigest>73524699b6bec6781d32fb1967482bbaca2f71bc414157ca74c4240e360f70e5</premis:messageDigest>\n
+        \             </premis:fixity>\n              <premis:size>95</premis:size>\n
+        \             <premis:format>\n                <premis:formatDesignation>\n
+        \                 <premis:formatName>Plain Text</premis:formatName>\n                  <premis:formatVersion></premis:formatVersion>\n
+        \               </premis:formatDesignation>\n                <premis:formatRegistry>\n
+        \                 <premis:formatRegistryName>PRONOM</premis:formatRegistryName>\n
+        \                 <premis:formatRegistryKey>x-fmt/111</premis:formatRegistryKey>\n
+        \               </premis:formatRegistry>\n              </premis:format>\n
+        \             <premis:creatingApplication>\n                <premis:dateCreatedByApplication>2021-03-30</premis:dateCreatedByApplication>\n
+        \             </premis:creatingApplication>\n            </premis:objectCharacteristics>\n
+        \           <premis:originalName>%SIPDirectory%objects/metadata/transfers/6b3c7d3d-c037-4542-9951-f8db45a4e89b-137497d8-0f5e-4e79-9616-68d91bb3c2ac/manifest-sha256.txt</premis:originalName>\n
+        \         </premis:object>\n        </mets:xmlData>\n      </mets:mdWrap>\n
+        \   </mets:techMD>\n    <mets:digiprovMD ID=\"digiprovMD_1\">\n      <mets:mdWrap
+        MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n          <premis:event
+        xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>9a52efd3-ca40-455e-8298-aef9a5e2b032</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>ingestion</premis:eventType>\n
+        \           <premis:eventDateTime>2021-03-30T18:29:51.567241+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail></premis:eventDetail>\n
+        \           </premis:eventDetailInformation>\n            <premis:eventOutcomeInformation>\n
+        \             <premis:eventOutcome></premis:eventOutcome>\n              <premis:eventOutcomeDetail>\n
+        \               <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_2\">\n      <mets:mdWrap MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n
+        \         <premis:event xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>26ac7ad3-b9ed-445b-933e-318cf3903798</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>message
+        digest calculation</premis:eventType>\n            <premis:eventDateTime>2021-03-30T18:29:51.709812+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail>program=\"python\";
+        module=\"hashlib.sha256()\"</premis:eventDetail>\n            </premis:eventDetailInformation>\n
+        \           <premis:eventOutcomeInformation>\n              <premis:eventOutcome></premis:eventOutcome>\n
+        \             <premis:eventOutcomeDetail>\n                <premis:eventOutcomeDetailNote>73524699b6bec6781d32fb1967482bbaca2f71bc414157ca74c4240e360f70e5</premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_3\">\n      <mets:mdWrap MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n
+        \         <premis:event xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>a1d17c4e-3a01-4c39-865a-92ecbc0f01e3</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>virus
+        check</premis:eventType>\n            <premis:eventDateTime>2021-03-30T18:29:56.101330+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail>program=\"ClamAV
+        (clamd)\"; version=\"ClamAV 0.102.4\"; virusDefinitions=\"26125/Tue Mar 30
+        07:11:47 2021\"</premis:eventDetail>\n            </premis:eventDetailInformation>\n
+        \           <premis:eventOutcomeInformation>\n              <premis:eventOutcome>Pass</premis:eventOutcome>\n
+        \             <premis:eventOutcomeDetail>\n                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_4\">\n      <mets:mdWrap MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n
+        \         <premis:event xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>fa350a24-4afd-4483-b83d-7fcf9e554ca3</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>format
+        identification</premis:eventType>\n            <premis:eventDateTime>2021-03-30T18:30:03.198382+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail>program=\"Siegfried\";
+        version=\"1.8.0\"</premis:eventDetail>\n            </premis:eventDetailInformation>\n
+        \           <premis:eventOutcomeInformation>\n              <premis:eventOutcome>Positive</premis:eventOutcome>\n
+        \             <premis:eventOutcomeDetail>\n                <premis:eventOutcomeDetailNote>x-fmt/111</premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_5\">\n      <mets:mdWrap MDTYPE=\"PREMIS:AGENT\">\n        <mets:xmlData>\n
+        \         <premis:agent xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:agentIdentifier>\n
+        \             <premis:agentIdentifierType>preservation system</premis:agentIdentifierType>\n
+        \             <premis:agentIdentifierValue>Archivematica-1.11.2</premis:agentIdentifierValue>\n
+        \           </premis:agentIdentifier>\n            <premis:agentName>Archivematica</premis:agentName>\n
+        \           <premis:agentType>software</premis:agentType>\n          </premis:agent>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_6\">\n      <mets:mdWrap MDTYPE=\"PREMIS:AGENT\">\n        <mets:xmlData>\n
+        \         <premis:agent xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:agentIdentifier>\n
+        \             <premis:agentIdentifierType>repository code</premis:agentIdentifierType>\n
+        \             <premis:agentIdentifierValue>RAC</premis:agentIdentifierValue>\n
+        \           </premis:agentIdentifier>\n            <premis:agentName>rockarch.org</premis:agentName>\n
+        \           <premis:agentType>organization</premis:agentType>\n          </premis:agent>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_7\">\n      <mets:mdWrap MDTYPE=\"PREMIS:AGENT\">\n        <mets:xmlData>\n
+        \         <premis:agent xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:agentIdentifier>\n
+        \             <premis:agentIdentifierType>Archivematica user pk</premis:agentIdentifierType>\n
+        \             <premis:agentIdentifierValue>3</premis:agentIdentifierValue>\n
+        \           </premis:agentIdentifier>\n            <premis:agentName>username=\"fornax\",
+        first_name=\"\", last_name=\"\"</premis:agentName>\n            <premis:agentType>Archivematica
+        user</premis:agentType>\n          </premis:agent>\n        </mets:xmlData>\n
+        \     </mets:mdWrap>\n    </mets:digiprovMD>\n  </mets:amdSec>\n  <mets:amdSec
+        ID=\"amdSec_2\">\n    <mets:techMD ID=\"techMD_2\">\n      <mets:mdWrap MDTYPE=\"PREMIS:OBJECT\">\n
+        \       <mets:xmlData>\n          <premis:object xmlns:premis=\"http://www.loc.gov/premis/v3\"
+        xsi:type=\"premis:file\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:objectIdentifier>\n
+        \             <premis:objectIdentifierType>UUID</premis:objectIdentifierType>\n
+        \             <premis:objectIdentifierValue>b88e7081-f565-4d1b-b785-5c9cd0fd2e17</premis:objectIdentifierValue>\n
+        \           </premis:objectIdentifier>\n            <premis:objectCharacteristics>\n
+        \             <premis:compositionLevel>0</premis:compositionLevel>\n              <premis:fixity>\n
+        \               <premis:messageDigestAlgorithm>sha256</premis:messageDigestAlgorithm>\n
+        \               <premis:messageDigest>12425f76899587e88dd8713a28ecc5f0ab41db5c51b98d276a27fc284b587f7f</premis:messageDigest>\n
+        \             </premis:fixity>\n              <premis:size>159</premis:size>\n
+        \             <premis:format>\n                <premis:formatDesignation>\n
+        \                 <premis:formatName>Plain Text</premis:formatName>\n                  <premis:formatVersion></premis:formatVersion>\n
+        \               </premis:formatDesignation>\n                <premis:formatRegistry>\n
+        \                 <premis:formatRegistryName>PRONOM</premis:formatRegistryName>\n
+        \                 <premis:formatRegistryKey>x-fmt/111</premis:formatRegistryKey>\n
+        \               </premis:formatRegistry>\n              </premis:format>\n
+        \             <premis:creatingApplication>\n                <premis:dateCreatedByApplication>2021-03-30</premis:dateCreatedByApplication>\n
+        \             </premis:creatingApplication>\n            </premis:objectCharacteristics>\n
+        \           <premis:originalName>%SIPDirectory%objects/metadata/transfers/6b3c7d3d-c037-4542-9951-f8db45a4e89b-137497d8-0f5e-4e79-9616-68d91bb3c2ac/manifest-sha512.txt</premis:originalName>\n
+        \         </premis:object>\n        </mets:xmlData>\n      </mets:mdWrap>\n
+        \   </mets:techMD>\n    <mets:digiprovMD ID=\"digiprovMD_8\">\n      <mets:mdWrap
+        MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n          <premis:event
+        xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>103cff7f-fa59-4bd8-b6ae-64a4baa48bf8</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>ingestion</premis:eventType>\n
+        \           <premis:eventDateTime>2021-03-30T18:29:51.543755+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail></premis:eventDetail>\n
+        \           </premis:eventDetailInformation>\n            <premis:eventOutcomeInformation>\n
+        \             <premis:eventOutcome></premis:eventOutcome>\n              <premis:eventOutcomeDetail>\n
+        \               <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_9\">\n      <mets:mdWrap MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n
+        \         <premis:event xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>ac6f65d7-a835-490f-9d40-3331b2d25211</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>message
+        digest calculation</premis:eventType>\n            <premis:eventDateTime>2021-03-30T18:29:51.740086+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail>program=\"python\";
+        module=\"hashlib.sha256()\"</premis:eventDetail>\n            </premis:eventDetailInformation>\n
+        \           <premis:eventOutcomeInformation>\n              <premis:eventOutcome></premis:eventOutcome>\n
+        \             <premis:eventOutcomeDetail>\n                <premis:eventOutcomeDetailNote>12425f76899587e88dd8713a28ecc5f0ab41db5c51b98d276a27fc284b587f7f</premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_10\">\n      <mets:mdWrap MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n
+        \         <premis:event xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>f8d0f331-985a-494e-9ed3-4d9ffcd8cbd1</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>virus
+        check</premis:eventType>\n            <premis:eventDateTime>2021-03-30T18:29:56.078603+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail>program=\"ClamAV
+        (clamd)\"; version=\"ClamAV 0.102.4\"; virusDefinitions=\"26125/Tue Mar 30
+        07:11:47 2021\"</premis:eventDetail>\n            </premis:eventDetailInformation>\n
+        \           <premis:eventOutcomeInformation>\n              <premis:eventOutcome>Pass</premis:eventOutcome>\n
+        \             <premis:eventOutcomeDetail>\n                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_11\">\n      <mets:mdWrap MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n
+        \         <premis:event xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>93822f0d-df18-4456-a45d-a6411a9155b2</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>format
+        identification</premis:eventType>\n            <premis:eventDateTime>2021-03-30T18:30:03.459207+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail>program=\"Siegfried\";
+        version=\"1.8.0\"</premis:eventDetail>\n            </premis:eventDetailInformation>\n
+        \           <premis:eventOutcomeInformation>\n              <premis:eventOutcome>Positive</premis:eventOutcome>\n
+        \             <premis:eventOutcomeDetail>\n                <premis:eventOutcomeDetailNote>x-fmt/111</premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_12\">\n      <mets:mdWrap MDTYPE=\"PREMIS:AGENT\">\n        <mets:xmlData>\n
+        \         <premis:agent xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:agentIdentifier>\n
+        \             <premis:agentIdentifierType>preservation system</premis:agentIdentifierType>\n
+        \             <premis:agentIdentifierValue>Archivematica-1.11.2</premis:agentIdentifierValue>\n
+        \           </premis:agentIdentifier>\n            <premis:agentName>Archivematica</premis:agentName>\n
+        \           <premis:agentType>software</premis:agentType>\n          </premis:agent>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_13\">\n      <mets:mdWrap MDTYPE=\"PREMIS:AGENT\">\n        <mets:xmlData>\n
+        \         <premis:agent xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:agentIdentifier>\n
+        \             <premis:agentIdentifierType>repository code</premis:agentIdentifierType>\n
+        \             <premis:agentIdentifierValue>RAC</premis:agentIdentifierValue>\n
+        \           </premis:agentIdentifier>\n            <premis:agentName>rockarch.org</premis:agentName>\n
+        \           <premis:agentType>organization</premis:agentType>\n          </premis:agent>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_14\">\n      <mets:mdWrap MDTYPE=\"PREMIS:AGENT\">\n        <mets:xmlData>\n
+        \         <premis:agent xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:agentIdentifier>\n
+        \             <premis:agentIdentifierType>Archivematica user pk</premis:agentIdentifierType>\n
+        \             <premis:agentIdentifierValue>3</premis:agentIdentifierValue>\n
+        \           </premis:agentIdentifier>\n            <premis:agentName>username=\"fornax\",
+        first_name=\"\", last_name=\"\"</premis:agentName>\n            <premis:agentType>Archivematica
+        user</premis:agentType>\n          </premis:agent>\n        </mets:xmlData>\n
+        \     </mets:mdWrap>\n    </mets:digiprovMD>\n  </mets:amdSec>\n  <mets:amdSec
+        ID=\"amdSec_3\">\n    <mets:techMD ID=\"techMD_3\">\n      <mets:mdWrap MDTYPE=\"PREMIS:OBJECT\">\n
+        \       <mets:xmlData>\n          <premis:object xmlns:premis=\"http://www.loc.gov/premis/v3\"
+        xsi:type=\"premis:file\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:objectIdentifier>\n
+        \             <premis:objectIdentifierType>UUID</premis:objectIdentifierType>\n
+        \             <premis:objectIdentifierValue>03246b9e-1616-4053-a33e-11c3581de328</premis:objectIdentifierValue>\n
+        \           </premis:objectIdentifier>\n            <premis:objectCharacteristics>\n
+        \             <premis:compositionLevel>0</premis:compositionLevel>\n              <premis:fixity>\n
+        \               <premis:messageDigestAlgorithm>sha256</premis:messageDigestAlgorithm>\n
+        \               <premis:messageDigest>35d2c80c4e06be584a4da20e0bbd6991646b2c7aa06ff4a5e40be3ce53495f50</premis:messageDigest>\n
+        \             </premis:fixity>\n              <premis:size>14</premis:size>\n
+        \             <premis:format>\n                <premis:formatDesignation>\n
+        \                 <premis:formatName>Plain Text</premis:formatName>\n                  <premis:formatVersion></premis:formatVersion>\n
+        \               </premis:formatDesignation>\n                <premis:formatRegistry>\n
+        \                 <premis:formatRegistryName>PRONOM</premis:formatRegistryName>\n
+        \                 <premis:formatRegistryKey>x-fmt/111</premis:formatRegistryKey>\n
+        \               </premis:formatRegistry>\n              </premis:format>\n
+        \             <premis:creatingApplication>\n                <premis:dateCreatedByApplication>2021-03-24</premis:dateCreatedByApplication>\n
+        \             </premis:creatingApplication>\n            </premis:objectCharacteristics>\n
+        \           <premis:originalName>%transferDirectory%data/objects/sample_file.txt</premis:originalName>\n
+        \         </premis:object>\n        </mets:xmlData>\n      </mets:mdWrap>\n
+        \   </mets:techMD>\n    <mets:digiprovMD ID=\"digiprovMD_15\">\n      <mets:mdWrap
+        MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n          <premis:event
+        xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>35546613-de9a-47b9-bf4a-ead13fef513f</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>ingestion</premis:eventType>\n
+        \           <premis:eventDateTime>2021-03-30T18:29:06.158243+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail></premis:eventDetail>\n
+        \           </premis:eventDetailInformation>\n            <premis:eventOutcomeInformation>\n
+        \             <premis:eventOutcome></premis:eventOutcome>\n              <premis:eventOutcomeDetail>\n
+        \               <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_16\">\n      <mets:mdWrap MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n
+        \         <premis:event xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>b79e4c41-bc9a-475c-9c51-3b688c6b4496</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>message
+        digest calculation</premis:eventType>\n            <premis:eventDateTime>2021-03-30T18:29:06.476397+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail>program=\"python\";
+        module=\"hashlib.sha256()\"</premis:eventDetail>\n            </premis:eventDetailInformation>\n
+        \           <premis:eventOutcomeInformation>\n              <premis:eventOutcome></premis:eventOutcome>\n
+        \             <premis:eventOutcomeDetail>\n                <premis:eventOutcomeDetailNote>35d2c80c4e06be584a4da20e0bbd6991646b2c7aa06ff4a5e40be3ce53495f50</premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_17\">\n      <mets:mdWrap MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n
+        \         <premis:event xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>60678870-0772-4c00-bfb9-bc1fec7a5965</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>fixity
+        check</premis:eventType>\n            <premis:eventDateTime>2021-03-30T18:29:07.664720+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail>Bagit
+        - verifypayloadmanifests</premis:eventDetail>\n            </premis:eventDetailInformation>\n
+        \           <premis:eventOutcomeInformation>\n              <premis:eventOutcome>Pass</premis:eventOutcome>\n
+        \             <premis:eventOutcomeDetail>\n                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_18\">\n      <mets:mdWrap MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n
+        \         <premis:event xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>3efafd2f-ce87-4877-b730-b04e4440e2c9</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>virus
+        check</premis:eventType>\n            <premis:eventDateTime>2021-03-30T18:29:09.811782+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail>program=\"ClamAV
+        (clamd)\"; version=\"ClamAV 0.102.4\"; virusDefinitions=\"26125/Tue Mar 30
+        07:11:47 2021\"</premis:eventDetail>\n            </premis:eventDetailInformation>\n
+        \           <premis:eventOutcomeInformation>\n              <premis:eventOutcome>Pass</premis:eventOutcome>\n
+        \             <premis:eventOutcomeDetail>\n                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_19\">\n      <mets:mdWrap MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n
+        \         <premis:event xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>8cdf9db9-b41d-498e-84fa-3adae09eb84f</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>format
+        identification</premis:eventType>\n            <premis:eventDateTime>2021-03-30T18:29:13.700303+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail>program=\"Siegfried\";
+        version=\"1.8.0\"</premis:eventDetail>\n            </premis:eventDetailInformation>\n
+        \           <premis:eventOutcomeInformation>\n              <premis:eventOutcome>Positive</premis:eventOutcome>\n
+        \             <premis:eventOutcomeDetail>\n                <premis:eventOutcomeDetailNote>x-fmt/111</premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_20\">\n      <mets:mdWrap MDTYPE=\"PREMIS:AGENT\">\n        <mets:xmlData>\n
+        \         <premis:agent xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:agentIdentifier>\n
+        \             <premis:agentIdentifierType>preservation system</premis:agentIdentifierType>\n
+        \             <premis:agentIdentifierValue>Archivematica-1.11.2</premis:agentIdentifierValue>\n
+        \           </premis:agentIdentifier>\n            <premis:agentName>Archivematica</premis:agentName>\n
+        \           <premis:agentType>software</premis:agentType>\n          </premis:agent>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_21\">\n      <mets:mdWrap MDTYPE=\"PREMIS:AGENT\">\n        <mets:xmlData>\n
+        \         <premis:agent xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:agentIdentifier>\n
+        \             <premis:agentIdentifierType>repository code</premis:agentIdentifierType>\n
+        \             <premis:agentIdentifierValue>RAC</premis:agentIdentifierValue>\n
+        \           </premis:agentIdentifier>\n            <premis:agentName>rockarch.org</premis:agentName>\n
+        \           <premis:agentType>organization</premis:agentType>\n          </premis:agent>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_22\">\n      <mets:mdWrap MDTYPE=\"PREMIS:AGENT\">\n        <mets:xmlData>\n
+        \         <premis:agent xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:agentIdentifier>\n
+        \             <premis:agentIdentifierType>Archivematica user pk</premis:agentIdentifierType>\n
+        \             <premis:agentIdentifierValue>3</premis:agentIdentifierValue>\n
+        \           </premis:agentIdentifier>\n            <premis:agentName>username=\"fornax\",
+        first_name=\"\", last_name=\"\"</premis:agentName>\n            <premis:agentType>Archivematica
+        user</premis:agentType>\n          </premis:agent>\n        </mets:xmlData>\n
+        \     </mets:mdWrap>\n    </mets:digiprovMD>\n  </mets:amdSec>\n  <mets:amdSec
+        ID=\"amdSec_4\">\n    <mets:techMD ID=\"techMD_4\">\n      <mets:mdWrap MDTYPE=\"PREMIS:OBJECT\">\n
+        \       <mets:xmlData>\n          <premis:object xmlns:premis=\"http://www.loc.gov/premis/v3\"
+        xsi:type=\"premis:file\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:objectIdentifier>\n
+        \             <premis:objectIdentifierType>UUID</premis:objectIdentifierType>\n
+        \             <premis:objectIdentifierValue>1bed3fb6-b354-4377-9612-2c6dbe8648eb</premis:objectIdentifierValue>\n
+        \           </premis:objectIdentifier>\n            <premis:objectCharacteristics>\n
+        \             <premis:compositionLevel>0</premis:compositionLevel>\n              <premis:fixity>\n
+        \               <premis:messageDigestAlgorithm>sha256</premis:messageDigestAlgorithm>\n
+        \               <premis:messageDigest>b19e86dedabb91c7a5f2706ee12762cbef504562dd0d8f178955dfec8856c0c6</premis:messageDigest>\n
+        \             </premis:fixity>\n              <premis:size>82561</premis:size>\n
+        \             <premis:format>\n                <premis:formatDesignation>\n
+        \                 <premis:formatName>XML</premis:formatName>\n                  <premis:formatVersion>1.0</premis:formatVersion>\n
+        \               </premis:formatDesignation>\n                <premis:formatRegistry>\n
+        \                 <premis:formatRegistryName>PRONOM</premis:formatRegistryName>\n
+        \                 <premis:formatRegistryKey>fmt/101</premis:formatRegistryKey>\n
+        \               </premis:formatRegistry>\n              </premis:format>\n
+        \             <premis:creatingApplication>\n                <premis:dateCreatedByApplication>2021-03-30</premis:dateCreatedByApplication>\n
+        \             </premis:creatingApplication>\n            </premis:objectCharacteristics>\n
+        \           <premis:originalName>%SIPDirectory%objects/submissionDocumentation/transfer-6b3c7d3d-c037-4542-9951-f8db45a4e89b-137497d8-0f5e-4e79-9616-68d91bb3c2ac/METS.xml</premis:originalName>\n
+        \         </premis:object>\n        </mets:xmlData>\n      </mets:mdWrap>\n
+        \   </mets:techMD>\n    <mets:digiprovMD ID=\"digiprovMD_23\">\n      <mets:mdWrap
+        MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n          <premis:event
+        xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>08af2111-1834-445b-9738-f374cda9b292</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>ingestion</premis:eventType>\n
+        \           <premis:eventDateTime>2021-03-30T18:29:35.719343+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail></premis:eventDetail>\n
+        \           </premis:eventDetailInformation>\n            <premis:eventOutcomeInformation>\n
+        \             <premis:eventOutcome></premis:eventOutcome>\n              <premis:eventOutcomeDetail>\n
+        \               <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_24\">\n      <mets:mdWrap MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n
+        \         <premis:event xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>3fa3b9e5-ffc0-4bf5-85f6-c4541d79083d</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>message
+        digest calculation</premis:eventType>\n            <premis:eventDateTime>2021-03-30T18:29:35.800102+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail>program=\"python\";
+        module=\"hashlib.sha256()\"</premis:eventDetail>\n            </premis:eventDetailInformation>\n
+        \           <premis:eventOutcomeInformation>\n              <premis:eventOutcome></premis:eventOutcome>\n
+        \             <premis:eventOutcomeDetail>\n                <premis:eventOutcomeDetailNote>b19e86dedabb91c7a5f2706ee12762cbef504562dd0d8f178955dfec8856c0c6</premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_25\">\n      <mets:mdWrap MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n
+        \         <premis:event xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>d6a9c72c-f980-427e-b1f9-1d3d7de91ae1</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>virus
+        check</premis:eventType>\n            <premis:eventDateTime>2021-03-30T18:29:38.654735+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail>program=\"ClamAV
+        (clamd)\"; version=\"ClamAV 0.102.4\"; virusDefinitions=\"26125/Tue Mar 30
+        07:11:47 2021\"</premis:eventDetail>\n            </premis:eventDetailInformation>\n
+        \           <premis:eventOutcomeInformation>\n              <premis:eventOutcome>Pass</premis:eventOutcome>\n
+        \             <premis:eventOutcomeDetail>\n                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_26\">\n      <mets:mdWrap MDTYPE=\"PREMIS:EVENT\">\n        <mets:xmlData>\n
+        \         <premis:event xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:eventIdentifier>\n
+        \             <premis:eventIdentifierType>UUID</premis:eventIdentifierType>\n
+        \             <premis:eventIdentifierValue>0cff1209-c724-44f4-8a21-13f32237ffc0</premis:eventIdentifierValue>\n
+        \           </premis:eventIdentifier>\n            <premis:eventType>format
+        identification</premis:eventType>\n            <premis:eventDateTime>2021-03-30T18:29:49.312203+00:00</premis:eventDateTime>\n
+        \           <premis:eventDetailInformation>\n              <premis:eventDetail>program=\"Siegfried\";
+        version=\"1.8.0\"</premis:eventDetail>\n            </premis:eventDetailInformation>\n
+        \           <premis:eventOutcomeInformation>\n              <premis:eventOutcome>Positive</premis:eventOutcome>\n
+        \             <premis:eventOutcomeDetail>\n                <premis:eventOutcomeDetailNote>fmt/101</premis:eventOutcomeDetailNote>\n
+        \             </premis:eventOutcomeDetail>\n            </premis:eventOutcomeInformation>\n
+        \           <premis:linkingAgentIdentifier>\n              <premis:linkingAgentIdentifierType>preservation
+        system</premis:linkingAgentIdentifierType>\n              <premis:linkingAgentIdentifierValue>Archivematica-1.11.2</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>RAC</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n            <premis:linkingAgentIdentifier>\n
+        \             <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>\n
+        \             <premis:linkingAgentIdentifierValue>3</premis:linkingAgentIdentifierValue>\n
+        \           </premis:linkingAgentIdentifier>\n          </premis:event>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_27\">\n      <mets:mdWrap MDTYPE=\"PREMIS:AGENT\">\n        <mets:xmlData>\n
+        \         <premis:agent xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:agentIdentifier>\n
+        \             <premis:agentIdentifierType>preservation system</premis:agentIdentifierType>\n
+        \             <premis:agentIdentifierValue>Archivematica-1.11.2</premis:agentIdentifierValue>\n
+        \           </premis:agentIdentifier>\n            <premis:agentName>Archivematica</premis:agentName>\n
+        \           <premis:agentType>software</premis:agentType>\n          </premis:agent>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_28\">\n      <mets:mdWrap MDTYPE=\"PREMIS:AGENT\">\n        <mets:xmlData>\n
+        \         <premis:agent xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:agentIdentifier>\n
+        \             <premis:agentIdentifierType>repository code</premis:agentIdentifierType>\n
+        \             <premis:agentIdentifierValue>RAC</premis:agentIdentifierValue>\n
+        \           </premis:agentIdentifier>\n            <premis:agentName>rockarch.org</premis:agentName>\n
+        \           <premis:agentType>organization</premis:agentType>\n          </premis:agent>\n
+        \       </mets:xmlData>\n      </mets:mdWrap>\n    </mets:digiprovMD>\n    <mets:digiprovMD
+        ID=\"digiprovMD_29\">\n      <mets:mdWrap MDTYPE=\"PREMIS:AGENT\">\n        <mets:xmlData>\n
+        \         <premis:agent xmlns:premis=\"http://www.loc.gov/premis/v3\" xsi:schemaLocation=\"http://www.loc.gov/premis/v3
+        http://www.loc.gov/standards/premis/v3/premis.xsd\" version=\"3.0\">\n            <premis:agentIdentifier>\n
+        \             <premis:agentIdentifierType>Archivematica user pk</premis:agentIdentifierType>\n
+        \             <premis:agentIdentifierValue>3</premis:agentIdentifierValue>\n
+        \           </premis:agentIdentifier>\n            <premis:agentName>username=\"fornax\",
+        first_name=\"\", last_name=\"\"</premis:agentName>\n            <premis:agentType>Archivematica
+        user</premis:agentType>\n          </premis:agent>\n        </mets:xmlData>\n
+        \     </mets:mdWrap>\n    </mets:digiprovMD>\n  </mets:amdSec>\n  <mets:amdSec
+        ID=\"amdSec_5\">\n    <mets:sourceMD ID=\"sourceMD_1\">\n      <mets:mdWrap
+        MDTYPE=\"OTHER\" OTHERMDTYPE=\"BagIt\">\n        <mets:xmlData>\n          <transfer_metadata>\n
+        \           <Date-End>2005-03-24</Date-End>\n            <Origin>aurora</Origin>\n
+        \           <Record-Creators>Desperate Dan Appreciation Society</Record-Creators>\n
+        \           <Language>eng</Language>\n            <Title>kGkOnPSLMVHKSOZwrZzD</Title>\n
+        \           <Internal-Sender-Identifier>6b3c7d3d-c037-4542-9951-f8db45a4e89b</Internal-Sender-Identifier>\n
+        \           <External-Identifier>QYbjRioUiztSAbZgRoNO</External-Identifier>\n
+        \           <Payload-Oxum>14.1</Payload-Oxum>\n            <Internal-Sender-Description>JZHAGwftNYPjgwNnQjUE</Internal-Sender-Description>\n
+        \           <Bagging-Date>2021-03-24T15:55:23.780488</Bagging-Date>\n            <Date-Start>1972-03-24</Date-Start>\n
+        \           <Bag-Software-Agent>bagit.py v1.8.1 &lt;https://github.com/LibraryOfCongress/bagit-python&gt;</Bag-Software-Agent>\n
+        \           <Record-Type>grant records</Record-Type>\n            <Source-Organization>Village
+        Green Preservation Society</Source-Organization>\n            <BagIt-Profile-Identifier>https://aurora.dev.rockarch.org/api/bagit_profiles/13.json</BagIt-Profile-Identifier>\n
+        \         </transfer_metadata>\n        </mets:xmlData>\n      </mets:mdWrap>\n
+        \   </mets:sourceMD>\n  </mets:amdSec>\n  <mets:fileSec>\n    <mets:fileGrp
+        USE=\"original\">\n      <mets:file GROUPID=\"Group-03246b9e-1616-4053-a33e-11c3581de328\"
+        ID=\"file-03246b9e-1616-4053-a33e-11c3581de328\" ADMID=\"amdSec_3\">\n        <mets:FLocat
+        xlink:href=\"objects/sample_file.txt\" LOCTYPE=\"OTHER\" OTHERLOCTYPE=\"SYSTEM\"/>\n
+        \     </mets:file>\n    </mets:fileGrp>\n    <mets:fileGrp USE=\"submissionDocumentation\">\n
+        \     <mets:file GROUPID=\"Group-1bed3fb6-b354-4377-9612-2c6dbe8648eb\" ID=\"file-1bed3fb6-b354-4377-9612-2c6dbe8648eb\"
+        ADMID=\"amdSec_4\">\n        <mets:FLocat xlink:href=\"objects/submissionDocumentation/transfer-6b3c7d3d-c037-4542-9951-f8db45a4e89b-137497d8-0f5e-4e79-9616-68d91bb3c2ac/METS.xml\"
+        LOCTYPE=\"OTHER\" OTHERLOCTYPE=\"SYSTEM\"/>\n      </mets:file>\n    </mets:fileGrp>\n
+        \   <mets:fileGrp USE=\"metadata\">\n      <mets:file GROUPID=\"Group-41c06bf0-6003-4c09-afea-ab15a769f198\"
+        ID=\"file-41c06bf0-6003-4c09-afea-ab15a769f198\" ADMID=\"amdSec_1\">\n        <mets:FLocat
+        xlink:href=\"objects/metadata/transfers/6b3c7d3d-c037-4542-9951-f8db45a4e89b-137497d8-0f5e-4e79-9616-68d91bb3c2ac/manifest-sha256.txt\"
+        LOCTYPE=\"OTHER\" OTHERLOCTYPE=\"SYSTEM\"/>\n      </mets:file>\n      <mets:file
+        GROUPID=\"Group-b88e7081-f565-4d1b-b785-5c9cd0fd2e17\" ID=\"file-b88e7081-f565-4d1b-b785-5c9cd0fd2e17\"
+        ADMID=\"amdSec_2\">\n        <mets:FLocat xlink:href=\"objects/metadata/transfers/6b3c7d3d-c037-4542-9951-f8db45a4e89b-137497d8-0f5e-4e79-9616-68d91bb3c2ac/manifest-sha512.txt\"
+        LOCTYPE=\"OTHER\" OTHERLOCTYPE=\"SYSTEM\"/>\n      </mets:file>\n    </mets:fileGrp>\n
+        \ </mets:fileSec>\n  <mets:structMap ID=\"structMap_1\" LABEL=\"Archivematica
+        default\" TYPE=\"physical\">\n    <mets:div LABEL=\"6b3c7d3d-c037-4542-9951-f8db45a4e89b-ddef17b8-0434-41d3-93d5-a89c63d38556\"
+        TYPE=\"Directory\" DMDID=\"dmdSec_1\">\n      <mets:div LABEL=\"objects\"
+        TYPE=\"Directory\" ADMID=\"amdSec_5\">\n        <mets:div LABEL=\"metadata\"
+        TYPE=\"Directory\">\n          <mets:div LABEL=\"transfers\" TYPE=\"Directory\">\n
+        \           <mets:div LABEL=\"6b3c7d3d-c037-4542-9951-f8db45a4e89b-137497d8-0f5e-4e79-9616-68d91bb3c2ac\"
+        TYPE=\"Directory\">\n              <mets:div LABEL=\"manifest-sha256.txt\"
+        TYPE=\"Item\">\n                <mets:fptr FILEID=\"file-41c06bf0-6003-4c09-afea-ab15a769f198\"/>\n
+        \             </mets:div>\n              <mets:div LABEL=\"manifest-sha512.txt\"
+        TYPE=\"Item\">\n                <mets:fptr FILEID=\"file-b88e7081-f565-4d1b-b785-5c9cd0fd2e17\"/>\n
+        \             </mets:div>\n            </mets:div>\n          </mets:div>\n
+        \       </mets:div>\n        <mets:div LABEL=\"sample_file.txt\" TYPE=\"Item\">\n
+        \         <mets:fptr FILEID=\"file-03246b9e-1616-4053-a33e-11c3581de328\"/>\n
+        \       </mets:div>\n        <mets:div LABEL=\"submissionDocumentation\" TYPE=\"Directory\">\n
+        \         <mets:div LABEL=\"transfer-6b3c7d3d-c037-4542-9951-f8db45a4e89b-137497d8-0f5e-4e79-9616-68d91bb3c2ac\"
+        TYPE=\"Directory\">\n            <mets:div LABEL=\"METS.xml\" TYPE=\"Item\">\n
+        \             <mets:fptr FILEID=\"file-1bed3fb6-b354-4377-9612-2c6dbe8648eb\"/>\n
+        \           </mets:div>\n          </mets:div>\n        </mets:div>\n      </mets:div>\n
+        \   </mets:div>\n  </mets:structMap>\n</mets:mets>\n\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\06b3c7d3d-c037-4542-9951-f8db45a4e89b-ddef17b8-0434-41d3-93d5-a89c63d38556/processingMCP.xml\0\0\0\0\0\0\0\0\00000664\00000515\00000515\000000013613\014030667061\0030023\0
+        0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0ustar
+        \ \0archivematica\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0archivematica\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0<processingMCP>\n
+        \ <preconfiguredChoices>\n    <!-- Store DIP -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>5e58066d-e113-4383-b20b-f301ed4d751c</appliesTo>\n      <goToChain>8d29eb3d-a8a8-4347-806e-3d8227ed44a1</goToChain>\n
+        \   </preconfiguredChoice>\n    <!-- Select compression level -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>01c651cb-c174-4ba4-b985-1d87a44d6754</appliesTo>\n      <goToChain>414da421-b83f-4648-895f-a34840e3c3f5</goToChain>\n
+        \   </preconfiguredChoice>\n    <!-- Perform file format identification (Submission
+        documentation & metadata) -->\n    <preconfiguredChoice>\n      <appliesTo>087d27be-c719-47d8-9bbb-9a7d8b609c44</appliesTo>\n
+        \     <goToChain>4dec164b-79b0-4459-8505-8095af9655b5</goToChain>\n    </preconfiguredChoice>\n
+        \   <!-- Examine contents -->\n    <preconfiguredChoice>\n      <appliesTo>accea2bf-ba74-4a3a-bb97-614775c74459</appliesTo>\n
+        \     <goToChain>e0a39199-c62a-4a2f-98de-e9d1116460a8</goToChain>\n    </preconfiguredChoice>\n
+        \   <!-- Select compression algorithm -->\n    <preconfiguredChoice>\n      <appliesTo>01d64f58-8295-4b7b-9cab-8f1b153a504f</appliesTo>\n
+        \     <goToChain>9475447c-9889-430c-9477-6287a9574c5b</goToChain>\n    </preconfiguredChoice>\n
+        \   <!-- Create SIP(s) -->\n    <preconfiguredChoice>\n      <appliesTo>bb194013-597c-4e4a-8493-b36d190f8717</appliesTo>\n
+        \     <goToChain>61cfa825-120e-4b17-83e6-51a42b67d969</goToChain>\n    </preconfiguredChoice>\n
+        \   <!-- Delete packages after extraction -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>f19926dd-8fb5-4c79-8ade-c83f61f55b40</appliesTo>\n      <goToChain>72e8443e-a8eb-49a8-ba5f-76d52f960bde</goToChain>\n
+        \   </preconfiguredChoice>\n    <!-- Normalize (match 1 for \"Normalize for
+        preservation and access\") -->\n    <preconfiguredChoice>\n      <appliesTo>cb8e5706-e73f-472f-ad9b-d1236af8095f</appliesTo>\n
+        \     <goToChain>b93cecd4-71f2-4e28-bc39-d32fd62c5a94</goToChain>\n    </preconfiguredChoice>\n
+        \   <!-- Bind PIDs -->\n    <preconfiguredChoice>\n      <appliesTo>a2ba5278-459a-4638-92d9-38eb1588717d</appliesTo>\n
+        \     <goToChain>44a7c397-8187-4fd2-b8f7-c61737c4df49</goToChain>\n    </preconfiguredChoice>\n
+        \   <!-- Perform file format identification (Transfer) -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>f09847c2-ee51-429a-9478-a860477f6b8d</appliesTo>\n      <goToChain>d97297c7-2b49-4cfe-8c9f-0613d63ed763</goToChain>\n
+        \   </preconfiguredChoice>\n    <!-- Store DIP location -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>cd844b6e-ab3c-4bc6-b34f-7103f88715de</appliesTo>\n      <goToChain>/api/v2/location/eb45c70d-da71-4bb6-88e8-178ac2cc73d0/</goToChain>\n
+        \   </preconfiguredChoice>\n    <!-- Generate transfer structure report -->\n
+        \   <preconfiguredChoice>\n      <appliesTo>56eebd45-5600-4768-a8c2-ec0114555a3d</appliesTo>\n
+        \     <goToChain>e9eaef1e-c2e0-4e3b-b942-bfb537162795</goToChain>\n    </preconfiguredChoice>\n
+        \   <!-- Perform policy checks on originals -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>70fc7040-d4fb-4d19-a0e6-792387ca1006</appliesTo>\n      <goToChain>3e891cc4-39d2-4989-a001-5107a009a223</goToChain>\n
+        \   </preconfiguredChoice>\n    <!-- Transcribe files (OCR) -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>82ee9ad2-2c74-4c7c-853e-e4eaf68fc8b6</appliesTo>\n      <goToChain>0a24787c-00e3-4710-b324-90e792bfb484</goToChain>\n
+        \   </preconfiguredChoice>\n    <!-- Reminder: add metadata if desired -->\n
+        \   <preconfiguredChoice>\n      <appliesTo>eeb23509-57e2-4529-8857-9d62525db048</appliesTo>\n
+        \     <goToChain>5727faac-88af-40e8-8c10-268644b0142d</goToChain>\n    </preconfiguredChoice>\n
+        \   <!-- Generate thumbnails -->\n    <preconfiguredChoice>\n      <appliesTo>498f7a6d-1b8c-431a-aa5d-83f14f3c5e65</appliesTo>\n
+        \     <goToChain>972fce6c-52c8-4c00-99b9-d6814e377974</goToChain>\n    </preconfiguredChoice>\n
+        \   <!-- Store AIP -->\n    <preconfiguredChoice>\n      <appliesTo>2d32235c-02d4-4686-88a6-96f4d6c7b1c3</appliesTo>\n
+        \     <goToChain>9efab23c-31dc-4cbd-a39d-bb1665460cbe</goToChain>\n    </preconfiguredChoice>\n
+        \   <!-- Perform policy checks on access derivatives -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>8ce07e94-6130-4987-96f0-2399ad45c5c2</appliesTo>\n      <goToChain>76befd52-14c3-44f9-838f-15a4e01624b0</goToChain>\n
+        \   </preconfiguredChoice>\n    <!-- Perform file format identification (Ingest)
+        -->\n    <preconfiguredChoice>\n      <appliesTo>7a024896-c4f7-4808-a240-44c87c762bc5</appliesTo>\n
+        \     <goToChain>5b3c8268-5b33-4b70-b1aa-0e4540fe03d1</goToChain>\n    </preconfiguredChoice>\n
+        \   <!-- Perform policy checks on preservation derivatives -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>153c5f41-3cfb-47ba-9150-2dd44ebc27df</appliesTo>\n      <goToChain>b7ce05f0-9d94-4b3e-86cc-d4b2c6dba546</goToChain>\n
+        \   </preconfiguredChoice>\n    <!-- Assign UUIDs to directories -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>bd899573-694e-4d33-8c9b-df0af802437d</appliesTo>\n      <goToChain>2dc3f487-e4b0-4e07-a4b3-6216ed24ca14</goToChain>\n
+        \   </preconfiguredChoice>\n    <!-- Store AIP location -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>b320ce81-9982-408a-9502-097d0daa48fa</appliesTo>\n      <goToChain>/api/v2/location/2b57ff66-cf0c-4e25-a2f1-7e044a88d007/</goToChain>\n
+        \   </preconfiguredChoice>\n    <!-- Document empty directories -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>d0dfa5fc-e3c2-4638-9eda-f96eea1070e0</appliesTo>\n      <goToChain>65273f18-5b4e-4944-af4f-09be175a88e8</goToChain>\n
+        \   </preconfiguredChoice>\n    <!-- Extract packages -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>dec97e3c-5598-4b99-b26e-f87a435a6b7f</appliesTo>\n      <goToChain>79f1f5af-7694-48a4-b645-e42790bbf870</goToChain>\n
+        \   </preconfiguredChoice>\n    <!-- Approve normalization -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>de909a42-c5b5-46e1-9985-c031b50e9d30</appliesTo>\n      <goToChain>1e0df175-d56d-450d-8bee-7df1dc7ae815</goToChain>\n
+        \   </preconfiguredChoice>\n    <!-- Upload DIP -->\n    <preconfiguredChoice>\n
+        \     <appliesTo>92879a29-45bf-4f0b-ac43-e64474f0f2f9</appliesTo>\n      <goToChain>3572f844-5e69-4000-a24b-4e32d3487f82</goToChain>\n
+        \   </preconfiguredChoice>\n  </preconfiguredChoices>\n</processingMCP>\n\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+    headers:
+      Cache-Control:
+      - no-cache
+      Connection:
+      - keep-alive
+      Content-Disposition:
+      - attachment; filename="6b3c7d3d-c037-4542-9951-f8db45a4e89b-ddef17b8-0434-41d3-93d5-a89c63d38556.tar"
+      Content-Language:
+      - en
+      Content-Length:
+      - '81920'
+      Content-Type:
+      - application/x-tar
+      Date:
+      - Mon, 18 Oct 2021 20:53:32 GMT
+      Server:
+      - nginx
+      Vary:
+      - Accept, Accept-Language, Cookie
+      X-Frame-Options:
+      - SAMEORIGIN
+    status:
+      code: 200
+      message: OK
 version: 1

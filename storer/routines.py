@@ -71,12 +71,14 @@ class DownloadRoutine(Routine):
             try:
                 download_path = am_client.download_package(am_client.package_uuid)
                 tmp_path = join(
-                    self.tmp_dir, '{}{}'.format(am_client.package_uuid, self.get_extension(package_data)))
+                    self.tmp_dir, f"{am_client.package_uuid}{self.get_extension(package_data)}")
                 move(download_path, tmp_path)
             except Exception as e:
-                raise RoutineError("Error downloading data: {}".format(e))
+                raise RoutineError(f"Error downloading data: {e}")
             package.type = package_data['package_type'].lower()
             package.data = package_data
+        else:
+            raise RoutineError(f"Package {package.archivematica_identifier} is not downloadable")
 
     def get_extension(self, package):
         return (splitext(package['current_path'])[1]
