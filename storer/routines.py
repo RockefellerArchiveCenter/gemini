@@ -44,7 +44,7 @@ class Routine:
                 raise Exception(str(e), package.archivematica_identifier)
         else:
             message = self.idle_message
-        return (message, [package.bag_identifier] if package else None)
+        return (message, [package.archivematica_identifier] if package else None)
 
 
 class DownloadRoutine(Routine):
