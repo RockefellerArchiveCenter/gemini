@@ -96,8 +96,10 @@ rdflib==5.0.0
     # via
     #   pyfc4
     #   rdflib-jsonld
-rdflib-jsonld==0.6.2
-    # via pyfc4
+rdflib-jsonld==0.5.0
+    # via
+    #   -r requirements.in
+    #   pyfc4
 requests==2.26.0
     # via
     #   -r requirements.in

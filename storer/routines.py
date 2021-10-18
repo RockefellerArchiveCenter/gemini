@@ -177,10 +177,11 @@ class StoreRoutine(Routine):
         """Returns a PREMIS schema URL based on the version number provided."""
         return 'http://www.loc.gov/premis/v3' if version.startswith("3.") else 'info:lc/xmlns/premis-v2'
 
-    def clean_up(self, uuid):
-        """Removes files and directories for a given transfer."""
+    def clean_up(self, uuid, src_file=False):
+        """Removes directories for a given transfer. If `src_file` argument is
+        true, removes source file matching the UUID as well."""
         for d in listdir(self.tmp_dir):
-            if uuid in d:
+            if uuid in d and (src_file or isdir(join(self.tmp_dir, d))):
                 remove_file_or_dir(join(self.tmp_dir, d))
 
     def store_aip(self, package, container, mimetypes):
@@ -219,7 +220,8 @@ class PostRoutine(object):
             package.process_status = self.end_status
             package.save()
             package_ids.append(package.internal_sender_identifier)
-        return (self.success_message, package_ids)
+        msg = self.success_message if len(package_ids) else self.idle_message
+        return (msg, package_ids)
 
 
 class DeliverRoutine(PostRoutine):
@@ -228,6 +230,7 @@ class DeliverRoutine(PostRoutine):
     end_status = Package.DELIVERED
     url = settings.DELIVERY_URL
     success_message = "Package data delivered."
+    idle_message = "No package data waiting to be delivered."
 
     def get_data(self, package):
         return {'identifier': package.internal_sender_identifier,
@@ -243,6 +246,7 @@ class CleanupRequester(PostRoutine):
     end_status = Package.CLEANED_UP
     url = settings.CLEANUP_URL
     success_message = "Requests sent to clean up Packages."
+    idle_message = "No packages waiting for cleanup."
 
     def get_data(self, package):
         return {"identifier": package.internal_sender_identifier}
