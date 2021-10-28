@@ -17,4 +17,5 @@ repos:
 - repo: https://github.com/jazzband/pip-tools
   rev: 6.2.0
   hooks:
-    - id: pip-compile
+  - id: pip-compile
+    additional_dependencies: [setuptools<58]  # added to work around use_2to3 error in rdflib-jsonld

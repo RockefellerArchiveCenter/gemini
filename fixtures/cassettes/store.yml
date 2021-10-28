@@ -8132,23 +8132,507 @@ interactions:
     body: '{"identifier": "10fd15d0-6b65-43e6-a8ec-132d1d46f024", "uri": "http://dev.fedora.rac.marist.cloud:8080/fedora/rest/70588e68-7742-49aa-a0ef-774a46b17b0a",
       "package_type": "aip"}'
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      Content-Length: ['176']
-      Content-Type: [application/json]
-      User-Agent: [python-requests/2.20.0]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '176'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.20.0
     method: POST
     uri: http://aquarius-web:8002/packages/
   response:
-    body: {string: '{"url":"http://aquarius-web:8002/packages/9/","fedora_uri":"http://dev.fedora.rac.marist.cloud:8080/fedora/rest/70588e68-7742-49aa-a0ef-774a46b17b0a","identifier":"10fd15d0-6b65-43e6-a8ec-132d1d46f024","package_type":"aip","process_status":10,"transfer_data":null,"accession_data":null,"created":"2018-11-19T03:19:46.925128Z","last_modified":"2018-11-19T03:19:46.925170Z"}'}
+    body:
+      string: '{"url":"http://aquarius-web:8002/packages/9/","fedora_uri":"http://dev.fedora.rac.marist.cloud:8080/fedora/rest/70588e68-7742-49aa-a0ef-774a46b17b0a","identifier":"10fd15d0-6b65-43e6-a8ec-132d1d46f024","package_type":"aip","process_status":10,"transfer_data":null,"accession_data":null,"created":"2018-11-19T03:19:46.925128Z","last_modified":"2018-11-19T03:19:46.925170Z"}'
     headers:
-      Allow: ['GET, POST, HEAD, OPTIONS']
-      Content-Length: ['372']
-      Content-Type: [application/json]
-      Date: ['Mon, 19 Nov 2018 03:19:46 GMT']
-      Server: [WSGIServer/0.2 CPython/3.6.5]
-      Vary: ['Accept, Cookie']
-      X-Frame-Options: [SAMEORIGIN]
-    status: {code: 200, message: OK}
+      Allow:
+      - GET, POST, HEAD, OPTIONS
+      Content-Length:
+      - '372'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 19 Nov 2018 03:19:46 GMT
+      Server:
+      - WSGIServer/0.2 CPython/3.6.5
+      Vary:
+      - Accept, Cookie
+      X-Frame-Options:
+      - SAMEORIGIN
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+    method: HEAD
+    uri: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072
+  response:
+    body:
+      string: ''
+    headers:
+      Content-Language:
+      - en
+      Content-Type:
+      - text/html;charset=utf-8
+      Date:
+      - Mon, 18 Oct 2021 20:55:57 GMT
+    status:
+      code: 404
+      message: ''
+- request:
+    body: '[]'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2'
+      Content-Type:
+      - application/ld+json
+      User-Agent:
+      - python-requests/2.26.0
+    method: PUT
+    uri: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072
+  response:
+    body:
+      string: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072
+    headers:
+      Content-Length:
+      - '84'
+      Content-Type:
+      - text/plain
+      Date:
+      - Mon, 18 Oct 2021 20:55:57 GMT
+      ETag:
+      - W/"78305355097d4558268a2653cc751e239245443d"
+      Last-Modified:
+      - Mon, 18 Oct 2021 20:55:57 GMT
+      Location:
+      - http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072
+    status:
+      code: 201
+      message: ''
+- request:
+    body: 'PREFIX pcdm: <http://pcdm.org/models#>
+
+      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+
+      DELETE {
+
+
+      }
+
+
+
+      INSERT {
+
+      <http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072>
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://pcdm.org/models#Object>
+      .
+
+
+      }
+
+
+      WHERE {}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '304'
+      Content-Type:
+      - application/sparql-update
+      User-Agent:
+      - python-requests/2.26.0
+    method: PATCH
+    uri: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/fcr:metadata
+  response:
+    body:
+      string: ''
+    headers:
+      Date:
+      - Mon, 18 Oct 2021 20:55:57 GMT
+      ETag:
+      - W/"187a78e6e21219cc3adfe23be01b11736bde3133"
+      Last-Modified:
+      - Mon, 18 Oct 2021 20:55:57 GMT
+    status:
+      code: 204
+      message: ''
+- request:
+    body: "[\n  {\n    \"@id\": \"http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files\",\n
+      \   \"@type\": [\n      \"http://www.w3.org/ns/ldp#DirectContainer\"\n    ],\n
+      \   \"http://www.w3.org/ns/ldp#hasMemberRelation\": [\n      {\n        \"@id\":
+      \"http://pcdm.org/models#hasFile\"\n      }\n    ],\n    \"http://www.w3.org/ns/ldp#membershipResource\":
+      [\n      {\n        \"@id\": \"http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072\"\n
+      \     }\n    ]\n  }\n]"
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '487'
+      Content-Type:
+      - application/ld+json
+      User-Agent:
+      - python-requests/2.26.0
+    method: PUT
+    uri: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files
+  response:
+    body:
+      string: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files
+    headers:
+      Content-Length:
+      - '90'
+      Content-Type:
+      - text/plain
+      Date:
+      - Mon, 18 Oct 2021 20:55:57 GMT
+      ETag:
+      - W/"84531ab1037b15d778952bb3d031aa66b9b37417"
+      Last-Modified:
+      - Mon, 18 Oct 2021 20:55:57 GMT
+      Location:
+      - http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files
+    status:
+      code: 201
+      message: ''
+- request:
+    body: "[\n  {\n    \"@id\": \"http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/members\",\n
+      \   \"@type\": [\n      \"http://www.w3.org/ns/ldp#IndirectContainer\"\n    ],\n
+      \   \"http://www.w3.org/ns/ldp#hasMemberRelation\": [\n      {\n        \"@id\":
+      \"http://pcdm.org/models#hasMember\"\n      }\n    ],\n    \"http://www.w3.org/ns/ldp#insertedContentRelation\":
+      [\n      {\n        \"@id\": \"http://www.openarchives.org/ore/terms/proxyFor\"\n
+      \     }\n    ],\n    \"http://www.w3.org/ns/ldp#membershipResource\": [\n      {\n
+      \       \"@id\": \"http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072\"\n
+      \     }\n    ]\n  }\n]"
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '638'
+      Content-Type:
+      - application/ld+json
+      User-Agent:
+      - python-requests/2.26.0
+    method: PUT
+    uri: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/members
+  response:
+    body:
+      string: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/members
+    headers:
+      Content-Length:
+      - '92'
+      Content-Type:
+      - text/plain
+      Date:
+      - Mon, 18 Oct 2021 20:55:57 GMT
+      ETag:
+      - W/"a1112e10d457292d3b496e4b74ee9fa333b8561f"
+      Last-Modified:
+      - Mon, 18 Oct 2021 20:55:57 GMT
+      Location:
+      - http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/members
+    status:
+      code: 201
+      message: ''
+- request:
+    body: "[\n  {\n    \"@id\": \"http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/related\",\n
+      \   \"@type\": [\n      \"http://www.w3.org/ns/ldp#IndirectContainer\"\n    ],\n
+      \   \"http://www.w3.org/ns/ldp#hasMemberRelation\": [\n      {\n        \"@id\":
+      \"http://www.openarchives.org/ore/terms/aggregates\"\n      }\n    ],\n    \"http://www.w3.org/ns/ldp#insertedContentRelation\":
+      [\n      {\n        \"@id\": \"http://www.openarchives.org/ore/terms/proxyFor\"\n
+      \     }\n    ],\n    \"http://www.w3.org/ns/ldp#membershipResource\": [\n      {\n
+      \       \"@id\": \"http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072\"\n
+      \     }\n    ]\n  }\n]"
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '654'
+      Content-Type:
+      - application/ld+json
+      User-Agent:
+      - python-requests/2.26.0
+    method: PUT
+    uri: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/related
+  response:
+    body:
+      string: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/related
+    headers:
+      Content-Length:
+      - '92'
+      Content-Type:
+      - text/plain
+      Date:
+      - Mon, 18 Oct 2021 20:55:57 GMT
+      ETag:
+      - W/"37e4e52c949e235927a4ab443c3540b0764c7961"
+      Last-Modified:
+      - Mon, 18 Oct 2021 20:55:57 GMT
+      Location:
+      - http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/related
+    status:
+      code: 201
+      message: ''
+- request:
+    body: "[\n  {\n    \"@id\": \"http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/associated\",\n
+      \   \"@type\": [\n      \"http://www.w3.org/ns/ldp#DirectContainer\"\n    ],\n
+      \   \"http://www.w3.org/ns/ldp#hasMemberRelation\": [\n      {\n        \"@id\":
+      \"http://pcdm.org/models#hasRelatedFile\"\n      }\n    ],\n    \"http://www.w3.org/ns/ldp#membershipResource\":
+      [\n      {\n        \"@id\": \"http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072\"\n
+      \     }\n    ]\n  }\n]"
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '499'
+      Content-Type:
+      - application/ld+json
+      User-Agent:
+      - python-requests/2.26.0
+    method: PUT
+    uri: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/associated
+  response:
+    body:
+      string: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/associated
+    headers:
+      Content-Length:
+      - '95'
+      Content-Type:
+      - text/plain
+      Date:
+      - Mon, 18 Oct 2021 20:55:58 GMT
+      ETag:
+      - W/"ca57e60438f1fddea05659f480c971357dc38a3e"
+      Last-Modified:
+      - Mon, 18 Oct 2021 20:55:58 GMT
+      Location:
+      - http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/associated
+    status:
+      code: 201
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+    method: HEAD
+    uri: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files/03246b9e-1616-4053-a33e-11c3581de328-sample_file.txt
+  response:
+    body:
+      string: ''
+    headers:
+      Content-Language:
+      - en
+      Content-Type:
+      - text/html;charset=utf-8
+      Date:
+      - Mon, 18 Oct 2021 20:55:58 GMT
+    status:
+      code: 404
+      message: ''
+- request:
+    body: !!python/object/new:_io.BytesIO
+      state: !!python/tuple
+      - !!binary |
+        amxrc2ZqbGFqZmxzZAo=
+      - 0
+      - null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '14'
+      Content-Type:
+      - application/octet-stream
+      User-Agent:
+      - python-requests/2.26.0
+    method: PUT
+    uri: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files/03246b9e-1616-4053-a33e-11c3581de328-sample_file.txt
+  response:
+    body:
+      string: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files/03246b9e-1616-4053-a33e-11c3581de328-sample_file.txt
+    headers:
+      Content-Length:
+      - '143'
+      Content-Type:
+      - text/plain
+      Date:
+      - Mon, 18 Oct 2021 20:55:58 GMT
+      ETag:
+      - '"4061daa008a24eaf51c757a3fef88d51dd4d359c"'
+      Last-Modified:
+      - Mon, 18 Oct 2021 20:55:58 GMT
+      Link:
+      - <http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files/03246b9e-1616-4053-a33e-11c3581de328-sample_file.txt/fcr:metadata>;
+        rel="describedby"; anchor="http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files/03246b9e-1616-4053-a33e-11c3581de328-sample_file.txt"
+      Location:
+      - http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files/03246b9e-1616-4053-a33e-11c3581de328-sample_file.txt
+    status:
+      code: 201
+      message: ''
+- request:
+    body: 'PREFIX pcdm: <http://pcdm.org/models#>
+
+      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+
+      DELETE {
+
+
+      }
+
+
+
+      INSERT {
+
+      <http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files/03246b9e-1616-4053-a33e-11c3581de328-sample_file.txt>
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://pcdm.org/models#File>
+      .
+
+
+      }
+
+
+      WHERE {}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '361'
+      Content-Type:
+      - application/sparql-update
+      User-Agent:
+      - python-requests/2.26.0
+    method: PATCH
+    uri: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files/03246b9e-1616-4053-a33e-11c3581de328-sample_file.txt/fcr:metadata
+  response:
+    body:
+      string: ''
+    headers:
+      Date:
+      - Mon, 18 Oct 2021 20:55:58 GMT
+      ETag:
+      - W/"f885527455a3973044fa466d24f295fb2a39d222"
+      Last-Modified:
+      - Mon, 18 Oct 2021 20:55:59 GMT
+    status:
+      code: 204
+      message: ''
+- request:
+    body: 'PREFIX pcdm: <http://pcdm.org/models#>
+
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+      PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+
+      DELETE {
+
+
+      }
+
+
+
+      INSERT {
+
+      <http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files/03246b9e-1616-4053-a33e-11c3581de328-sample_file.txt>
+      <http://www.w3.org/2000/01/rdf-schema#label> "03246b9e-1616-4053-a33e-11c3581de328-sample_file.txt"^^<http://www.w3.org/2001/XMLSchema#string>
+      .
+
+      <http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files/03246b9e-1616-4053-a33e-11c3581de328-sample_file.txt>
+      <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://pcdm.org/models#File>
+      .
+
+      <http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files/03246b9e-1616-4053-a33e-11c3581de328-sample_file.txt>
+      <http://purl.org/dc/elements/1.1/format> "application/octet-stream"^^<http://www.w3.org/2001/XMLSchema#string>
+      .
+
+
+      }
+
+
+      WHERE {}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1010'
+      Content-Type:
+      - application/sparql-update
+      User-Agent:
+      - python-requests/2.26.0
+    method: PATCH
+    uri: http://fedora.dev.rockarch.org:8080/fedora/rest/b663b040-5718-427c-ac84-26fc48191072/files/03246b9e-1616-4053-a33e-11c3581de328-sample_file.txt/fcr:metadata
+  response:
+    body:
+      string: ''
+    headers:
+      Date:
+      - Mon, 18 Oct 2021 20:55:58 GMT
+      ETag:
+      - W/"ad1d17c306f018065960c9b4f13142573b782450"
+      Last-Modified:
+      - Mon, 18 Oct 2021 20:55:59 GMT
+    status:
+      code: 204
+      message: ''
 version: 1

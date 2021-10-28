@@ -1,23 +1,22 @@
 import json
 import shutil
 import tarfile
+from os import rename
 from os.path import join, splitext
 
-import py7zlib
+import py7zr
 import requests
+from gemini import settings
 
 
 def extract_file(archive, src, dest):
     ext = splitext(archive)[1]
     if ext == '.7z':
-        fp = open(archive, 'rb')
-        a = py7zlib.Archive7z(fp)
-        for name in a.getnames():
-            if name.endswith(src):
-                outfile = open(dest, 'wb')
-                outfile.write(a.getmember(name).read())
-                outfile.close()
-        fp.close()
+        with py7zr.SevenZipFile(archive, 'r') as archive:
+            for name in archive.getnames():
+                if name.endswith(src):
+                    archive.extract(path=settings.TMP_DIR, targets=[name])
+                    rename(join(settings.TMP_DIR, name), dest)
     elif ext == '.tar':
         tf = tarfile.open(archive, mode="r")
         for member in tf.getmembers():
