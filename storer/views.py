@@ -1,4 +1,4 @@
-from asterism.views import RoutineView
+from asterism.views import RoutineView, prepare_response
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -41,9 +41,8 @@ class PackageViewSet(ModelViewSet):
             Package.objects.create(
                 archivematica_identifier=archivematica_identifier,
                 process_status=Package.CREATED)
-            return Response(
-                {"detail": f"Package for identifier {archivematica_identifier} created"},
-                status=status.HTTP_201_CREATED)
+            message = prepare_response("Package created.", archivematica_identifier)
+            return Response(message, status=status.HTTP_201_CREATED)
         return Response(
             {"detail": f"A package with the identifier {archivematica_identifier} already exists."},
             status=status.HTTP_400_BAD_REQUEST)
