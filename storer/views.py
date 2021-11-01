@@ -41,7 +41,7 @@ class PackageViewSet(ModelViewSet):
             Package.objects.create(
                 archivematica_identifier=archivematica_identifier,
                 process_status=Package.CREATED)
-            message = prepare_response("Package created.", archivematica_identifier)
+            message = prepare_response(("Package created.", archivematica_identifier))
             return Response(message, status=status.HTTP_201_CREATED)
         return Response(
             {"detail": f"A package with the identifier {archivematica_identifier} already exists."},
