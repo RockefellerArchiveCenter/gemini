@@ -47,18 +47,11 @@ idna==3.3
     # via
     #   requests
     #   yarl
-importlib-metadata==4.8.2
-    # via
-    #   jsonschema
-    #   pluggy
-    #   py7zr
-    #   pybcj
-    #   pytest
 iniconfig==1.1.1
     # via pytest
 isodate==0.6.0
     # via rdflib
-jsonschema==3.2.0
+jsonschema==4.2.1
     # via -r requirements.in
 multidict==5.2.0
     # via yarl
@@ -123,7 +116,6 @@ six==1.16.0
     # via
     #   amclient
     #   isodate
-    #   jsonschema
     #   odin
     #   rdflib
     #   vcrpy
@@ -137,12 +129,6 @@ toml==0.10.2
     # via pytest
 tomli==1.2.2
     # via coverage
-typing-extensions==3.10.0.2
-    # via
-    #   asgiref
-    #   gitpython
-    #   importlib-metadata
-    #   yarl
 uritemplate==4.1.1
     # via -r requirements.in
 urllib3==1.26.7
@@ -155,8 +141,3 @@ wrapt==1.13.3
     # via vcrpy
 yarl==1.7.2
     # via vcrpy
-zipp==3.6.0
-    # via importlib-metadata
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools
