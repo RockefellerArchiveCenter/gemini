@@ -1,5 +1,5 @@
 amclient==1.2.0
-asterism==0.7.2
+asterism==0.7.4
 Django==3.2.9
 djangorestframework==3.12.4
 health-check==3.4.1
