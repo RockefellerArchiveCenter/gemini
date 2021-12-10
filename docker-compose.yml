@@ -8,10 +8,12 @@ services:
   gemini-web:
     build: .
     entrypoint: /code/entrypoint.sh
+    environment:
+      - APPLICATION_PORT=${APPLICATION_PORT:-8006}
     volumes:
       - .:/code
     ports:
-      - "8006:8006"
+      - "${APPLICATION_PORT:-8006}:${APPLICATION_PORT:-8006}"
     depends_on:
       - gemini-db
 
