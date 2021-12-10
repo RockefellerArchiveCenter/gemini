@@ -9,7 +9,6 @@ SQL_PASSWORD = "postgres"  # password for the application database (string)
 SQL_HOST = "gemini-db"  # host for the application database (string)
 SQL_PORT = 5432  # port on which the application database can be reached (integer)
 
-STORAGE_ROOT = "/" # absolute path to root of attached file storage (string)
 STORAGE_TMP_DIR = "tmp" # temporary directory for transfers, relative to storage root (string)
 
 AM_BASEURL = "http://archivematica-dashboard:8000" # Base URL for the Archivematica Dashboard API (string)
