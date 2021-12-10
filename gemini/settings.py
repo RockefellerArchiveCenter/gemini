@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 
-import gemini.config as CF
+from gemini import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,12 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'j&!jzlr5i!%8g2agh%!6^)*h)y+l0gezhjwt+i2!xitbdsqtn8'
+SECRET_KEY = config.DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = CF.DEBUG
+DEBUG = config.DJANGO_DEBUG
 
-ALLOWED_HOSTS = CF.ALLOWED_HOSTS
+ALLOWED_HOSTS = config.DJANGO_ALLOWED_HOSTS
 
 # Application definition
 
@@ -59,7 +59,7 @@ ROOT_URLCONF = 'gemini.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR, os.path.join(BASE_DIR, 'storer', 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,7 +74,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'gemini.wsgi.application'
 
-DATABASES = CF.DATABASES
+DATABASES = {
+    "default": {
+        "ENGINE": config.SQL_ENGINE,
+        "NAME": config.SQL_DATABASE,
+        "USER": config.SQL_USER,
+        "PASSWORD": config.SQL_PASSWORD,
+        "HOST": config.SQL_HOST,
+        "PORT": config.SQL_PORT,
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -113,18 +122,29 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = CF.STATIC_ROOT
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 CRON_CLASSES = [
     "storer.cron.StoreAIPs",
     "storer.cron.StoreDIPs",
 ]
+FEDORA = {
+    "baseurl": config.FEDORA_BASEURL,
+    "username": config.FEDORA_USERNAME,
+    "password": config.FEDORA_PASSWORD
+}
 
-ARCHIVEMATICA = CF.ARCHIVEMATICA
-FEDORA = CF.FEDORA
-TMP_DIR = CF.TMP_DIR
-DELIVERY_URL = CF.DELIVERY_URL
-CLEANUP_URL = CF.CLEANUP_URL
+ARCHIVEMATICA = {
+    "baseurl": config.AM_BASEURL,
+    "username": config.AM_USERNAME,
+    "api_key": config.AM_API_KEY,
+    "pipeline_uuids": config.AM_PIPELINE_UUIDS
+}
+
+
+TMP_DIR = config.TMP_DIR
+DELIVERY_URL = config.DELIVERY_URL
+CLEANUP_URL = config.CLEANUP_URL
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

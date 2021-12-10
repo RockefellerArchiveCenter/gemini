@@ -1,36 +1,25 @@
-DEBUG = True
+DJANGO_DEBUG = True # run Django in debug mode, which outputs stack traces to the UI, set to False for production (boolean)
+DJANGO_SECRET_KEY = "&0-xb06z0kd7m%dic^wn9wdgft&yqdb_m)3uq54p+r%=5l!k$q" # used by Django to create hashes (string)
+DJANGO_ALLOWED_HOSTS = ["localhost", "fornax-web"] # hosts Scorpio will respond to (list of strings)
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'HOST': 'gemini-db',
-        'PORT': 5432,
-    }
-}
+SQL_ENGINE = "django.db.backends.postgresql"  # the database engine used by Scorpio (string, one of django.db.backends)
+SQL_DATABASE = "postgres"  # name of the application database (string)
+SQL_USER = "postgres"  # name of the application database user (string)
+SQL_PASSWORD = "postgres"  # password for the application database (string)
+SQL_HOST = "gemini-db"  # host for the application database (string)
+SQL_PORT = 5432  # port on which the application database can be reached (integer)
 
-ALLOWED_HOSTS = ['localhost', 'gemini-web']
+STORAGE_ROOT = "/" # absolute path to root of attached file storage (string)
+STORAGE_TMP_DIR = "tmp" # temporary directory for transfers, relative to storage root (string)
 
-BASE_DIR = ''
+AM_BASEURL = "http://archivematica-dashboard:8000" # Base URL for the Archivematica Dashboard API (string)
+AM_USERNAME = "test" # Archivematica user with sufficient privileges to start a transfer (string)
+AM_API_KEY = "test" # API Key for the Archivematica user (string)
+AM_PIPELINE_UUIDS = ["b80b39f0-ab3d-406d-8efd-dd48b532c34f", "d17e28ea-8dd7-4e41-b960-4e7e2851c70a", "537994ea-8aee-43ea-a2c4-693d0843990c"] # UUID for the pipeline location (list)
 
-ARCHIVEMATICA = {
-  "baseurl": "http://archivematica-storage-service:8000",
-  "username": "test",
-  "api_key": "test",
-  "pipeline_uuids": ["b80b39f0-ab3d-406d-8efd-dd48b532c34f", "d17e28ea-8dd7-4e41-b960-4e7e2851c70a", "537994ea-8aee-43ea-a2c4-693d0843990c"]
-}
+FEDORA_BASEURL = "http://localhost:8080/fedora/rest/" # Base URL for the Fedora API (string)
+FEDORA_USERNAME = "admin" # Fedora user (string)
+FEDORA_PASSWORD = "admin" # Password for Fedora user (string)
 
-FEDORA = {
-  "baseurl": "http://localhost:8080/fedora/rest/",
-  "username": "admin",
-  "password": "admin",
-}
-
-TMP_DIR = '{}/tmp'.format(BASE_DIR)
-
-STATIC_ROOT = '/static'
-
-DELIVERY_URL = 'http://aquarius-web:8002/packages/'
-
-CLEANUP_URL = 'http://fornax-web:8003/cleanup/'
+DELIVERY_URL = 'http://aquarius-web:8002/packages/' # URL for package delivery in the next service (string)
+CLEANUP_URL = 'http://fornax-web:8003/cleanup/' # URL for cleanup service (string)

@@ -1,0 +1,19 @@
+version: 0.0
+os: linux
+files:
+  - source: ./
+    destination: ${ROOT_DIR}
+hooks:
+  AfterInstall:
+    - location: deploy_scripts/set_permissions.sh
+      timeout: 30
+    - location: deploy_scripts/install_dependencies_django.sh
+      timeout: 300
+    - location: deploy_scripts/run_management_commands_django.sh
+      timeout: 300
+  ApplicationStart:
+    - location: deploy_scripts/restart_httpd.sh
+      timeout: 20
+  ValidateService:
+    - location: deploy_scripts/curl_status_endpoint.sh
+      timeout: 10
