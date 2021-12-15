@@ -1,6 +1,6 @@
 amclient==1.2.0
 asterism==0.7.2
-Django==3.2.9
+Django==3.2.10
 djangorestframework==3.12.4
 health-check==3.4.1
 jsonschema==3.2.0
