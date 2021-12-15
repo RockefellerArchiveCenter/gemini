@@ -8,7 +8,7 @@ amclient==1.2.0
     # via -r requirements.in
 asgiref==3.4.1
     # via django
-asterism==0.7.2
+asterism==0.7.4
     # via -r requirements.in
 attrs==21.2.0
     # via
@@ -70,13 +70,13 @@ packaging==21.3
     # via pytest
 pluggy==1.0.0
     # via pytest
-psycopg2-binary==2.9.1
+psycopg2-binary==2.9.2
     # via
     #   -r requirements.in
     #   asterism
 py==1.11.0
     # via pytest
-py7zr==0.16.2
+py7zr==0.17.0
     # via -r requirements.in
 pybcj==0.5.0
     # via py7zr
