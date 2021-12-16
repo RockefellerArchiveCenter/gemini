@@ -8,7 +8,7 @@ amclient==1.2.0
     # via -r requirements.in
 asgiref==3.4.1
     # via django
-asterism==0.7.2
+asterism==0.7.4
     # via -r requirements.in
 attrs==21.2.0
     # via
@@ -20,15 +20,15 @@ brotli==1.0.9
     # via py7zr
 certifi==2021.10.8
     # via requests
-charset-normalizer==2.0.7
+charset-normalizer==2.0.9
     # via requests
 clinner==1.12.3
     # via health-check
 colorlog==3.2.0
     # via clinner
-coverage[toml]==6.1.1
+coverage[toml]==6.2
     # via pytest-cov
-django==3.2.9
+django==3.2.10
     # via
     #   -r requirements.in
     #   asterism
@@ -56,7 +56,7 @@ importlib-metadata==4.8.2
     #   pytest
 iniconfig==1.1.1
     # via pytest
-isodate==0.6.0
+isodate==0.6.1
     # via rdflib
 jsonschema==3.2.0
     # via -r requirements.in
@@ -66,25 +66,25 @@ multivolumefile==0.2.3
     # via py7zr
 odin==1.7.3
     # via asterism
-packaging==21.2
+packaging==21.3
     # via pytest
 pluggy==1.0.0
     # via pytest
-psycopg2-binary==2.9.1
+psycopg2-binary==2.9.2
     # via
     #   -r requirements.in
     #   asterism
 py==1.11.0
     # via pytest
-py7zr==0.16.2
+py7zr==0.17.0
     # via -r requirements.in
 pybcj==0.5.0
     # via py7zr
-pycryptodomex==3.11.0
+pycryptodomex==3.12.0
     # via py7zr
 pyfc4==0.6
     # via -r requirements.in
-pyparsing==2.4.7
+pyparsing==3.0.6
     # via
     #   packaging
     #   rdflib
@@ -135,9 +135,9 @@ texttable==1.6.4
     # via py7zr
 toml==0.10.2
     # via pytest
-tomli==1.2.2
+tomli==1.2.3
     # via coverage
-typing-extensions==3.10.0.2
+typing-extensions==4.0.1
     # via
     #   asgiref
     #   gitpython
