@@ -4,13 +4,13 @@
 #
 #    pip-compile
 #
-amclient==1.2.0
+amclient==1.2.1
     # via -r requirements.in
 asgiref==3.4.1
     # via django
 asterism==0.7.4
     # via -r requirements.in
-attrs==21.2.0
+attrs==21.4.0
     # via
     #   jsonschema
     #   pytest
@@ -20,7 +20,7 @@ brotli==1.0.9
     # via py7zr
 certifi==2021.10.8
     # via requests
-charset-normalizer==2.0.9
+charset-normalizer==2.0.10
     # via requests
 clinner==1.12.3
     # via health-check
@@ -28,12 +28,12 @@ colorlog==3.2.0
     # via clinner
 coverage[toml]==6.2
     # via pytest-cov
-django==3.2.10
+django==3.2.11
     # via
     #   -r requirements.in
     #   asterism
     #   djangorestframework
-djangorestframework==3.12.4
+djangorestframework==3.13.1
     # via
     #   -r requirements.in
     #   asterism
@@ -47,7 +47,7 @@ idna==3.3
     # via
     #   requests
     #   yarl
-importlib-metadata==4.8.2
+importlib-metadata==4.8.3
     # via
     #   jsonschema
     #   pluggy
@@ -70,13 +70,13 @@ packaging==21.3
     # via pytest
 pluggy==1.0.0
     # via pytest
-psycopg2-binary==2.9.2
+psycopg2-binary==2.9.3
     # via
     #   -r requirements.in
     #   asterism
 py==1.11.0
     # via pytest
-py7zr==0.17.0
+py7zr==0.17.2
     # via -r requirements.in
 pybcj==0.5.0
     # via py7zr
@@ -84,7 +84,7 @@ pycryptodomex==3.12.0
     # via py7zr
 pyfc4==0.6
     # via -r requirements.in
-pyparsing==3.0.6
+pyparsing==3.0.7
     # via
     #   packaging
     #   rdflib
@@ -99,12 +99,14 @@ pytest==6.2.5
 pytest-cov==3.0.0
     # via pyfc4
 pytz==2021.3
-    # via django
+    # via
+    #   django
+    #   djangorestframework
 pyyaml==6.0
     # via
     #   health-check
     #   vcrpy
-pyzstd==0.15.0
+pyzstd==0.15.1
     # via py7zr
 rdflib==5.0.0
     # via
@@ -114,7 +116,7 @@ rdflib-jsonld==0.5.0
     # via
     #   -r requirements.in
     #   pyfc4
-requests==2.26.0
+requests==2.27.1
     # via
     #   -r requirements.in
     #   amclient
@@ -145,7 +147,7 @@ typing-extensions==4.0.1
     #   yarl
 uritemplate==4.1.1
     # via -r requirements.in
-urllib3==1.26.7
+urllib3==1.26.8
     # via
     #   amclient
     #   requests
