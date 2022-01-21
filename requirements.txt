@@ -76,7 +76,7 @@ psycopg2-binary==2.9.3
     #   asterism
 py==1.11.0
     # via pytest
-py7zr==0.17.2
+py7zr==0.17.0
     # via -r requirements.in
 pybcj==0.5.0
     # via py7zr

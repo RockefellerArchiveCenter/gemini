@@ -5,7 +5,7 @@ djangorestframework==3.13.1
 health-check==3.4.1
 jsonschema==3.2.0
 psycopg2-binary==2.9.3
-py7zr==0.17.2
+py7zr==0.17.0
 pyfc4==0.6
 rdflib-jsonld==0.5.0
 requests==2.27.1
