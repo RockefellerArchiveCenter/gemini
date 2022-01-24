@@ -76,11 +76,11 @@ psycopg2-binary==2.9.3
     #   asterism
 py==1.11.0
     # via pytest
-py7zr==0.17.0
+py7zr==0.17.3
     # via -r requirements.in
 pybcj==0.5.0
     # via py7zr
-pycryptodomex==3.12.0
+pycryptodomex==3.13.0
     # via py7zr
 pyfc4==0.6
     # via -r requirements.in
@@ -106,7 +106,7 @@ pyyaml==6.0
     # via
     #   health-check
     #   vcrpy
-pyzstd==0.15.1
+pyzstd==0.15.2
     # via py7zr
 rdflib==5.0.0
     # via
