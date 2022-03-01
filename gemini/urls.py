@@ -13,11 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from asterism.views import PingView
 from django.contrib import admin
-from django.urls import include
+from django.urls import include, re_path
 from rest_framework import routers
 from rest_framework.schemas import get_schema_view
+
 from storer.views import (CleanupRequestView, DeliverView, DownloadView,
                           PackageViewSet, StoreView)
 
@@ -30,12 +31,12 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(r'^download/', DownloadView.as_view(), name='download-packages'),
-    url(r'^store/', StoreView.as_view(), name='store-packages'),
-    url(r'^deliver/', DeliverView.as_view(), name='deliver-packages'),
-    url(r'^request-cleanup/', CleanupRequestView.as_view(), name='request-cleanup'),
-    url(r'^status/', include('health_check.api.urls')),
-    url(r'^admin/', admin.site.urls),
-    url(r'^schema/', schema_view, name='schema'),
+    re_path(r'^', include(router.urls)),
+    re_path(r'^download/', DownloadView.as_view(), name='download-packages'),
+    re_path(r'^store/', StoreView.as_view(), name='store-packages'),
+    re_path(r'^deliver/', DeliverView.as_view(), name='deliver-packages'),
+    re_path(r'^request-cleanup/', CleanupRequestView.as_view(), name='request-cleanup'),
+    re_path(r'^status/', PingView.as_view(), name='ping'),
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^schema/', schema_view, name='schema'),
 ]
