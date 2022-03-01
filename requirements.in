@@ -1,13 +1,11 @@
 amclient==1.2.1
-asterism==0.7.4
-Django==3.2.11
+asterism==0.8
+Django==4.0.2
 djangorestframework==3.13.1
-health-check==3.4.1
 jsonschema==3.2.0
 psycopg2-binary==2.9.3
-py7zr==0.17.3
-pyfc4==0.6
-rdflib-jsonld==0.5.0
+py7zr==0.17.4
+pyfc4==0.7
 requests==2.27.1
 uritemplate==4.1.1
 vcrpy==4.1.1

@@ -7,8 +7,9 @@ from shutil import rmtree
 import vcr
 from django.test import Client, TestCase
 from django.urls import reverse
-from gemini import settings
 from rest_framework.test import APIRequestFactory
+
+from gemini import settings
 
 from .models import Package
 from .routines import (CleanupRequester, DeliverRoutine, DownloadRoutine,
@@ -95,7 +96,7 @@ class PackageTest(TestCase):
         self.assertEqual(schema.status_code, 200, "Wrong HTTP code")
 
     def test_health_check(self):
-        status = self.client.get(reverse('api_health_ping'))
+        status = self.client.get(reverse('ping'))
         self.assertEqual(status.status_code, 200, "Wrong HTTP code")
 
     def tearDown(self):
