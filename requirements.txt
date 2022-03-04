@@ -8,7 +8,7 @@ amclient==1.2.1
     # via -r requirements.in
 asgiref==3.5.0
     # via django
-asterism==0.8
+asterism==0.9.0
     # via -r requirements.in
 attrs==21.4.0
     # via
@@ -24,7 +24,7 @@ charset-normalizer==2.0.12
     # via requests
 coverage[toml]==6.3.2
     # via pytest-cov
-django==4.0.2
+django==4.0.3
     # via
     #   -r requirements.in
     #   asterism
