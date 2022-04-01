@@ -59,7 +59,7 @@ psycopg2-binary==2.9.3
     #   asterism
 py==1.11.0
     # via pytest
-py7zr==0.17.4
+py7zr==0.18.3
     # via -r requirements.in
 pybcj==0.5.0
     # via py7zr
@@ -71,7 +71,7 @@ pyparsing==3.0.7
     # via
     #   packaging
     #   rdflib
-pyppmd==0.17.3
+pyppmd==0.18.2
     # via py7zr
 pyrsistent==0.18.1
     # via jsonschema
@@ -121,6 +121,8 @@ wrapt==1.13.3
     # via vcrpy
 yarl==1.7.2
     # via vcrpy
+zipfile-deflate64==0.2.0
+    # via py7zr
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
