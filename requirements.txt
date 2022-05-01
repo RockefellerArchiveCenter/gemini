@@ -53,13 +53,15 @@ packaging==21.3
     # via pytest
 pluggy==1.0.0
     # via pytest
+psutil==5.9.0
+    # via py7zr
 psycopg2-binary==2.9.3
     # via
     #   -r requirements.in
     #   asterism
 py==1.11.0
     # via pytest
-py7zr==0.18.3
+py7zr==0.18.5
     # via -r requirements.in
 pybcj==0.5.1
     # via py7zr
