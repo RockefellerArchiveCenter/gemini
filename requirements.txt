@@ -61,9 +61,9 @@ psycopg2-binary==2.9.3
     #   asterism
 py==1.11.0
     # via pytest
-py7zr==0.18.5
+py7zr==0.18.7
     # via -r requirements.in
-pybcj==0.5.2
+pybcj==0.6.0
     # via py7zr
 pycryptodomex==3.14.1
     # via py7zr
