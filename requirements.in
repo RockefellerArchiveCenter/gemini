@@ -1,10 +1,10 @@
 amclient==1.2.1
 asterism==0.9.0
-Django==4.0.4
+Django==4.0.5
 djangorestframework==3.13.1
 jsonschema==3.2.0
 psycopg2-binary==2.9.3
-py7zr==0.18.5
+py7zr==0.18.7
 pyfc4==0.7
 requests==2.27.1
 uritemplate==4.1.1
