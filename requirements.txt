@@ -91,7 +91,7 @@ pyzstd==0.15.2
     # via py7zr
 rdflib==6.1.1
     # via pyfc4
-requests==2.27.1
+requests==2.28.1
     # via
     #   -r requirements.in
     #   amclient

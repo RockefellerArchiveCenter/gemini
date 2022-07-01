@@ -6,6 +6,6 @@ jsonschema==3.2.0
 psycopg2-binary==2.9.3
 py7zr==0.18.7
 pyfc4==0.7
-requests==2.27.1
+requests==2.28.1
 uritemplate==4.1.1
 vcrpy==4.1.1
