@@ -22,7 +22,7 @@ certifi==2022.6.15
     # via requests
 charset-normalizer==2.1.0
     # via requests
-coverage[toml]==6.4.1
+coverage[toml]==6.4.2
     # via pytest-cov
 django==4.0.6
     # via
@@ -37,13 +37,13 @@ idna==3.3
     # via
     #   requests
     #   yarl
-inflate64==0.1.3
+inflate64==0.1.4
     # via py7zr
 iniconfig==1.1.1
     # via pytest
 isodate==0.6.1
     # via rdflib
-jsonschema==4.6.1
+jsonschema==4.7.2
     # via -r requirements.in
 multidict==6.0.2
     # via yarl
@@ -114,7 +114,7 @@ tomli==2.0.1
     #   pytest
 uritemplate==4.1.1
     # via -r requirements.in
-urllib3==1.26.9
+urllib3==1.26.10
     # via
     #   amclient
     #   requests
