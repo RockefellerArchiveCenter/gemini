@@ -20,11 +20,11 @@ brotli==1.0.9
     # via py7zr
 certifi==2022.6.15
     # via requests
-charset-normalizer==2.1.0
+charset-normalizer==2.1.1
     # via requests
-coverage[toml]==6.4.2
+coverage[toml]==6.4.4
     # via pytest-cov
-django==4.0.6
+django==4.1
     # via
     #   -r requirements.in
     #   asterism
@@ -37,13 +37,13 @@ idna==3.3
     # via
     #   requests
     #   yarl
-inflate64==0.2.0
+inflate64==0.3.0
     # via py7zr
 iniconfig==1.1.1
     # via pytest
 isodate==0.6.1
     # via rdflib
-jsonschema==4.9.0
+jsonschema==4.15.0
     # via -r requirements.in
 multidict==6.0.2
     # via yarl
@@ -63,9 +63,9 @@ psycopg2-binary==2.9.3
     #   asterism
 py==1.11.0
     # via pytest
-py7zr==0.19.0
+py7zr==0.20.0
     # via -r requirements.in
-pybcj==0.6.1
+pybcj==1.0.1
     # via py7zr
 pycryptodomex==3.15.0
     # via py7zr
@@ -85,11 +85,11 @@ pytest==7.1.2
     #   pytest-cov
 pytest-cov==3.0.0
     # via pyfc4
-pytz==2022.1
+pytz==2022.2.1
     # via djangorestframework
 pyyaml==6.0
     # via vcrpy
-pyzstd==0.15.2
+pyzstd==0.15.3
     # via py7zr
 rdflib==6.2.0
     # via pyfc4
@@ -114,15 +114,15 @@ tomli==2.0.1
     #   pytest
 uritemplate==4.1.1
     # via -r requirements.in
-urllib3==1.26.11
+urllib3==1.26.12
     # via
     #   amclient
     #   requests
-vcrpy==4.2.0
+vcrpy==4.2.1
     # via -r requirements.in
 wrapt==1.14.1
     # via vcrpy
-yarl==1.7.2
+yarl==1.8.1
     # via vcrpy
 
 # The following packages are considered to be unsafe in a requirements file:
