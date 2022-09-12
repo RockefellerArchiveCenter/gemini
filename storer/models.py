@@ -6,13 +6,17 @@ class Package(BasePackage):
     BasePackage._meta.get_field("bag_identifier").blank = True
     BasePackage._meta.get_field("bag_identifier")._unique = False
     CREATED = 0
+    DOWNLOADING = 5
     DOWNLOADED = 10
+    STORING = 15
     STORED = 20
     DELIVERED = 25
     CLEANED_UP = 30
     PROCESS_STATUS_CHOICES = (
         (CREATED, 'Package created'),
+        (DOWNLOADING, 'Package being downloaded'),
         (DOWNLOADED, 'Package downloaded'),
+        (STORING, 'Package being stored'),
         (STORED, 'Package stored'),
         (DELIVERED, 'Package data delivered'),
         (CLEANED_UP, 'Package cleaned up')
