@@ -34,23 +34,32 @@ class Routine:
 
     def run(self):
         """Main method. Processes only one package at a time."""
-        package = Package.objects.filter(process_status=self.start_status).first()
-        if package:
-            try:
-                self.handle_package(package)
-                package.process_status = self.end_status
+        if not Package.objects.filter(process_status=self.in_process_status).exists():
+            package = Package.objects.filter(process_status=self.start_status).first()
+            if package:
+                package.process_status = self.in_process_status
                 package.save()
-                message = self.success_message
-            except Exception as e:
-                raise Exception(str(e), package.archivematica_identifier)
+                try:
+                    self.handle_package(package)
+                    package.process_status = self.end_status
+                    package.save()
+                    message = self.success_message
+                except Exception as e:
+                    package.process_status = self.start_status
+                    package.save()
+                    raise Exception(str(e), package.archivematica_identifier)
+            else:
+                message = self.idle_message
         else:
-            message = self.idle_message
+            message = "Service currently running"
+            package = None
         return (message, [package.archivematica_identifier] if package else None)
 
 
 class DownloadRoutine(Routine):
     """Downloads a package from Archivematica."""
     start_status = Package.CREATED
+    in_process_status = Package.DOWNLOADING
     end_status = Package.DOWNLOADED
     success_message = "All packages downloaded."
     idle_message = "No packages waiting to be downloaded."
@@ -98,6 +107,7 @@ class StoreRoutine(Routine):
     uploaded. Only one package is processed at a time.
     """
     start_status = Package.DOWNLOADED
+    in_process_status = Package.STORING
     end_status = Package.STORED
     success_message = "Packages stored."
     idle_message = "No packages to store."
