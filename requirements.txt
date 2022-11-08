@@ -24,7 +24,7 @@ charset-normalizer==2.1.1
     # via requests
 coverage[toml]==6.5.0
     # via pytest-cov
-django==4.0.7
+django==4.0.8
     # via
     #   -r requirements.in
     #   asterism
@@ -33,11 +33,13 @@ djangorestframework==3.14.0
     # via
     #   -r requirements.in
     #   asterism
+exceptiongroup==1.0.0
+    # via pytest
 idna==3.4
     # via
     #   requests
     #   yarl
-inflate64==0.3.0
+inflate64==0.3.1
     # via py7zr
 iniconfig==1.1.1
     # via pytest
@@ -55,14 +57,12 @@ packaging==21.3
     # via pytest
 pluggy==1.0.0
     # via pytest
-psutil==5.9.2
+psutil==5.9.3
     # via py7zr
-psycopg2-binary==2.9.3
+psycopg2-binary==2.9.5
     # via
     #   -r requirements.in
     #   asterism
-py==1.11.0
-    # via pytest
 py7zr==0.20.0
     # via -r requirements.in
 pybcj==1.0.1
@@ -77,15 +77,15 @@ pyparsing==3.0.9
     #   rdflib
 pyppmd==0.18.3
     # via py7zr
-pyrsistent==0.18.1
+pyrsistent==0.19.1
     # via jsonschema
-pytest==7.1.3
+pytest==7.2.0
     # via
     #   pyfc4
     #   pytest-cov
 pytest-cov==4.0.0
     # via pyfc4
-pytz==2022.2.1
+pytz==2022.6
     # via djangorestframework
 pyyaml==6.0
     # via vcrpy
