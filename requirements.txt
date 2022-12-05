@@ -33,7 +33,7 @@ djangorestframework==3.14.0
     # via
     #   -r requirements.in
     #   asterism
-exceptiongroup==1.0.0
+exceptiongroup==1.0.4
     # via pytest
 idna==3.4
     # via
@@ -45,29 +45,29 @@ iniconfig==1.1.1
     # via pytest
 isodate==0.6.1
     # via rdflib
-jsonschema==4.16.0
+jsonschema==4.17.3
     # via -r requirements.in
 multidict==6.0.2
     # via yarl
 multivolumefile==0.2.3
     # via py7zr
-odin==1.8.1
+odin==2.0
     # via asterism
 packaging==21.3
     # via pytest
 pluggy==1.0.0
     # via pytest
-psutil==5.9.3
+psutil==5.9.4
     # via py7zr
 psycopg2-binary==2.9.5
     # via
     #   -r requirements.in
     #   asterism
-py7zr==0.20.0
+py7zr==0.20.2
     # via -r requirements.in
 pybcj==1.0.1
     # via py7zr
-pycryptodomex==3.15.0
+pycryptodomex==3.16.0
     # via py7zr
 pyfc4==0.7
     # via -r requirements.in
@@ -75,9 +75,9 @@ pyparsing==3.0.9
     # via
     #   packaging
     #   rdflib
-pyppmd==0.18.3
+pyppmd==1.0.0
     # via py7zr
-pyrsistent==0.19.1
+pyrsistent==0.19.2
     # via jsonschema
 pytest==7.2.0
     # via
@@ -102,11 +102,10 @@ six==1.16.0
     # via
     #   amclient
     #   isodate
-    #   odin
     #   vcrpy
 sqlparse==0.4.3
     # via django
-texttable==1.6.4
+texttable==1.6.7
     # via py7zr
 tomli==2.0.1
     # via
@@ -114,7 +113,7 @@ tomli==2.0.1
     #   pytest
 uritemplate==4.1.1
     # via -r requirements.in
-urllib3==1.26.12
+urllib3==1.26.13
     # via
     #   amclient
     #   requests
