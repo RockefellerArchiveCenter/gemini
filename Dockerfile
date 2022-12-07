@@ -15,6 +15,6 @@ RUN pip install --upgrade pip \
 
 COPY . /code/gemini/
 
-EXPOSE 8000
+EXPOSE 8006
 
 ENTRYPOINT ["/code/gemini/entrypoint.sh"]
