@@ -5,6 +5,8 @@ services:
     image: postgres:10.4
     volumes:
       - geminidb:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
   gemini-web:
     build: .
     entrypoint: /code/entrypoint.sh
@@ -13,7 +15,7 @@ services:
     volumes:
       - .:/code
     ports:
-      - "${APPLICATION_PORT:-8006}:${APPLICATION_PORT:-8006}"
+      - "8006:8006"
     depends_on:
       - gemini-db
 
