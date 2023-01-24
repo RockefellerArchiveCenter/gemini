@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 
-from gemini import config
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config.DJANGO_SECRET_KEY
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config.DJANGO_DEBUG
+DEBUG = os.getenv('DJANGO_DEBUG')
 
-ALLOWED_HOSTS = config.DJANGO_ALLOWED_HOSTS
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS')
 
 # Application definition
 
@@ -75,12 +73,12 @@ WSGI_APPLICATION = 'gemini.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": config.SQL_ENGINE,
-        "NAME": config.SQL_DATABASE,
-        "USER": config.SQL_USER,
-        "PASSWORD": config.SQL_PASSWORD,
-        "HOST": config.SQL_HOST,
-        "PORT": config.SQL_PORT,
+        "ENGINE": os.getenv('SQL_ENGINE'),
+        "NAME": os.getenv('SQL_DATABASE'),
+        "USER": os.getenv('SQL_USER'),
+        "PASSWORD": os.getenv('SQL_PASSWORD'),
+        "HOST": os.getenv('SQL_HOST'),
+        "PORT": os.getenv('SQL_PORT'),
     }
 }
 
@@ -128,22 +126,22 @@ CRON_CLASSES = [
     "storer.cron.StoreDIPs",
 ]
 FEDORA = {
-    "baseurl": config.FEDORA_BASEURL,
-    "username": config.FEDORA_USERNAME,
-    "password": config.FEDORA_PASSWORD
+    "baseurl": os.getenv('FEDORA_BASEURL'),
+    "username": os.getenv('FEDORA_USERNAME'),
+    "password": os.getenv('FEDORA_PASSWORD')
 }
 
 ARCHIVEMATICA = {
-    "baseurl": config.AM_BASEURL,
-    "username": config.AM_USERNAME,
-    "api_key": config.AM_API_KEY,
-    "pipeline_uuids": config.AM_PIPELINE_UUIDS
+    "baseurl": os.getenv('AM_BASEURL'),
+    "username": os.getenv('AM_USERNAME'),
+    "api_key": os.getenv('AM_API_KEY'),
+    "pipeline_uuids": os.getenv('AM_PIPELINE_UUIDS')
 }
 
 
-TMP_DIR = config.STORAGE_TMP_DIR
-DELIVERY_URL = config.DELIVERY_URL
-CLEANUP_URL = config.CLEANUP_URL
+TMP_DIR = os.getenv('STORAGE_TMP_DIR')
+DELIVERY_URL = os.getenv('DELIVERY_URL')
+CLEANUP_URL = os.getenv('CLEANUP_URL')
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

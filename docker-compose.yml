@@ -7,6 +7,11 @@ services:
       - geminidb:/var/lib/postgresql/data/
     ports:
       - "5432:5432"
+    environment:
+      - SQL_PASSWORD=postgres
+      - SQL_DATABASE=postgres
+      - SQL_USER=postgres
+      - SQL_HOST=gemini-db
   gemini-web:
     build: .
     entrypoint: /code/entrypoint.sh
@@ -16,6 +21,11 @@ services:
       - .:/code
     ports:
       - "8006:8006"
+    environment:
+      - SQL_DATABASE=postgres
+      - SQL_USER=postgres
+      - SQL_PASSWORD=postgres
+      - SQL_HOST=gemini-db
     depends_on:
       - gemini-db
 
