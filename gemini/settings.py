@@ -25,7 +25,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG')
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split()
 
 # Application definition
 
@@ -135,7 +135,7 @@ ARCHIVEMATICA = {
     "baseurl": os.getenv('AM_BASEURL'),
     "username": os.getenv('AM_USERNAME'),
     "api_key": os.getenv('AM_API_KEY'),
-    "pipeline_uuids": os.getenv('AM_PIPELINE_UUIDS')
+    "pipeline_uuids": os.getenv('AM_PIPELINE_UUIDS').split()
 }
 
 
