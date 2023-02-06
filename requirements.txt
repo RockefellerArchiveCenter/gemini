@@ -24,7 +24,7 @@ charset-normalizer==3.0.1
     # via requests
 coverage[toml]==7.1.0
     # via pytest-cov
-django==4.0.8
+django==4.0.9
     # via
     #   -r requirements.in
     #   asterism
@@ -51,7 +51,7 @@ multidict==6.0.4
     # via yarl
 multivolumefile==0.2.3
     # via py7zr
-odin==2.1
+odin==2.2
     # via asterism
 packaging==23.0
     # via pytest
