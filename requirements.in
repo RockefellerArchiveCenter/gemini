@@ -1,6 +1,6 @@
 amclient~=1.2
 asterism~=0.9
-Django~=4.0.9
+Django~=4.1
 djangorestframework~=3.13
 jsonschema~=4.7
 psycopg2-binary~=2.9

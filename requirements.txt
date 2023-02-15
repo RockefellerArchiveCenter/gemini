@@ -24,7 +24,7 @@ charset-normalizer==3.0.1
     # via requests
 coverage[toml]==7.1.0
     # via pytest-cov
-django==4.0.9
+django==4.1.7
     # via
     #   -r requirements.in
     #   asterism
