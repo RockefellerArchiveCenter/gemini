@@ -144,7 +144,7 @@ class StoreRoutine(Routine):
         package.fedora_uri = container.uri_as_string()
         package.origin = mets_data['origin']
         package.archivesspace_uri = mets_data['archivesspace_uri']
-        self.clean_up(self.uuid)
+        self.clean_up(self.uuid, True)
 
     def parse_mets(self):
         """
@@ -192,7 +192,7 @@ class StoreRoutine(Routine):
 
     def clean_up(self, uuid, src_file=False):
         """Removes directories for a given transfer. If `src_file` argument is
-        true, removes source file matching the UUID as well."""
+        true, removes source file and extracted METS matching the UUID as well."""
         for d in listdir(self.tmp_dir):
             if uuid in d and (src_file or isdir(join(self.tmp_dir, d))):
                 remove_file_or_dir(join(self.tmp_dir, d))
