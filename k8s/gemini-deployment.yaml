@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gemini-dev
+  labels:
+    app: gemini-dev
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gemini-dev
+  template:
+    metadata:
+      labels:
+        app: gemini-dev
+    spec:
+      containers:
+        - name: gemini-dev
+          image: ${IMAGE_ADDRESS}
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: gemini-secret
+            - configMapRef:
+                name: gemini-config
+          ports:
+            - containerPort: 8006
