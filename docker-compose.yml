@@ -2,7 +2,11 @@ version: '3'
 
 services:
   gemini-db:
-    image: postgres:10.4
+    image: postgres:14.4
+    environment:
+      - POSTGRES_USER=postgres  # name of the application database user
+      - POSTGRES_PASSWORD=postgres  # name of the application database user
+      - POSTGRES_DB=gemini_db  # name of the application database
     volumes:
       - geminidb:/var/lib/postgresql/data/
   gemini-web:
