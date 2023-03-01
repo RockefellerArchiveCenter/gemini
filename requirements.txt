@@ -22,7 +22,7 @@ certifi==2022.12.7
     # via requests
 charset-normalizer==3.0.1
     # via requests
-coverage[toml]==7.1.0
+coverage[toml]==7.2.1
     # via pytest-cov
 django==4.1.7
     # via
@@ -51,7 +51,7 @@ multidict==6.0.4
     # via yarl
 multivolumefile==0.2.3
     # via py7zr
-odin==2.2
+odin==2.4
     # via asterism
 packaging==23.0
     # via pytest
@@ -63,7 +63,7 @@ psycopg2-binary==2.9.5
     # via
     #   -r requirements.in
     #   asterism
-py7zr==0.20.2
+py7zr==0.20.4
     # via -r requirements.in
 pybcj==1.0.1
     # via py7zr
@@ -87,7 +87,7 @@ pytz==2022.7.1
     # via djangorestframework
 pyyaml==6.0
     # via vcrpy
-pyzstd==0.15.3
+pyzstd==0.15.4
     # via py7zr
 rdflib==6.2.0
     # via pyfc4
@@ -114,7 +114,7 @@ urllib3==1.26.14
     #   requests
 vcrpy==4.2.1
     # via -r requirements.in
-wrapt==1.14.1
+wrapt==1.15.0
     # via vcrpy
 yarl==1.8.2
     # via vcrpy
