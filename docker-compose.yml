@@ -14,14 +14,14 @@ services:
       - SQL_HOST=gemini-db
   gemini-web:
     build: .
+    image: ${CONTAINER:-gemini}
     entrypoint: /code/entrypoint.sh
-    environment:
-      - APPLICATION_PORT=${APPLICATION_PORT:-8006}
     volumes:
       - .:/code
     ports:
       - "8006:8006"
     environment:
+      - APPLICATION_PORT=${APPLICATION_PORT:-8006}
       - SQL_DATABASE=postgres
       - SQL_USER=postgres
       - SQL_PASSWORD=postgres
