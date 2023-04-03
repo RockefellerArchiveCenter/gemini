@@ -1,9 +1,9 @@
 amclient~=1.2
-asterism~=0.9
+asterism~=1.0
 Django~=4.1
 djangorestframework~=3.13
 jsonschema~=4.7
-psycopg2-binary~=2.9
+psycopg2~=2.9
 py7zr~=0.19
 pyfc4~=0.7
 requests~=2.28
