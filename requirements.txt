@@ -6,7 +6,7 @@
 #
 amclient==1.2.3
     # via -r requirements.in
-asgiref==3.6.0
+asgiref==3.7.2
     # via django
 asterism==1.1.0
     # via -r requirements.in
@@ -20,7 +20,7 @@ certifi==2023.5.7
     # via requests
 charset-normalizer==3.1.0
     # via requests
-coverage[toml]==7.2.5
+coverage[toml]==7.2.7
     # via pytest-cov
 django==4.2.1
     # via
@@ -61,7 +61,7 @@ py7zr==0.20.5
     # via -r requirements.in
 pybcj==1.0.1
     # via py7zr
-pycryptodomex==3.17
+pycryptodomex==3.18.0
     # via py7zr
 pyfc4==0.7
     # via -r requirements.in
@@ -75,7 +75,7 @@ pytest==7.3.1
     # via
     #   pyfc4
     #   pytest-cov
-pytest-cov==4.0.0
+pytest-cov==4.1.0
     # via pyfc4
 pytz==2023.3
     # via djangorestframework
@@ -85,7 +85,7 @@ pyzstd==0.15.7
     # via py7zr
 rdflib==6.3.2
     # via pyfc4
-requests==2.30.0
+requests==2.31.0
     # via
     #   -r requirements.in
     #   amclient
@@ -100,13 +100,15 @@ texttable==1.6.7
     # via py7zr
 tomli==2.0.1
     # via pytest
+typing-extensions==4.6.2
+    # via asgiref
 uritemplate==4.1.1
     # via -r requirements.in
-urllib3==1.26.15
+urllib3==1.26.16
     # via
     #   amclient
     #   requests
-vcrpy==4.2.1
+vcrpy==4.3.1
     # via -r requirements.in
 wrapt==1.15.0
     # via vcrpy
