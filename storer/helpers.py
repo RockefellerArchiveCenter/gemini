@@ -28,8 +28,7 @@ def extract_file(archive, src, dest):
                 outfile.close()
         tf.close()
     else:
-        print("Unrecognized archive extension")
-        return False
+        raise Exception("Unrecognized archive extension")
     return dest
 
 
