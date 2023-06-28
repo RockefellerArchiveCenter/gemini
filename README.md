@@ -40,13 +40,16 @@ gemini has five services, all of which are exposed via HTTP endpoints (see [Rout
 * Create Packages
   * Handles data from Archivematica's post-store callback and creates database
     objects representing packages to be downloaded.
+* Add Data to packages
+  * Adds data from the Archivematica API to the packages
 * Download Packages
   * Downloads packages from the Archivematica Storage Service.
+* Parse METS
+  * Parses Archivematica METS file to extract additional metadata.
 * Store Packages
   * Storing the package in Fedora, along with minimal metadata.
-  * Creating a package object in gemini's database.
-  * Delivering a POST request to a configurable URL. This request has a payload containing the URI of the stored package in Fedora, the package type ("aip" or "dip") and the value of the `Internal-Sender-Identifier` field from the package's `bag-info.txt` file.
 * Deliver Data - sends package data to another service.
+  * Delivering a POST request to a configurable URL. This request has a payload containing the URI of the stored package in Fedora, the package type ("aip" or "dip") and the value of the `Internal-Sender-Identifier` field from the package's `bag-info.txt` file.
 * Request Cleanup - send a request to another service to clean up after a package has been processed.
 
 ### Routes
