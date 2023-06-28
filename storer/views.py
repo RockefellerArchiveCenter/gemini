@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from storer.models import Package
-from storer.routines import (CleanupRequester, DeliverRoutine, DownloadRoutine,
-                             StoreRoutine)
+from storer.routines import (AddDataRoutine, CleanupRequester, DeliverRoutine,
+                             DownloadRoutine, ParseMETSRoutine, StoreRoutine)
 from storer.serializers import PackageListSerializer, PackageSerializer
 
 
@@ -49,9 +49,19 @@ class PackageViewSet(ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST)
 
 
+class AddDataView(RoutineView):
+    """Downloads packages. Accepts POST requests only."""
+    routine = AddDataRoutine
+
+
 class DownloadView(RoutineView):
     """Downloads packages. Accepts POST requests only."""
     routine = DownloadRoutine
+
+
+class ParseMETSView(RoutineView):
+    """Downloads packages. Accepts POST requests only."""
+    routine = ParseMETSRoutine
 
 
 class StoreView(RoutineView):

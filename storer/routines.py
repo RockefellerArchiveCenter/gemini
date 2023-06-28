@@ -1,5 +1,6 @@
+import tarfile
 from os import W_OK, access, listdir
-from os.path import basename, isdir, join, splitext
+from os.path import basename, isdir, join
 from shutil import move
 from xml.etree import ElementTree as ET
 
@@ -41,7 +42,8 @@ class Routine:
                 package.save()
                 try:
                     self.handle_package(package)
-                    package.process_status = self.end_status
+                    end_status = getattr(self, 'end_status') if hasattr(self, 'end_status') else self.get_end_status(package)
+                    package.process_status = end_status
                     package.save()
                     message = self.success_message
                 except Exception as e:
@@ -55,17 +57,26 @@ class Routine:
             package = None
         return (message, [package.archivematica_identifier] if package else None)
 
+    def get_end_status(self, package):
+        raise NotImplementedError('get_end_status has not been implemented on this class.')
 
-class DownloadRoutine(Routine):
-    """Downloads a package from Archivematica."""
+
+class AddDataRoutine(Routine):
     start_status = Package.CREATED
-    in_process_status = Package.DOWNLOADING
-    end_status = Package.DOWNLOADED
-    success_message = "All packages downloaded."
-    idle_message = "No packages waiting to be downloaded."
+    in_process_status = Package.ADDING_DATA
+    success_message = "Data added to package."
+    idle_message = "No packages waiting for data to be added."
+
+    def get_end_status(self, package):
+        """
+        Dynamically determines end_status. If package location is not in
+        expected list, bypasses download routine.
+        """
+        location = package.data['current_location'].split('/')[-2]
+        return Package.DATA_ADDED if (location in settings.ARCHIVEMATICA['location_uuids']) else Package.DOWNLOADED
 
     def handle_package(self, package):
-
+        """Gets information about a package from Archivematica."""
         am_client = AMClient(
             ss_api_key=settings.ARCHIVEMATICA['api_key'],
             ss_user_name=settings.ARCHIVEMATICA['username'],
@@ -77,76 +88,104 @@ class DownloadRoutine(Routine):
         if isinstance(package_data, int):
             raise Exception(errors.error_lookup(package_data))
 
-        if self.is_downloadable(package_data):
+        package.type = package_data['package_type'].lower()
+        package.fedora_uri = package_data['resource_uri']  # this gets overwritten if package is stored in Fedora
+        package.data = package_data
+
+
+class DownloadRoutine(Routine):
+    """Downloads a package from Archivematica."""
+    start_status = Package.DATA_ADDED
+    in_process_status = Package.DOWNLOADING
+    end_status = Package.DOWNLOADED
+    success_message = "Package downloaded."
+    idle_message = "No packages waiting to be downloaded."
+
+    def handle_package(self, package):
+
+        am_client = AMClient(
+            ss_api_key=settings.ARCHIVEMATICA['api_key'],
+            ss_user_name=settings.ARCHIVEMATICA['username'],
+            ss_url=settings.ARCHIVEMATICA['baseurl'],
+            directory=self.tmp_dir)
+
+        if self.is_downloadable(package.data):
             try:
-                download_path = am_client.download_package(am_client.package_uuid)
+                download_path = am_client.download_package(package.archivematica_identifier)
                 tmp_path = join(
-                    self.tmp_dir, f"{am_client.package_uuid}{self.get_extension(package_data)}")
+                    self.tmp_dir, f"{package.archivematica_identifier}{self.get_extension(package.type)}")
                 move(download_path, tmp_path)
             except Exception as e:
                 raise RoutineError(f"Error downloading data: {e}")
-            package.type = package_data['package_type'].lower()
-            package.data = package_data
         else:
             raise RoutineError(f"Package {package.archivematica_identifier} is not downloadable")
 
-    def get_extension(self, package):
-        return (splitext(package['current_path'])[1]
-                if splitext(package['current_path'])[1]
-                else '.tar')
+    def get_extension(self, package_type):
+        return '.tar' if package_type == 'dip' else '.7z'
 
     def is_downloadable(self, package):
         pipeline = package['origin_pipeline'].split('/')[-2]
         return (pipeline in settings.ARCHIVEMATICA['pipeline_uuids'])
 
 
-class StoreRoutine(Routine):
-    """Uploads the contents of a package to Fedora.
-
-    AIPS are uploaded as single 7z files. DIPs are extracted and each file is
-    uploaded. Only one package is processed at a time.
-    """
+class ParseMETSRoutine(Routine):
+    """Parses data from a METS file."""
     start_status = Package.DOWNLOADED
-    in_process_status = Package.STORING
-    end_status = Package.STORED
-    success_message = "Packages stored."
-    idle_message = "No packages to store."
+    in_process_status = Package.PARSING_METS
+    success_message = "METS data parsed."
+    idle_message = "No packages waiting for METS parsing."
 
-    def __init__(self):
-        super(StoreRoutine, self).__init__()
-        self.fedora_client = FedoraClient(root=settings.FEDORA['baseurl'],
-                                          username=settings.FEDORA['username'],
-                                          password=settings.FEDORA['password'])
+    def get_end_status(self, package):
+        return Package.STORED if self.is_remote_package(package) else Package.METS_PARSED
 
     def handle_package(self, package):
         self.uuid = package.archivematica_identifier
-        if package.type == 'aip':
-            self.extension = '.7z'
-            self.mets_path = "METS.{}.xml".format(self.uuid)
-        elif package.type == 'dip':
-            self.extension = '.tar'
-            self.extracted = helpers.extract_all(join(self.tmp_dir, "{}.tar".format(self.uuid)), join(self.tmp_dir, self.uuid), self.tmp_dir)
-            self.mets_path = [f for f in listdir(self.extracted) if (basename(f).startswith('METS.') and basename(f).endswith('.xml'))][0]
+        self.upload = True
+
+        if self.is_remote_package(package):
+            mets_path = self.get_remote_mets(package)
         else:
-            self.clean_up(self.uuid)
-            raise RoutineError("Unrecognized package type: {}".format(package.type))
+            mets_path = self.get_mets_from_package(package.type)
 
-        mets_data = self.parse_mets()
+        mets_data = self.parse_mets(mets_path)
 
-        try:
-            container = self.fedora_client.create_container(self.uuid)
-            getattr(self, 'store_{}'.format(package.type))(package.data, container, mets_data['mimetypes'])
-        except Exception as e:
-            self.clean_up(self.uuid)
-            raise RoutineError("Error storing data: {}".format(e))
-
+        package.mimetypes = mets_data['mimetypes']
         package.internal_sender_identifier = mets_data['internal_sender_identifier']
-        package.fedora_uri = container.uri_as_string()
         package.origin = mets_data['origin']
         package.archivesspace_uri = mets_data['archivesspace_uri']
-        self.clean_up(self.uuid, True)
+        # TODO do we need to clean up here?
 
-    def parse_mets(self):
+    def is_remote_package(self, package):
+        location = package.data['current_location'].split('/')[-2]
+        return not (location in settings.ARCHIVEMATICA['location_uuids'])
+
+    def get_remote_mets(self, package):
+        mets_path = "METS.{}.xml".format(self.uuid)
+        am_client = AMClient(
+            ss_api_key=settings.ARCHIVEMATICA['api_key'],
+            ss_user_name=settings.ARCHIVEMATICA['username'],
+            ss_url=settings.ARCHIVEMATICA['baseurl'],
+            package_uuid=self.uuid,
+            relative_path=mets_path,
+            saveas_filename=mets_path,
+            directory=self.tmp_dir)
+        am_client.extract_file()
+        return join(self.tmp_dir, mets_path)
+
+    def get_mets_from_package(self, package_type):
+        if package_type == 'aip':
+            extension = '.7z'
+            mets_source_path = "METS.{}.xml".format(self.uuid)
+        else:
+            extension = '.tar'
+            tf = tarfile.open(join(self.tmp_dir, "{}.tar".format(self.uuid)))
+            mets_source_path = [f for f in tf.getnames() if (basename(f).startswith('METS.') and basename(f).endswith('.xml'))][0]
+        return helpers.extract_file(
+            join(self.tmp_dir, f"{self.uuid}{extension}"),
+            mets_source_path,
+            join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
+
+    def parse_mets(self, mets_path):
         """
         Parses Archivematica's METS file and returns the Internal-Sender-Identifier
         submitted in a bag-info.txt file, as well as a dict of filename UUIDs
@@ -154,11 +193,8 @@ class StoreRoutine(Routine):
         """
         try:
             mets_data = {}
-            mets = helpers.extract_file(join(self.tmp_dir, "{}{}".format(
-                self.uuid, self.extension)), self.mets_path,
-                join(self.tmp_dir, "METS.{}.xml".format(self.uuid)))
             ns = {'mets': 'http://www.loc.gov/METS/', 'fits': 'http://hul.harvard.edu/ois/xml/ns/fits/fits_output'}
-            tree = ET.parse(mets)
+            tree = ET.parse(mets_path)
             bagit_root = tree.find("mets:amdSec/mets:sourceMD/mets:mdWrap[@OTHERMDTYPE='BagIt']/mets:xmlData/transfer_metadata", ns)
             mets_data['internal_sender_identifier'] = self.findtext_with_exception(bagit_root, "Internal-Sender-Identifier", ns)
             mets_data['archivesspace_uri'] = bagit_root.findtext("ArchivesSpace-URI", namespaces=ns)
@@ -174,7 +210,7 @@ class StoreRoutine(Routine):
             mets_data['mimetypes'] = mimetypes
             return mets_data
         except FileNotFoundError:
-            raise RoutineError("No METS file found at {}".format(self.mets_path))
+            raise RoutineError("No METS file found at {}".format(mets_path))
         except ValueError as e:
             raise RoutineError("Could not find element {} in METS file".format(e))
         except Exception as e:
@@ -197,13 +233,54 @@ class StoreRoutine(Routine):
             if uuid in d and (src_file or isdir(join(self.tmp_dir, d))):
                 remove_file_or_dir(join(self.tmp_dir, d))
 
+
+class StoreRoutine(Routine):
+    """Uploads the contents of a package to Fedora.
+
+    AIPS are uploaded as single 7z files. DIPs are extracted and each file is
+    uploaded. Only one package is processed at a time.
+    """
+    start_status = Package.METS_PARSED
+    in_process_status = Package.STORING
+    end_status = Package.STORED
+    success_message = "Package stored."
+    idle_message = "No packages to store."
+
+    def handle_package(self, package):
+        self.fedora_client = FedoraClient(root=settings.FEDORA['baseurl'],
+                                          username=settings.FEDORA['username'],
+                                          password=settings.FEDORA['password'])
+        self.uuid = package.archivematica_identifier
+
+        if package.type == 'dip':
+            self.extracted = helpers.extract_all(join(self.tmp_dir, "{}.tar".format(self.uuid)), join(self.tmp_dir, self.uuid), self.tmp_dir)
+
+        try:
+            container = self.fedora_client.create_container(self.uuid)
+            getattr(self, 'store_{}'.format(package.type))(package.data, container, package.mimetypes)
+        except Exception as e:
+            self.clean_up(self.uuid)
+            raise RoutineError("Error storing data: {}".format(e))
+
+        package.fedora_uri = container.uri_as_string()
+        self.clean_up(self.uuid, True)
+
+    def clean_up(self, uuid, src_file=False):
+        """Removes directories for a given transfer. If `src_file` argument is
+        true, removes source file and extracted METS matching the UUID as well."""
+        for d in listdir(self.tmp_dir):
+            if uuid in d and (src_file or isdir(join(self.tmp_dir, d))):
+                remove_file_or_dir(join(self.tmp_dir, d))
+
     def store_aip(self, package, container, mimetypes):
         """
         Stores an AIP as a single binary in Fedora and handles the resulting URI.
         Assumes AIPs are stored as a compressed package.
         """
-        self.fedora_client.create_binary(join(self.tmp_dir, "{}{}".format(
-            self.uuid, self.extension)), container, 'application/x-7z-compressed')
+        self.fedora_client.create_binary(
+            join(self.tmp_dir, f"{self.uuid}.7z"),
+            container,
+            'application/x-7z-compressed')
 
     def store_dip(self, package, container, mimetypes):
         """
@@ -213,7 +290,10 @@ class StoreRoutine(Routine):
         """
         for f in listdir(join(self.extracted, 'objects')):
             mimetype = mimetypes[f[0:36]]
-            self.fedora_client.create_binary(join(self.tmp_dir, self.uuid, 'objects', f), container, mimetype)
+            self.fedora_client.create_binary(
+                join(self.tmp_dir, self.uuid, 'objects', f),
+                container,
+                mimetype)
 
 
 class PostRoutine(object):
@@ -242,7 +322,7 @@ class DeliverRoutine(PostRoutine):
     start_status = Package.STORED
     end_status = Package.DELIVERED
     url = settings.DELIVERY_URL
-    success_message = "Package data delivered."
+    success_message = "All package data delivered."
     idle_message = "No package data waiting to be delivered."
 
     def get_data(self, package):
