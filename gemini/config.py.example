@@ -15,6 +15,7 @@ AM_BASEURL = "http://archivematica-dashboard:8000" # Base URL for the Archivemat
 AM_USERNAME = "test" # Archivematica user with sufficient privileges to start a transfer (string)
 AM_API_KEY = "test" # API Key for the Archivematica user (string)
 AM_PIPELINE_UUIDS = ["b80b39f0-ab3d-406d-8efd-dd48b532c34f", "d17e28ea-8dd7-4e41-b960-4e7e2851c70a", "537994ea-8aee-43ea-a2c4-693d0843990c"] # UUID for the pipeline location (list)
+AM_LOCATION_UUIDS = ["7662e69a-6b4f-4a83-825f-ce3b92006969", "eb45c70d-da71-4bb6-88e8-178ac2cc73d0] # UUID for the storage location (list)
 
 FEDORA_BASEURL = "http://localhost:8080/fedora/rest/" # Base URL for the Fedora API (string)
 FEDORA_USERNAME = "admin" # Fedora user (string)
