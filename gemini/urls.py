@@ -19,8 +19,9 @@ from django.urls import include, re_path
 from rest_framework import routers
 from rest_framework.schemas import get_schema_view
 
-from storer.views import (CleanupRequestView, DeliverView, DownloadView,
-                          PackageViewSet, StoreView)
+from storer.views import (AddDataView, CleanupRequestView, DeliverView,
+                          DownloadView, PackageViewSet, ParseMETSView,
+                          StoreView)
 
 router = routers.DefaultRouter()
 router.register(r'packages', PackageViewSet, 'package')
@@ -32,8 +33,10 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     re_path(r'^', include(router.urls)),
-    re_path(r'^download/', DownloadView.as_view(), name='download-packages'),
-    re_path(r'^store/', StoreView.as_view(), name='store-packages'),
+    re_path(r'^add-data/', AddDataView.as_view(), name='add-data'),
+    re_path(r'^download/', DownloadView.as_view(), name='download-package'),
+    re_path(r'^parse-mets/', ParseMETSView.as_view(), name='parse-mets'),
+    re_path(r'^store/', StoreView.as_view(), name='store-package'),
     re_path(r'^deliver/', DeliverView.as_view(), name='deliver-packages'),
     re_path(r'^request-cleanup/', CleanupRequestView.as_view(), name='request-cleanup'),
     re_path(r'^status/', PingView.as_view(), name='ping'),
