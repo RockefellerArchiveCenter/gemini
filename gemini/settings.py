@@ -137,7 +137,8 @@ ARCHIVEMATICA = {
     "baseurl": config.AM_BASEURL,
     "username": config.AM_USERNAME,
     "api_key": config.AM_API_KEY,
-    "pipeline_uuids": config.AM_PIPELINE_UUIDS
+    "pipeline_uuids": config.AM_PIPELINE_UUIDS,
+    "location_uuids": config.AM_LOCATION_UUIDS
 }
 
 
