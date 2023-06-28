@@ -6,8 +6,12 @@ class Package(BasePackage):
     BasePackage._meta.get_field("bag_identifier").blank = True
     BasePackage._meta.get_field("bag_identifier")._unique = False
     CREATED = 0
+    ADDING_DATA = 1
+    DATA_ADDED = 2
     DOWNLOADING = 5
     DOWNLOADED = 10
+    PARSING_METS = 11
+    METS_PARSED = 12
     STORING = 15
     STORED = 20
     DELIVERED = 25
@@ -25,3 +29,4 @@ class Package(BasePackage):
     internal_sender_identifier = models.CharField(max_length=60, null=True, blank=True)
     fedora_uri = models.CharField(max_length=255, null=True, blank=True)
     archivesspace_uri = models.CharField(max_length=255, null=True, blank=True)
+    mimetypes = models.JSONField(null=True, blank=True)
