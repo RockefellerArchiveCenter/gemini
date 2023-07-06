@@ -22,7 +22,7 @@ charset-normalizer==3.1.0
     # via requests
 coverage[toml]==7.2.7
     # via pytest-cov
-django==4.2.2
+django==4.2.3
     # via
     #   -r requirements.in
     #   asterism
@@ -31,8 +31,6 @@ djangorestframework==3.14.0
     # via
     #   -r requirements.in
     #   asterism
-exceptiongroup==1.1.1
-    # via pytest
 idna==3.4
     # via requests
 inflate64==0.3.1
@@ -92,10 +90,6 @@ sqlparse==0.4.4
     # via django
 texttable==1.6.7
     # via py7zr
-tomli==2.0.1
-    # via pytest
-typing-extensions==4.7.0
-    # via asgiref
 uritemplate==4.1.1
     # via -r requirements.in
 urllib3==1.26.16
