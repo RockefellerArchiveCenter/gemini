@@ -16,15 +16,15 @@ attrs==23.1.0
     #   referencing
 bagit==1.8.1
     # via asterism
-brotli==1.0.9
+brotli==1.1.0
     # via py7zr
 certifi==2023.7.22
     # via requests
-charset-normalizer==3.2.0
+charset-normalizer==3.3.0
     # via requests
-coverage[toml]==7.3.0
+coverage[toml]==7.3.1
     # via pytest-cov
-django==4.2.4
+django==4.2.5
     # via
     #   -r requirements.in
     #   asterism
@@ -43,7 +43,7 @@ iniconfig==2.0.0
     # via pytest
 isodate==0.6.1
     # via rdflib
-jsonschema==4.19.0
+jsonschema==4.19.1
     # via -r requirements.in
 jsonschema-specifications==2023.7.1
     # via jsonschema
@@ -55,13 +55,13 @@ pluggy==1.3.0
     # via pytest
 psutil==5.9.5
     # via py7zr
-psycopg2==2.9.7
+psycopg2==2.9.8
     # via -r requirements.in
 py7zr==0.20.6
     # via -r requirements.in
 pybcj==1.0.1
     # via py7zr
-pycryptodomex==3.18.0
+pycryptodomex==3.19.0
     # via py7zr
 pyfc4==0.7
     # via -r requirements.in
@@ -69,13 +69,13 @@ pyparsing==3.1.1
     # via rdflib
 pyppmd==1.0.0
     # via py7zr
-pytest==7.4.0
+pytest==7.4.2
     # via
     #   pyfc4
     #   pytest-cov
 pytest-cov==4.1.0
     # via pyfc4
-pytz==2023.3
+pytz==2023.3.post1
     # via djangorestframework
 pyyaml==6.0.1
     # via -r requirements.in
@@ -92,7 +92,7 @@ requests==2.31.0
     #   -r requirements.in
     #   amclient
     #   pyfc4
-rpds-py==0.10.0
+rpds-py==0.10.3
     # via
     #   jsonschema
     #   referencing
@@ -108,7 +108,7 @@ tomli==2.0.1
     # via
     #   coverage
     #   pytest
-typing-extensions==4.7.1
+typing-extensions==4.8.0
     # via asgiref
 uritemplate==4.1.1
     # via -r requirements.in
