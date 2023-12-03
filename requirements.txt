@@ -23,9 +23,7 @@ certifi==2023.11.17
 charset-normalizer==3.3.2
     # via requests
 coverage[toml]==7.3.2
-    # via
-    #   coverage
-    #   pytest-cov
+    # via pytest-cov
 django==4.2.7
     # via
     #   -r requirements.in
