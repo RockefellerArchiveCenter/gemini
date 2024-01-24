@@ -166,7 +166,7 @@ class ParseMETSRoutine(Routine):
             ss_user_name=settings.ARCHIVEMATICA['username'],
             ss_url=settings.ARCHIVEMATICA['baseurl'],
             package_uuid=self.uuid,
-            relative_path=mets_path,
+            relative_path=join('data', mets_path),
             saveas_filename=mets_path,
             directory=self.tmp_dir)
         am_client.extract_file()
