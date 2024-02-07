@@ -23,8 +23,10 @@ certifi==2024.2.2
 charset-normalizer==3.3.2
     # via requests
 coverage[toml]==7.4.1
-    # via pytest-cov
-django==4.2.9
+    # via
+    #   coverage
+    #   pytest-cov
+django==4.2.10
     # via
     #   -r requirements.in
     #   asterism
