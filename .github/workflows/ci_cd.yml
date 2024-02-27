@@ -46,7 +46,7 @@ jobs:
         run: docker-compose up -d
 
       - name: Wait for services to be ready
-        run: ./wait-for-it.sh $CONTAINER:$APPLICATION_PORT -- docker-compose exec $CONTAINER pip install coverage
+        run: ./wait-for-it.sh $CONTAINER:$APPLICATION_PORT -- docker-compose exec -T $CONTAINER pip install coverage
 
       - name: Install pre-commit
         run: |
