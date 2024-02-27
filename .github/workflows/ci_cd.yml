@@ -1,0 +1,105 @@
+name: CI/CD
+
+on:
+  pull_request:
+    branches:
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      APPLICATION_NAME: gemini
+      CONTAINER: gemini-web
+      APPLICATION_PORT: 8006
+
+    services:
+      docker:
+        image: docker:stable
+        options: --privileged
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            $HOME/.cache/pip
+            $HOME/.cache/pre-commit
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/*.lock') }}
+
+      - name: Copy config file
+        run: cp ${{ env.APPLICATION_NAME }}/config.py.example ${{ env.APPLICATION_NAME }}/config.py
+
+      - name: Login to Docker
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Start Docker containers
+        run: docker-compose up -d
+
+      - name: Wait for services to be ready
+        run: ./wait-for-it.sh $CONTAINER:$APPLICATION_PORT -- docker-compose exec $CONTAINER pip install coverage
+
+      - name: Install pre-commit
+        run: |
+          pip install "pre-commit===2.13.0"
+          pre-commit install
+
+      - name: Run pre-commit checks
+        run: pre-commit run --all-files --show-diff-on-failure
+
+      - name: Run tests with coverage
+        run: docker-compose exec $CONTAINER coverage run manage.py test
+
+      - name: Generate coverage report
+        run: docker-compose exec $CONTAINER coverage report --omit=*/migrations/* -m
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Clone deploy scripts if not present
+        run: |
+          if [ ! -d deploy_scripts ]; then
+            git clone https://github.com/RockefellerArchiveCenter/deploy_scripts.git;
+          fi
+
+      - name: Substitute environment variables
+        run: sudo deploy_scripts/substitute_env.sh
+
+      - name: Create deployment zip
+        run: sudo deploy_scripts/make_zip_django.sh $DEPLOY_ZIP_DIR $DEPLOY_ZIP_NAME
+
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@v3.1.0
+        with:
+          args: --exclude '.git/*'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_REGION: 'us-east-1'
+          SOURCE_DIR: $DEPLOY_ZIP_DIR
+          DEST_DIR: $DEPLOY_ZIP_DIR
+          BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
+
+      - name: Deploy to CodeDeploy
+        uses: aws-actions/aws-codedeploy-appspec-action@v1
+        with:
+          codedeploy-application-name: ${{ env.APPLICATION_NAME }}
+          codedeploy-deployment-group-name: ${{ secrets.DEPLOYMENT_GROUP }}
+          codedeploy-region: 'us-east-1'
+          s3-bucket: ${{ secrets.AWS_BUCKET_NAME }}
+          s3-key: $DEPLOY_ZIP_NAME
