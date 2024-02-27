@@ -57,10 +57,10 @@ jobs:
         run: pre-commit run --all-files --show-diff-on-failure
 
       - name: Run tests with coverage
-        run: docker-compose exec $CONTAINER coverage run manage.py test
+        run: docker-compose exec -T $CONTAINER coverage run manage.py test
 
       - name: Generate coverage report
-        run: docker-compose exec $CONTAINER coverage report --omit=*/migrations/* -m
+        run: docker-compose exec -T $CONTAINER coverage report --omit=*/migrations/* -m
 
   deploy:
     needs: build
