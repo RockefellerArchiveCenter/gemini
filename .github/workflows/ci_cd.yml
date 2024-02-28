@@ -75,7 +75,7 @@ jobs:
       name: development
 
     env:
-      ROOT_DIR = ${{ vars.ROOT_DIR }}
+      ROOT_DIR: ${{ vars.ROOT_DIR }}
 
     steps:
       - name: Checkout code
