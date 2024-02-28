@@ -91,7 +91,7 @@ jobs:
         run: sudo deploy_scripts/substitute_env.sh
 
       - name: Create deployment zip
-        run: sudo deploy_scripts/make_zip_django.sh ${{ vars.DEPLOY_ZIP_DIR }} ${{ vars.DEPLOY_ZIP_NAME }}
+        run: sudo deploy_scripts/make_zip_django.sh ${{ vars.DEPLOY_ZIP_DIR }} ${{ secrets.DEPLOY_ZIP_NAME }}
 
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master
@@ -101,9 +101,8 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           AWS_REGION: 'us-east-1'
-          SOURCE_DIR: $DEPLOY_ZIP_DIR
-          DEST_DIR: $DEPLOY_ZIP_DIR
-          BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
+          SOURCE_DIR: ${{ vars.DEPLOY_ZIP_DIR }}
+          AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
 
       #- name: Deploy to CodeDeploy
         #uses: aws-actions/aws-codedeploy-appspec-action@v1
