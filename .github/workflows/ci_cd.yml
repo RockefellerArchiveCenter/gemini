@@ -76,7 +76,7 @@ jobs:
 
     steps:
       - name: Test environment
-        run: echo "${{ env.DEPLOY_ZIP_DIR }}"
+        run: echo "${{ vars.DEPLOY_ZIP_DIR }}"
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -91,7 +91,7 @@ jobs:
         run: sudo deploy_scripts/substitute_env.sh
 
       - name: Create deployment zip
-        run: sudo deploy_scripts/make_zip_django.sh $DEPLOY_ZIP_DIR $DEPLOY_ZIP_NAME
+        run: sudo deploy_scripts/make_zip_django.sh ${{ vars.DEPLOY_ZIP_DIR }} ${{ vars.DEPLOY_ZIP_NAME }}
 
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master
