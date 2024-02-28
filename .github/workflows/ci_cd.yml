@@ -74,6 +74,9 @@ jobs:
     environment:
       name: development
 
+    env:
+      ROOT_DIR = ${{ vars.ROOT_DIR }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -81,7 +84,7 @@ jobs:
       - name: Clone deploy scripts if not present
         run: |
           if [ ! -d deploy_scripts ]; then
-            git clone --branch github-actions https://github.com/RockefellerArchiveCenter/deploy_scripts.git;
+            git clone https://github.com/RockefellerArchiveCenter/deploy_scripts.git;
           fi
 
       - name: Substitute environment variables
