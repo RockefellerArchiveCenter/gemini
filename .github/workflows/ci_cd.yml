@@ -18,6 +18,7 @@ jobs:
       APPLICATION_NAME: gemini
       CONTAINER: gemini-web
       APPLICATION_PORT: 8006
+      TEST: ${{ secrets.TEST_SECRET }}
 
     services:
       docker:
@@ -25,6 +26,9 @@ jobs:
         options: --privileged
 
     steps:
+      - name: Test secret
+        run: echo "${{ env.TEST }}"
+        
       - name: Checkout code
         uses: actions/checkout@v4
 
