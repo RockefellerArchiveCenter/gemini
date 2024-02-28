@@ -105,11 +105,11 @@ jobs:
           DEST_DIR: $DEPLOY_ZIP_DIR
           BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
 
-      - name: Deploy to CodeDeploy
-        uses: aws-actions/aws-codedeploy-appspec-action@v1
-        with:
-          codedeploy-application-name: ${{ env.APPLICATION_NAME }}
-          codedeploy-deployment-group-name: ${{ secrets.DEPLOYMENT_GROUP }}
-          codedeploy-region: 'us-east-1'
-          s3-bucket: ${{ secrets.AWS_BUCKET_NAME }}
-          s3-key: $DEPLOY_ZIP_NAME
+      #- name: Deploy to CodeDeploy
+        #uses: aws-actions/aws-codedeploy-appspec-action@v1
+        #with:
+          #codedeploy-application-name: ${{ env.APPLICATION_NAME }}
+          #codedeploy-deployment-group-name: ${{ secrets.DEPLOYMENT_GROUP }}
+          #codedeploy-region: 'us-east-1'
+          #s3-bucket: ${{ secrets.AWS_BUCKET_NAME }}
+          #s3-key: $DEPLOY_ZIP_NAME
