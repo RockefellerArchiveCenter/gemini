@@ -81,7 +81,7 @@ jobs:
       - name: Clone deploy scripts if not present
         run: |
           if [ ! -d deploy_scripts ]; then
-            git clone https://github.com/RockefellerArchiveCenter/deploy_scripts.git;
+            git clone --branch github-actions https://github.com/RockefellerArchiveCenter/deploy_scripts.git;
           fi
 
       - name: Substitute environment variables
