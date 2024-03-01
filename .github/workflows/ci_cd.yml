@@ -85,9 +85,6 @@ jobs:
         with:
           secrets: ${{ toJSON(secrets) }}
 
-      - name: Test environment variables
-        run: echo "$ROOT_DIR"
-
       - name: Clone deploy scripts if not present
         run: |
           if [ ! -d deploy_scripts ]; then
@@ -95,7 +92,13 @@ jobs:
           fi
 
       - name: Substitute environment variables
-        run: sudo deploy_scripts/substitute_env.sh
+        uses: tvarohohlavy/inplace-envsubst-action@v1.0.0
+        with:
+          files: |
+            $APPLICATION_NAME/config.py.deploy
+            deploy_scripts/create_apache_config.sh.deploy
+      #- name: Substitute environment variables
+      #  run: sudo deploy_scripts/substitute_env.sh
 
       - name: Create deployment zip
         run: sudo deploy_scripts/make_zip_django.sh $DEPLOY_ZIP_DIR $DEPLOY_ZIP_NAME
