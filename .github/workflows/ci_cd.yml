@@ -107,6 +107,19 @@ jobs:
             deploy_scripts/set_permissions.sh.deploy
             deploy_scripts/stop_cron.sh.deploy
 
+      - name: Rename deploy files
+        run: |
+          for TEMPLATE in ${APPLICATION_NAME}/config.py.deploy \
+            .env.deploy \
+            appspec.yml.deploy \
+            deploy_scripts/*.deploy
+          do
+            if [[ -f "$TEMPLATE" ]]; then
+              sed -e 's/\(\.deploy\)*$//g'`
+              rm $TEMPLATE
+            fi
+          done
+
       - name: Create deployment zip
         run: sudo deploy_scripts/make_zip_django.sh $DEPLOY_ZIP_DIR $DEPLOY_ZIP_NAME
 
