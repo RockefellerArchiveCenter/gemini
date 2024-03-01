@@ -137,10 +137,10 @@ jobs:
       - name: Deploy to S3
         run: aws s3 sync $DEPLOY_ZIP_DIR s3://$AWS_BUCKET_NAME
 
-      #- name: Deploy to AWS CodeDeploy
-      #  run: aws deploy create-deployment
-      #    --region us-east-1
-      #    --application-name ${{ env.APPLICATION_NAME }}
-      #    --deployment-config-name CodeDeployDefault.OneAtATime
-      #    --deployment-group-name ${{ secrets.DEPLOYMENT_GROUP }}
-      #    --s3-location bucket=${{ secrets.AWS_BUCKET_NAME }},bundleType=zip,key=${{ secrets.DEPLOY_ZIP_NAME }}
+      - name: Deploy to AWS CodeDeploy
+        run: aws deploy create-deployment
+          --region us-east-1
+          --application-name ${{ env.APPLICATION_NAME }}
+          --deployment-config-name CodeDeployDefault.OneAtATime
+          --deployment-group-name ${{ secrets.DEPLOYMENT_GROUP }}
+          --s3-location bucket=${{ secrets.AWS_BUCKET_NAME }},bundleType=zip,key=${{ secrets.DEPLOY_ZIP_NAME }}
