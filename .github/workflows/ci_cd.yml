@@ -70,14 +70,20 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
+    #if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
 
+    #CHANGE THIS TO BRANCH NAME AFTER TESTING
     environment:
       name: development
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Export secrets to environment variables
+        uses: oNaiPs/secrets-to-env-action@v1.5
+        with:
+          secrets: ${{ toJSON(secrets) }}
 
       - name: Clone deploy scripts if not present
         run: |
@@ -89,7 +95,7 @@ jobs:
         run: sudo deploy_scripts/substitute_env.sh
 
       - name: Create deployment zip
-        run: sudo deploy_scripts/make_zip_django.sh ${{ vars.DEPLOY_ZIP_DIR }} ${{ secrets.DEPLOY_ZIP_NAME }}
+        run: sudo deploy_scripts/make_zip_django.sh $DEPLOY_ZIP_DIR $DEPLOY_ZIP_NAME
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4.0.2
@@ -99,12 +105,12 @@ jobs:
           aws-region: us-east-1
 
       - name: Deploy to S3
-        run: aws s3 sync ${{ vars.DEPLOY_ZIP_DIR }} s3://${{ secrets.AWS_BUCKET_NAME }}
+        run: aws s3 sync $DEPLOY_ZIP_DIR s3://$AWS_BUCKET_NAME
 
-      - name: Deploy to AWS CodeDeploy
-        run: aws deploy create-deployment
-          --region us-east-1
-          --application-name ${{ env.APPLICATION_NAME }}
-          --deployment-config-name CodeDeployDefault.OneAtATime
-          --deployment-group-name ${{ secrets.DEPLOYMENT_GROUP }}
-          --s3-location bucket=${{ secrets.AWS_BUCKET_NAME }},bundleType=zip,key=${{ secrets.DEPLOY_ZIP_NAME }}
+      #- name: Deploy to AWS CodeDeploy
+      #  run: aws deploy create-deployment
+      #    --region us-east-1
+      #    --application-name ${{ env.APPLICATION_NAME }}
+      #    --deployment-config-name CodeDeployDefault.OneAtATime
+      #    --deployment-group-name ${{ secrets.DEPLOYMENT_GROUP }}
+      #    --s3-location bucket=${{ secrets.AWS_BUCKET_NAME }},bundleType=zip,key=${{ secrets.DEPLOY_ZIP_NAME }}
