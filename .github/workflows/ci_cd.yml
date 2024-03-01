@@ -106,8 +106,6 @@ jobs:
             deploy_scripts/run_management_commands_django.sh.deploy
             deploy_scripts/set_permissions.sh.deploy
             deploy_scripts/stop_cron.sh.deploy
-      #- name: Substitute environment variables
-      #  run: sudo deploy_scripts/substitute_env.sh
 
       - name: Create deployment zip
         run: sudo deploy_scripts/make_zip_django.sh $DEPLOY_ZIP_DIR $DEPLOY_ZIP_NAME
