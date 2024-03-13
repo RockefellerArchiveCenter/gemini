@@ -74,7 +74,7 @@ jobs:
 
     #CHANGE THIS TO BRANCH NAME AFTER TESTING
     environment:
-      name: ${{ github.ref_name }}
+      name: development
 
     steps:
       - name: Checkout code
