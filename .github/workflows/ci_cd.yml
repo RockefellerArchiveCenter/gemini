@@ -70,11 +70,11 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    #if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
 
     #CHANGE THIS TO BRANCH NAME AFTER TESTING
     environment:
-      name: development
+      name: ${{ github.ref_name }}
 
     steps:
       - name: Checkout code
@@ -136,9 +136,6 @@ jobs:
           role-skip-session-tagging: true
           role-duration-seconds: 1000
           aws-region: us-east-1
-
-      - name: Check AWS user
-        run: aws sts get-caller-identity
 
       - name: Deploy to S3
         run: aws s3 cp $DEPLOY_ZIP_DIR s3://$AWS_BUCKET_NAME --recursive
