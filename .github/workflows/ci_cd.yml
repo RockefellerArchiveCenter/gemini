@@ -141,7 +141,7 @@ jobs:
         run: aws sts get-caller-identity
 
       - name: Deploy to S3
-        run: aws s3 sync $DEPLOY_ZIP_DIR s3://$AWS_BUCKET_NAME
+        run: aws s3 cp $DEPLOY_ZIP_DIR s3://$AWS_BUCKET_NAME
 
       - name: Deploy to AWS CodeDeploy
         run: aws deploy create-deployment
