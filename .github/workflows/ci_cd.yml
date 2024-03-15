@@ -132,24 +132,24 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4.0.2
         with:
-          aws-access-key-id: ${{ secrets.AWS_CODEDEPLOY_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_CODEDEPLOY_SECRET_KEY }}
-          #role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE }}
-          #role-skip-session-tagging: true
-          #role-duration-seconds: 1000
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE }}
+          role-skip-session-tagging: true
+          role-duration-seconds: 1000
           aws-region: us-east-1
 
       - name: Deploy to S3
-        run: aws s3 cp $DEPLOY_ZIP_DIR s3://$AWS_BUCKET_NAME --recursive
+        run: aws s3 cp $DEPLOY_ZIP_DIR s3://$AWS_BUCKET_NAME --recursive --acl public-read-write
 
       - name: Configure AWS CodeDeploy Credentials
         uses: aws-actions/configure-aws-credentials@v4.0.2
         with:
-          aws-access-key-id: ${{ secrets.AWS_CODEDEPLOY_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_CODEDEPLOY_SECRET_KEY }}
-          #role-to-assume: ${{ secrets.AWS_CODEDEPLOY_ROLE }}
-          #role-skip-session-tagging: true
-          #role-duration-seconds: 1000
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          role-to-assume: ${{ secrets.AWS_CODEDEPLOY_ROLE }}
+          role-skip-session-tagging: true
+          role-duration-seconds: 1000
           aws-region: us-east-1
 
       - name: Deploy to AWS CodeDeploy
