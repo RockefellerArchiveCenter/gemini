@@ -152,6 +152,9 @@ jobs:
           role-duration-seconds: 1000
           aws-region: us-east-1
 
+      - name: Confirm caller identity
+        run: aws sts get-caller-identity
+
       - name: Deploy to AWS CodeDeploy
         run: aws deploy create-deployment
           --region us-east-1
