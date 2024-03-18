@@ -70,13 +70,10 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    #if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
 
-    #CHANGE THIS TO BRANCH NAME AFTER TESTING
     environment:
-      name: development
-    #environment:
-      #name: ${{ github.ref_name }}
+      name: ${{ github.ref_name }}
 
     steps:
       - name: Checkout code
