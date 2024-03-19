@@ -10,11 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: write
-      repository-projects: write
+    permissions: write-all
     steps:
       - uses: actions/checkout@v4
         with:
