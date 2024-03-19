@@ -13,6 +13,8 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      issues: write
+      repository-projects: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -42,4 +44,3 @@ jobs:
           delete-branch: true
           title: Dependency Updates
           commit-message: Dependency updates
-          secrets: inherit
