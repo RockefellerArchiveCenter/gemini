@@ -42,5 +42,4 @@ jobs:
           delete-branch: true
           title: Dependency Updates
           commit-message: Dependency updates
-          with:
-            secrets: inherit
+          secrets: inherit
