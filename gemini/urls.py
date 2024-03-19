@@ -41,5 +41,4 @@ urlpatterns = [
     re_path(r'^request-cleanup/', CleanupRequestView.as_view(), name='request-cleanup'),
     re_path(r'^status/', PingView.as_view(), name='ping'),
     re_path(r'^admin/', admin.site.urls),
-    re_path(r'^schema/', schema_view, name='schema'),
 ]
