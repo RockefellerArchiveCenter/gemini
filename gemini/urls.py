@@ -17,7 +17,6 @@ from asterism.views import PingView
 from django.contrib import admin
 from django.urls import include, re_path
 from rest_framework import routers
-from rest_framework.schemas import get_schema_view
 
 from storer.views import (AddDataView, CleanupRequestView, DeliverView,
                           DownloadView, PackageViewSet, ParseMETSView,
@@ -25,11 +24,6 @@ from storer.views import (AddDataView, CleanupRequestView, DeliverView,
 
 router = routers.DefaultRouter()
 router.register(r'packages', PackageViewSet, 'package')
-
-schema_view = get_schema_view(
-    title="Gemini API",
-    description="Endpoints for Gemini microservice application.",
-)
 
 urlpatterns = [
     re_path(r'^', include(router.urls)),
@@ -41,5 +35,4 @@ urlpatterns = [
     re_path(r'^request-cleanup/', CleanupRequestView.as_view(), name='request-cleanup'),
     re_path(r'^status/', PingView.as_view(), name='ping'),
     re_path(r'^admin/', admin.site.urls),
-    re_path(r'^schema/', schema_view, name='schema'),
 ]
