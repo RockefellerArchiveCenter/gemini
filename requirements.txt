@@ -96,7 +96,7 @@ rpds-py==0.18.0
     #   referencing
 six==1.16.0
     # via isodate
-sqlparse==0.4.4
+sqlparse==0.5.0
     # via django
 texttable==1.7.0
     # via py7zr
