@@ -1,72 +1,13 @@
-name: CI/CD
+name: Deploy
 
 on:
-  pull_request:
-    branches:
-      - development
   push:
     branches:
       - development
       - base
+  workflow_dispatch:
 
 jobs:
-  build:
-    if: github.ref != 'refs/heads/base' || github.ref != 'refs/heads/development'
-    runs-on: ubuntu-latest
-
-    env:
-      APPLICATION_NAME: gemini
-      CONTAINER: gemini-web
-      APPLICATION_PORT: 8006
-
-    services:
-      docker:
-        image: docker:stable
-        options: --privileged
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            $HOME/.cache/pip
-            $HOME/.cache/pre-commit
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/*.lock') }}
-
-      - name: Copy config file
-        run: cp ${{ env.APPLICATION_NAME }}/config.py.example ${{ env.APPLICATION_NAME }}/config.py
-
-      - name: Login to Docker
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-      - name: Start Docker containers
-        run: docker-compose up -d
-
-      - name: Wait for services to be ready
-        run: ./wait-for-it.sh $CONTAINER:$APPLICATION_PORT -- docker-compose exec -T $CONTAINER pip install coverage
-
-      - name: Install pre-commit
-        run: |
-          pip install "pre-commit===2.13.0"
-          pre-commit install
-
-      - name: Run pre-commit checks
-        run: pre-commit run --all-files --show-diff-on-failure
-
-      - name: Run tests with coverage
-        run: docker-compose exec -T $CONTAINER coverage run manage.py test
-
-      - name: Generate coverage report
-        run: docker-compose exec -T $CONTAINER coverage report --omit=*/migrations/* -m
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -74,6 +15,11 @@ jobs:
 
     environment:
       name: ${{ github.ref_name }}
+
+      env:
+        APPLICATION_NAME: gemini
+        CONTAINER: gemini-web
+        APPLICATION_PORT: 8006
 
     steps:
       - name: Checkout code
@@ -133,8 +79,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE }}
           role-skip-session-tagging: true
-          role-duration-seconds: 1000
-          aws-region: us-east-1
+          role-duration-seconds: 900
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy to S3
         run: aws s3 cp $DEPLOY_ZIP_DIR s3://$AWS_BUCKET_NAME --recursive
@@ -146,12 +92,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           role-to-assume: ${{ secrets.AWS_CODEDEPLOY_ROLE }}
           role-skip-session-tagging: true
-          role-duration-seconds: 1000
-          aws-region: us-east-1
+          role-duration-seconds: 900
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy to AWS CodeDeploy
         run: aws deploy create-deployment
-          --region us-east-1
+          --region ${{ secrets.AWS_REGION }}
           --application-name $APPLICATION_NAME
           --deployment-config-name CodeDeployDefault.OneAtATime
           --deployment-group-name $DEPLOYMENT_GROUP
