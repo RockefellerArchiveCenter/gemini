@@ -5,17 +5,14 @@ on:
     branches:
       - development
       - base
-  pull_request:
-    branches:
-      - development
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    #if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
     environment:
-      name: development
+      name: ${{ github.ref_name }}
 
     env:
       APPLICATION_NAME: gemini
