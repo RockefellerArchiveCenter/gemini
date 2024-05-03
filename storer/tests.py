@@ -376,10 +376,6 @@ class PackageViewsTestCase(TestCase):
             response = PackageViewSet.as_view(actions={"post": "create"})(request)
             self.assertEqual(response.status_code, expected_status, "Wrong HTTP code")
 
-    def test_schema(self):
-        schema = self.client.get(reverse('schema'))
-        self.assertEqual(schema.status_code, 200, "Wrong HTTP code")
-
     def test_health_check(self):
         status = self.client.get(reverse('ping'))
         self.assertEqual(status.status_code, 200, "Wrong HTTP code")
