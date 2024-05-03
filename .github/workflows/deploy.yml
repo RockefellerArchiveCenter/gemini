@@ -9,17 +9,15 @@ on:
 
 jobs:
   deploy:
-    needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
-
     environment:
       name: ${{ github.ref_name }}
 
-      env:
-        APPLICATION_NAME: gemini
-        CONTAINER: gemini-web
-        APPLICATION_PORT: 8006
+    env:
+      APPLICATION_NAME: gemini
+      CONTAINER: gemini-web
+      APPLICATION_PORT: 8006
 
     steps:
       - name: Checkout code
