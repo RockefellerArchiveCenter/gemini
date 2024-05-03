@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
     environment:
-      name: ${{ github.ref_name }}
+      name: development
 
     env:
       APPLICATION_NAME: gemini
