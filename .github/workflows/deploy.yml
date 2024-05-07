@@ -5,16 +5,13 @@ on:
     branches:
       - development
       - base
-  pull_request:
-    branches:
-      - development
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     environment:
-      name: development
+      name: ${{ github.ref_name }}
 
     env:
       APPLICATION_NAME: gemini
@@ -84,6 +81,16 @@ jobs:
 
       - name: Deploy to S3
         run: aws s3 cp $DEPLOY_ZIP_DIR s3://$AWS_BUCKET_NAME --recursive
+
+      - name: Configure AWS CodeDeploy Credentials
+        uses: aws-actions/configure-aws-credentials@v4.0.2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          role-to-assume: ${{ secrets.AWS_CODEDEPLOY_ROLE }}
+          role-skip-session-tagging: true
+          role-duration-seconds: 900
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy to AWS CodeDeploy
         run: aws deploy create-deployment
