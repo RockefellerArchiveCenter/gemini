@@ -8,10 +8,9 @@ on:
 
 jobs:
   build:
-    if: github.ref != 'refs/heads/base' || github.ref != 'refs/heads/development'
     runs-on: ubuntu-latest
     environment:
-      name: development
+      name: ${{ vars.DEV_ENVIRONMENT }}
 
     env:
       APPLICATION_NAME: gemini
