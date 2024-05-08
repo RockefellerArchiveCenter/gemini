@@ -5,13 +5,16 @@ on:
     branches:
       - development
       - base
+  pull_request:
+    branches:
+      - development
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.ref_name }}
+      name: development
 
     env:
       APPLICATION_NAME: gemini
