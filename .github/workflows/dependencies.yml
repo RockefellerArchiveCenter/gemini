@@ -44,7 +44,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6.0.2
         with:
-          token: token: ${{ steps.app-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}
           base: development
           branch: dependency-updates
           delete-branch: true
