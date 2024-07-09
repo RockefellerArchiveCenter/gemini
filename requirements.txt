@@ -18,7 +18,7 @@ bagit==1.8.1
     # via asterism
 brotli==1.1.0
     # via py7zr
-certifi==2024.6.2
+certifi==2024.7.4
     # via requests
 charset-normalizer==3.3.2
     # via requests
@@ -43,7 +43,7 @@ iniconfig==2.0.0
     # via pytest
 isodate==0.6.1
     # via rdflib
-jsonschema==4.22.0
+jsonschema==4.23.0
     # via -r requirements.in
 jsonschema-specifications==2023.12.1
     # via jsonschema
@@ -57,7 +57,7 @@ psutil==6.0.0
     # via py7zr
 psycopg2==2.9.9
     # via -r requirements.in
-py7zr==0.21.0
+py7zr==0.21.1
     # via -r requirements.in
 pybcj==1.0.2
     # via py7zr
@@ -90,7 +90,7 @@ requests==2.32.3
     #   -r requirements.in
     #   amclient
     #   pyfc4
-rpds-py==0.18.1
+rpds-py==0.19.0
     # via
     #   jsonschema
     #   referencing
