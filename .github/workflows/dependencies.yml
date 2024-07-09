@@ -24,6 +24,7 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
           ref: development
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v4
