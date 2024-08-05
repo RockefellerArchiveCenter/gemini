@@ -18,13 +18,13 @@ bagit==1.8.1
     # via asterism
 brotli==1.1.0
     # via py7zr
-certifi==2024.6.2
+certifi==2024.7.4
     # via requests
 charset-normalizer==3.3.2
     # via requests
-coverage[toml]==7.5.4
+coverage[toml]==7.6.0
     # via pytest-cov
-django==4.2.13
+django==4.2.14
     # via
     #   -r requirements.in
     #   asterism
@@ -33,7 +33,7 @@ djangorestframework==3.15.2
     # via
     #   -r requirements.in
     #   asterism
-exceptiongroup==1.2.1
+exceptiongroup==1.2.2
     # via pytest
 idna==3.7
     # via requests
@@ -43,7 +43,7 @@ iniconfig==2.0.0
     # via pytest
 isodate==0.6.1
     # via rdflib
-jsonschema==4.22.0
+jsonschema==4.23.0
     # via -r requirements.in
 jsonschema-specifications==2023.12.1
     # via jsonschema
@@ -57,7 +57,7 @@ psutil==6.0.0
     # via py7zr
 psycopg2==2.9.9
     # via -r requirements.in
-py7zr==0.21.0
+py7zr==0.21.1
     # via -r requirements.in
 pybcj==1.0.2
     # via py7zr
@@ -69,7 +69,7 @@ pyparsing==3.1.2
     # via rdflib
 pyppmd==1.1.0
     # via py7zr
-pytest==8.2.2
+pytest==8.3.2
     # via
     #   pyfc4
     #   pytest-cov
@@ -90,13 +90,13 @@ requests==2.32.3
     #   -r requirements.in
     #   amclient
     #   pyfc4
-rpds-py==0.18.1
+rpds-py==0.19.1
     # via
     #   jsonschema
     #   referencing
 six==1.16.0
     # via isodate
-sqlparse==0.5.0
+sqlparse==0.5.1
     # via django
 texttable==1.7.0
     # via py7zr
