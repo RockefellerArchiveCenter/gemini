@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ vars.DEV_ENVIRONMENT }}
+      name: ${{ vars.TEST_ENVIRONMENT }}
 
     env:
       APPLICATION_NAME: gemini
