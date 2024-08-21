@@ -46,10 +46,10 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Start Docker containers
-        run: docker-compose up -d
+        run: docker compose up -d
 
       - name: Wait for services to be ready
-        run: ./wait-for-it.sh $CONTAINER:$APPLICATION_PORT -- docker-compose exec -T $CONTAINER pip install coverage
+        run: ./wait-for-it.sh $CONTAINER:$APPLICATION_PORT -- docker compose exec -T $CONTAINER pip install coverage
 
       - name: Install pre-commit
         run: |
@@ -60,7 +60,7 @@ jobs:
         run: pre-commit run --all-files --show-diff-on-failure
 
       - name: Run tests with coverage
-        run: docker-compose exec -T $CONTAINER coverage run manage.py test
+        run: docker compose exec -T $CONTAINER coverage run manage.py test
 
       - name: Generate coverage report
-        run: docker-compose exec -T $CONTAINER coverage report --omit=*/migrations/* -m
+        run: docker compose exec -T $CONTAINER coverage report --omit=*/migrations/* -m
