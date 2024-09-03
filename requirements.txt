@@ -10,7 +10,7 @@ asgiref==3.8.1
     # via django
 asterism==1.1.0
     # via -r requirements.in
-attrs==23.2.0
+attrs==24.2.0
     # via
     #   jsonschema
     #   referencing
@@ -18,13 +18,13 @@ bagit==1.8.1
     # via asterism
 brotli==1.1.0
     # via py7zr
-certifi==2024.7.4
+certifi==2024.8.30
     # via requests
 charset-normalizer==3.3.2
     # via requests
-coverage[toml]==7.6.0
+coverage[toml]==7.6.1
     # via pytest-cov
-django==4.2.14
+django==4.2.15
     # via
     #   -r requirements.in
     #   asterism
@@ -35,7 +35,7 @@ djangorestframework==3.15.2
     #   asterism
 exceptiongroup==1.2.2
     # via pytest
-idna==3.7
+idna==3.8
     # via requests
 inflate64==1.0.0
     # via py7zr
@@ -57,7 +57,7 @@ psutil==6.0.0
     # via py7zr
 psycopg2==2.9.9
     # via -r requirements.in
-py7zr==0.21.1
+py7zr==0.22.0
     # via -r requirements.in
 pybcj==1.0.2
     # via py7zr
@@ -65,7 +65,7 @@ pycryptodomex==3.20.0
     # via py7zr
 pyfc4==0.7
     # via -r requirements.in
-pyparsing==3.1.2
+pyparsing==3.1.4
     # via rdflib
 pyppmd==1.1.0
     # via py7zr
@@ -75,9 +75,9 @@ pytest==8.3.2
     #   pytest-cov
 pytest-cov==5.0.0
     # via pyfc4
-pyyaml==6.0.1
+pyyaml==6.0.2
     # via -r requirements.in
-pyzstd==0.16.0
+pyzstd==0.16.1
     # via py7zr
 rdflib==7.0.0
     # via pyfc4
@@ -90,7 +90,7 @@ requests==2.32.3
     #   -r requirements.in
     #   amclient
     #   pyfc4
-rpds-py==0.19.1
+rpds-py==0.20.0
     # via
     #   jsonschema
     #   referencing
