@@ -28,17 +28,13 @@ jobs:
           secrets: ${{ toJSON(secrets) }}
 
       - name: Clone deploy scripts if not present
-        run: |
-          if [ ! -d deploy_scripts ]; then
-            git clone https://github.com/RockefellerArchiveCenter/deploy_scripts.git;
-          fi
+        run: git clone https://github.com/RockefellerArchiveCenter/deploy_scripts.git;
 
       - name: Substitute environment variables
         uses: tvarohohlavy/inplace-envsubst-action@v1.0.0
         with:
           files: |
             $APPLICATION_NAME/config.py.deploy
-            .env.deploy
             appspec.yml.deploy
             deploy_scripts/create_apache_config.sh.deploy
             deploy_scripts/curl_index.sh.deploy
@@ -52,7 +48,6 @@ jobs:
       - name: Rename deploy files
         run: |
           mv $APPLICATION_NAME/config.py.deploy $APPLICATION_NAME/config.py
-          mv .env.deploy .env
           mv appspec.yml.deploy appspec.yml
           mv deploy_scripts/create_apache_config.sh.deploy deploy_scripts/create_apache_config.sh
           mv deploy_scripts/curl_index.sh.deploy deploy_scripts/curl_index.sh
