@@ -28,10 +28,7 @@ jobs:
           secrets: ${{ toJSON(secrets) }}
 
       - name: Clone deploy scripts if not present
-        run: |
-          if [ ! -d deploy_scripts ]; then
-            git clone https://github.com/RockefellerArchiveCenter/deploy_scripts.git;
-          fi
+        run: git clone https://github.com/RockefellerArchiveCenter/deploy_scripts.git;
 
       - name: Substitute environment variables
         uses: tvarohohlavy/inplace-envsubst-action@v1.0.0
