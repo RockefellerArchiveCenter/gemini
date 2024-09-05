@@ -42,7 +42,7 @@ jobs:
         run: docker compose up -d
 
       - name: Wait for services to be ready
-        run: ./wait-for-it.sh $CONTAINER:$APPLICATION_PORT -- docker compose exec -T $CONTAINER
+        run: ./wait-for-it.sh $CONTAINER:$APPLICATION_PORT
 
       - name: Install pre-commit
         run: |
