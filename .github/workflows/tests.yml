@@ -42,7 +42,7 @@ jobs:
         run: docker compose up -d
 
       - name: Wait for services to be ready
-        run: ./wait-for-it.sh $CONTAINER:$APPLICATION_PORT -- echo "container is ready"
+        run: ./wait-for-it.sh $CONTAINER:$APPLICATION_PORT -- echo "$CONTAINER is ready"
 
       - name: Install pre-commit
         run: |
@@ -53,4 +53,4 @@ jobs:
         run: pre-commit run --all-files --show-diff-on-failure
 
       - name: Run tests
-        run: docker compose exec -T $CONTAINER run manage.py test
+        run: docker compose exec -T $CONTAINER run python manage.py test
