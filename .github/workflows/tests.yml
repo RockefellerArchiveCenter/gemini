@@ -42,7 +42,7 @@ jobs:
         run: docker compose up -d
 
       - name: Wait for services to be ready
-        run: ./wait-for-it.sh $CONTAINER:$APPLICATION_PORT -- docker compose exec -T $CONTAINER pip install coverage
+        run: ./wait-for-it.sh $CONTAINER:$APPLICATION_PORT
 
       - name: Install pre-commit
         run: |
@@ -52,8 +52,5 @@ jobs:
       - name: Run pre-commit checks
         run: pre-commit run --all-files --show-diff-on-failure
 
-      - name: Run tests with coverage
-        run: docker compose exec -T $CONTAINER coverage run manage.py test
-
-      - name: Generate coverage report
-        run: docker compose exec -T $CONTAINER coverage report --omit=*/migrations/* -m
+      - name: Run tests
+        run: docker compose exec -T $CONTAINER run manage.py test
