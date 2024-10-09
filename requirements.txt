@@ -24,7 +24,7 @@ charset-normalizer==3.3.2
     # via requests
 coverage[toml]==7.6.1
     # via pytest-cov
-django==4.2.15
+django==4.2.16
     # via
     #   -r requirements.in
     #   asterism
@@ -35,7 +35,7 @@ djangorestframework==3.15.2
     #   asterism
 exceptiongroup==1.2.2
     # via pytest
-idna==3.8
+idna==3.10
     # via requests
 inflate64==1.0.0
     # via py7zr
@@ -69,7 +69,7 @@ pyparsing==3.1.4
     # via rdflib
 pyppmd==1.1.0
     # via py7zr
-pytest==8.3.2
+pytest==8.3.3
     # via
     #   pyfc4
     #   pytest-cov
@@ -108,7 +108,7 @@ typing-extensions==4.12.2
     # via asgiref
 uritemplate==4.1.1
     # via -r requirements.in
-urllib3==2.2.2
+urllib3==2.2.3
     # via
     #   amclient
     #   requests
