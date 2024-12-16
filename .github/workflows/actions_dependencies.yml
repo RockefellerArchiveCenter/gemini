@@ -33,4 +33,20 @@ jobs:
         uses: saadmk11/github-actions-version-updater@v0.8.1
         with:
           token: ${{ steps.app-token.outputs.token }}
-          pull_request_branch: "workflow-dependencies"
+          skip_pull_request: true
+
+      - name: Create and apply changes
+        run: |
+          git diff > changes.patch
+          git apply --allow-empty changes.patch
+          rm -rf changes.patch
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6.0.2
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          base: development
+          branch: actions-dependency-update
+          delete-branch: true
+          title: Actions Dependency Updates
+          commit-message: Actions Dependency updates
