@@ -11,7 +11,7 @@ on:
       - development
 
 jobs:
-  build:
+  actions-update:
     runs-on: ubuntu-latest
     permissions:
       contents: write
