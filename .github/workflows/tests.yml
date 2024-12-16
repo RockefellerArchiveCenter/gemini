@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    #if: "!contains(${{ github.event.pull_request.head.ref }}, 'dependabot')"
+    if: !contains(${{ github.event.pull_request.head.ref }}, 'dependabot')
     runs-on: ubuntu-latest
     environment:
       name: development
@@ -24,8 +24,6 @@ jobs:
         options: --privileged
 
     steps:
-      - run: echo running on branch ${GITHUB_REF##*/} ${GITHUB_REF}
-
       - name: Checkout code
         uses: actions/checkout@v4
 
