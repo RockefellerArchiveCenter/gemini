@@ -7,3 +7,4 @@ updates:
   directory: "/" # Location of package manifests
   schedule:
     interval: "monthly"
+  target-branch: "development"
