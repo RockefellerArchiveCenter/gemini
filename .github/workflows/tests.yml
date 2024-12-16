@@ -24,7 +24,7 @@ jobs:
         options: --privileged
 
     steps:
-      - run: Run echo running on branch ${GITHUB_REF##*/} ${GITHUB_REF}
+      - run: echo running on branch ${GITHUB_REF##*/} ${GITHUB_REF}
 
       - name: Checkout code
         uses: actions/checkout@v4
