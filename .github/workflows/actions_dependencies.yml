@@ -11,7 +11,7 @@ on:
       - development
 
 jobs:
-  build:
+  update-actions:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -33,4 +33,4 @@ jobs:
         uses: saadmk11/github-actions-version-updater@v0.8.1
         with:
           token: ${{ steps.app-token.outputs.token }}
-          pull_request_branch: "gh-actions-updates"
+          pull_request_branch: "workflow-dependencies"
