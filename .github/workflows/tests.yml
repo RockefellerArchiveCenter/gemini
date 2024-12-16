@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    if: !${{ contains(github.base_ref, 'dependabot') }}
+    if: !contains({{ github.ref_name}}, 'dependabot')
     runs-on: ubuntu-latest
     environment:
       name: development
