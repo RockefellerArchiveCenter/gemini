@@ -6,9 +6,12 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  pull_request:
+    branches:
+      - development
 
 jobs:
-  build:
+  update-actions:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -30,13 +33,4 @@ jobs:
         uses: saadmk11/github-actions-version-updater@v0.8.1
         with:
           token: ${{ steps.app-token.outputs.token }}
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6.0.2
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          base: development
-          branch: actions-dependency-updates
-          delete-branch: true
-          title: Actions Dependency Updates
-          commit-message: Actions Dependency updates
+          pull_request_branch: "workflow-dependencies"
