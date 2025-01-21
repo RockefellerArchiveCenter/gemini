@@ -45,4 +45,5 @@ jobs:
         uses: saadmk11/github-actions-version-updater@v0.8.1
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
+          committer_username: 'p-galligan'
           pull_request_branch: 'dependency-updates'
