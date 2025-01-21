@@ -24,7 +24,6 @@ jobs:
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
           ref: development
-          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v5
