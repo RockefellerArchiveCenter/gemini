@@ -41,18 +41,18 @@ jobs:
       - name: Run pip-compile
         run: pip-compile --upgrade
 
-      - name: Run GitHub Actions Version Updater
-        uses: saadmk11/github-actions-version-updater@v0.8.1
-        with:
-          token: ${{ secrets.ACCESS_TOKEN }}
-          pull_request_branch: 'dependency-updates'
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7.0.6
         with:
-          token: ${{ steps.app-token.outputs.token }}
+          token: ${{ secrets.ACCESS_TOKEN }}
           base: development
           branch: dependency-updates
           delete-branch: true
           title: Dependency Updates
           commit-message: Dependency updates
+
+      - name: Run GitHub Actions Version Updater
+        uses: saadmk11/github-actions-version-updater@v0.8.1
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          pull_request_branch: 'dependency-updates'
