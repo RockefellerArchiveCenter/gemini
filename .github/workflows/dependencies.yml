@@ -40,3 +40,4 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
           committer_username: 'p-galligan'
           pull_request_branch: 'dependency-updates'
+          pull_request_title: 'Dependency Updates'
