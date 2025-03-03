@@ -40,11 +40,9 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
           skip_pull_request: "true"
 
-      - name: Create patch
+      - name: Apply changes
         if: always()
-        run: |
-          git diff > changes.patch
-          git apply --allow-empty "changes.patch"
+        run: git apply --allow-empty
 
       - name: Create Pull Request
         if: always()
