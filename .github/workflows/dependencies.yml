@@ -48,7 +48,7 @@ jobs:
       
       - name: Delete patch file
           if: always()
-          rm -f changes.patch
+          run: rm -f changes.patch
 
       - name: Create Pull Request
         if: always()
