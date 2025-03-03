@@ -53,7 +53,7 @@ packaging==24.2
     # via pytest
 pluggy==1.5.0
     # via pytest
-psutil==6.1.1
+psutil==7.0.0
     # via py7zr
 psycopg2==2.9.10
     # via -r requirements.in
@@ -69,7 +69,7 @@ pyparsing==3.2.1
     # via rdflib
 pyppmd==1.1.1
     # via py7zr
-pytest==8.3.4
+pytest==8.3.5
     # via
     #   pyfc4
     #   pytest-cov
@@ -90,7 +90,7 @@ requests==2.32.3
     #   -r requirements.in
     #   amclient
     #   pyfc4
-rpds-py==0.22.3
+rpds-py==0.23.1
     # via
     #   jsonschema
     #   referencing
