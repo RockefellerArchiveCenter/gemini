@@ -38,7 +38,7 @@ jobs:
         uses: saadmk11/github-actions-version-updater@v0.8.1
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          skip_pull_request: true
+          skip_pull_request: "true"
 
       - name: Create patch
         run: |
