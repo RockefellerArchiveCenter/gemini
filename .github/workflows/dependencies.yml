@@ -47,6 +47,7 @@ jobs:
           git apply --allow-empty "changes.patch"
       
       - name: Delete patch file
+          if: always()
           rm -f changes.patch
 
       - name: Create Pull Request
