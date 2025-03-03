@@ -38,14 +38,16 @@ jobs:
         uses: saadmk11/github-actions-version-updater@v0.8.1
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          skip_pull_request: true
+          skip_pull_request: "true"
 
       - name: Create patch
+        if: always()
         run: |
           git diff > changes.patch
           git apply --allow-empty "changes.patch"
 
       - name: Create Pull Request
+        if: always()
         uses: peter-evans/create-pull-request@v7.0.7
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
