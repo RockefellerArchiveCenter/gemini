@@ -41,11 +41,13 @@ jobs:
           skip_pull_request: "true"
 
       - name: Create patch
+        if: always()
         run: |
           git diff > changes.patch
           git apply --allow-empty "changes.patch"
 
       - name: Create Pull Request
+        if: always()
         uses: peter-evans/create-pull-request@v7.0.7
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
