@@ -6,7 +6,7 @@
 #
 amclient==1.4.0
     # via -r requirements.in
-asgiref==3.8.1
+asgiref==3.9.1
     # via django
 asterism==1.1.0
     # via -r requirements.in
@@ -18,11 +18,11 @@ bagit==1.9.0
     # via asterism
 brotli==1.1.0
     # via py7zr
-certifi==2025.6.15
+certifi==2025.7.14
     # via requests
 charset-normalizer==3.4.2
     # via requests
-coverage[toml]==7.9.1
+coverage[toml]==7.10.1
     # via pytest-cov
 django==4.2.23
     # via
@@ -43,7 +43,7 @@ iniconfig==2.1.0
     # via pytest
 isodate==0.7.2
     # via rdflib
-jsonschema==4.24.0
+jsonschema==4.25.0
     # via -r requirements.in
 jsonschema-specifications==2025.4.1
     # via jsonschema
@@ -94,7 +94,7 @@ requests==2.32.4
     #   -r requirements.in
     #   amclient
     #   pyfc4
-rpds-py==0.25.1
+rpds-py==0.26.0
     # via
     #   jsonschema
     #   referencing
@@ -106,7 +106,7 @@ tomli==2.2.1
     # via
     #   coverage
     #   pytest
-typing-extensions==4.14.0
+typing-extensions==4.14.1
     # via
     #   asgiref
     #   exceptiongroup
