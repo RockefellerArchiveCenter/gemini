@@ -1,5 +1,6 @@
+**This application has been marked as read-only and is no longer actively maintained or supported.**
+
 # gemini
-TEST
 A microservice to store AIPs and DIPs in Fedora.
 
 gemini is part of [Project Electron](https://github.com/RockefellerArchiveCenter/project_electron), an initiative to build sustainable, open and user-centered infrastructure for the archival management of digital records at the [Rockefeller Archive Center](http://rockarch.org/).
